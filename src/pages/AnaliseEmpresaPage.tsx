@@ -48,7 +48,7 @@ const mockCompanies: Company[] = [
     name: "Comércio XYZ LTDA",
     cnpj: "11.222.333/0001-44",
     status: "awaiting_review",
-    processType: "atualizacao_cadastro",
+    processType: "atualizacao_cedente",
     managerName: "Pedro Costa",
     managerId: "3",
     createdAt: new Date("2024-01-05"),
