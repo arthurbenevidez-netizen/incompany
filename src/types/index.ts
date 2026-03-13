@@ -1,0 +1,88 @@
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: 'gerente_comercial' | 'equipe_cadastro' | 'cliente_externo';
+  avatar?: string;
+}
+
+export interface Company {
+  id: string;
+  name: string;
+  cnpj: string;
+  status: "pending" | "in_progress" | "approved" | "rejected" | "needs_review" | "awaiting_review";
+  processType: "cadastro_cedente" | "risco_sacado" | "atualizacao_cadastro";
+  managerName: string;
+  managerId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  documentsPending?: number;
+  documentsTotal?: number;
+  requestedDocuments?: string[];
+  requestDate?: Date;
+  requestMessage?: string;
+}
+
+export interface Document {
+  id: string;
+  companyId: string;
+  name: string;
+  type: 'empresa' | 'socios' | 'financeira';
+  category: string;
+  fileName: string;
+  fileUrl: string;
+  status: 'pending' | 'approved' | 'rejected' | 'needs_replacement';
+  uploadedAt: Date;
+  reviewedAt?: Date;
+  reviewerNotes?: string;
+  reviewerId?: string;
+}
+
+export interface DocumentFile {
+  id: string;
+  fileName: string;
+  fileUrl: string;
+  uploadedAt: Date;
+}
+
+export interface DocumentWithFiles {
+  id: string;
+  companyId: string;
+  name: string;
+  type: 'empresa' | 'socios' | 'financeira';
+  category: string;
+  status: 'pending' | 'approved' | 'rejected' | 'needs_replacement';
+  files: DocumentFile[];
+  reviewedAt?: Date;
+  reviewerNotes?: string;
+  reviewerId?: string;
+}
+
+export interface DocumentCategory {
+  id: string;
+  name: string;
+  type: 'empresa' | 'socios' | 'financeira';
+  processType: "cadastro_cedente" | "risco_sacado" | "atualizacao_cadastro";
+  required: boolean;
+  description: string;
+}
+
+export interface Notification {
+  id: string;
+  type: 'success' | 'warning' | 'info' | 'error';
+  title: string;
+  message: string;
+  createdAt: Date;
+  read: boolean;
+  actionUrl?: string;
+  relatedEntity?: {
+    type: 'company' | 'document' | 'process';
+    id: string;
+    name: string;
+  };
+  targetUser?: string;
+}
+
+export type DocumentStatus = 'pending' | 'approved' | 'rejected' | 'needs_replacement';
+export type CompanyStatus = 'pending' | 'in_progress' | 'approved' | 'rejected' | 'needs_review' | 'awaiting_review';
+export type ProcessType = 'cadastro_cedente' | 'risco_sacado' | 'atualizacao_cadastro';
