@@ -10,12 +10,14 @@ export interface Company {
   id: string;
   name: string;
   cnpj: string;
-  status: "pending" | "in_progress" | "approved" | "rejected" | "needs_review" | "awaiting_review";
-  processType: "cadastro_cedente" | "risco_sacado" | "atualizacao_cadastro";
+  status: CompanyStatus;
+  processType: ProcessType;
   managerName: string;
   managerId: string;
   createdAt: Date;
   updatedAt: Date;
+  approvedAt?: Date;
+  savedStatus?: 'completo' | 'incompleto';
   documentsPending?: number;
   documentsTotal?: number;
   requestedDocuments?: string[];
@@ -62,7 +64,7 @@ export interface DocumentCategory {
   id: string;
   name: string;
   type: 'empresa' | 'socios' | 'financeira';
-  processType: "cadastro_cedente" | "risco_sacado" | "atualizacao_cadastro";
+  processType: ProcessType;
   required: boolean;
   description: string;
 }
@@ -85,4 +87,4 @@ export interface Notification {
 
 export type DocumentStatus = 'pending' | 'approved' | 'rejected' | 'needs_replacement';
 export type CompanyStatus = 'pending' | 'in_progress' | 'approved' | 'rejected' | 'needs_review' | 'awaiting_review';
-export type ProcessType = 'cadastro_cedente' | 'risco_sacado' | 'atualizacao_cadastro';
+export type ProcessType = 'cadastro_cedente' | 'atualizacao_cedente' | 'risco_sacado' | 'cadastro_sacado';
