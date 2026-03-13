@@ -109,8 +109,10 @@ export default function AnaliseEmpresaPage() {
         return 'Cadastro Cedente';
       case 'risco_sacado':
         return 'Risco Sacado';
-      case 'atualizacao_cadastro':
-        return 'Atualização de Cadastro';
+      case 'atualizacao_cedente':
+        return 'Atualização de Cedente';
+      case 'cadastro_sacado':
+        return 'Cadastro de Sacado';
       default:
         return type;
     }

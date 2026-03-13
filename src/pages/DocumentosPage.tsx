@@ -154,7 +154,7 @@ export default function DocumentosPage() {
         return <UserPlus className="h-5 w-5 text-blue-600" />;
       case 'risco_sacado':
         return <ShieldAlert className="h-5 w-5 text-red-600" />;
-      case 'atualizacao_cadastro':
+      case 'atualizacao_cedente':
         return <RefreshCw className="h-5 w-5 text-green-600" />;
       default:
         return <FileText className="h-5 w-5 text-muted-foreground" />;
