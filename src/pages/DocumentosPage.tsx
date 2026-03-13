@@ -15,7 +15,7 @@ import DocumentViewModal from "@/components/DocumentViewModal";
 const mockCompanies = {
   "1": { name: "Tech Solutions LTDA", processType: "cadastro_cedente" },
   "2": { name: "Indústria ABC S.A.", processType: "risco_sacado" },
-  "3": { name: "Comércio XYZ LTDA", processType: "atualizacao_cadastro" },
+  "3": { name: "Comércio XYZ LTDA", processType: "atualizacao_cedente" },
 };
 
 const mockDocuments: DocumentWithFiles[] = [
