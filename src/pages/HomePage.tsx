@@ -1,4 +1,4 @@
-import { Building2, FileText, BarChart3, TrendingUp, Clock, CheckCircle, AlertTriangle, Users, UserPlus, ShieldAlert, RefreshCw } from "lucide-react";
+import { Building2, FileText, BarChart3, TrendingUp, Clock, CheckCircle, AlertTriangle, UserPlus, ShieldAlert, RefreshCw, UserCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -29,7 +29,7 @@ const recentCompanies = [
     documentsTotal: 9,
   },
   {
-    id: "2", 
+    id: "2",
     name: "Indústria ABC S.A.",
     cnpj: "98.765.432/0001-10",
     status: "pending",
@@ -44,7 +44,7 @@ const recentCompanies = [
     name: "Comércio XYZ LTDA",
     cnpj: "11.222.333/0001-44",
     status: "approved",
-    processType: "atualizacao_cadastro",
+    processType: "atualizacao_cedente",
     managerName: "Pedro Costa",
     updatedAt: new Date("2024-01-22"),
     documentsPending: 0,
@@ -111,8 +111,10 @@ export default function HomePage() {
         return <UserPlus className="h-4 w-4 text-blue-600" />;
       case 'risco_sacado':
         return <ShieldAlert className="h-4 w-4 text-red-600" />;
-      case 'atualizacao_cadastro':
+      case 'atualizacao_cedente':
         return <RefreshCw className="h-4 w-4 text-green-600" />;
+      case 'cadastro_sacado':
+        return <UserCheck className="h-4 w-4 text-purple-600" />;
       default:
         return <FileText className="h-4 w-4 text-muted-foreground" />;
     }
@@ -243,9 +245,9 @@ export default function HomePage() {
                           {company.documentsTotal - company.documentsPending}/{company.documentsTotal} docs
                         </span>
                       </div>
-                      <Progress 
-                        value={((company.documentsTotal - company.documentsPending) / company.documentsTotal) * 100} 
-                        className="w-20 h-2" 
+                      <Progress
+                        value={((company.documentsTotal - company.documentsPending) / company.documentsTotal) * 100}
+                        className="w-20 h-2"
                       />
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -253,9 +255,7 @@ export default function HomePage() {
                     </p>
                   </div>
                   <Button size="sm" variant="ghost" asChild>
-                    <Link to={`/empresa/${company.id}`}>
-                      Ver
-                    </Link>
+                    <Link to={`/empresa/${company.id}`}>Ver</Link>
                   </Button>
                 </div>
               ))}
@@ -295,9 +295,7 @@ export default function HomePage() {
                     </div>
                   </div>
                   <Button size="sm" variant="ghost" asChild>
-                    <Link to={`/analise/${item.id}`}>
-                      Analisar
-                    </Link>
+                    <Link to={`/analise/${item.id}`}>Analisar</Link>
                   </Button>
                 </div>
               ))}
@@ -320,7 +318,6 @@ export default function HomePage() {
                 <span className="text-xs text-muted-foreground">Cadastrar nova empresa</span>
               </Link>
             </Button>
-
             <Button variant="outline" className="h-auto p-6 flex flex-col gap-2 hover-scale" asChild>
               <Link to="/analise">
                 <FileText className="h-8 w-8 text-primary" />
@@ -328,7 +325,6 @@ export default function HomePage() {
                 <span className="text-xs text-muted-foreground">Revisar documentos</span>
               </Link>
             </Button>
-
             <Button variant="outline" className="h-auto p-6 flex flex-col gap-2 hover-scale" asChild>
               <Link to="/carteira">
                 <BarChart3 className="h-8 w-8 text-primary" />

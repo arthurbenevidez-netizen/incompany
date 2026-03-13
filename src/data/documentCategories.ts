@@ -123,12 +123,12 @@ export const documentCategories: DocumentCategory[] = [
     description: "Backlog de contratos"
   },
 
-  // ATUALIZAÇÃO DE CADASTRO - FINANCEIRO
+  // ATUALIZAÇÃO DE CEDENTE - FINANCEIRO
   {
     id: "ac_f1",
     name: "Balanço Atualizado",
     type: "financeira",
-    processType: "atualizacao_cadastro",
+    processType: "atualizacao_cedente",
     required: true,
     description: "Balanço e DRE atualizado assinado pelo contador da empresa"
   },
@@ -136,7 +136,7 @@ export const documentCategories: DocumentCategory[] = [
     id: "ac_f2",
     name: "Balancete Atualizado",
     type: "financeira",
-    processType: "atualizacao_cadastro",
+    processType: "atualizacao_cedente",
     required: true,
     description: "Balancete atualizado assinado pelo contador da empresa"
   },
@@ -144,7 +144,7 @@ export const documentCategories: DocumentCategory[] = [
     id: "ac_f3",
     name: "Declaração de Faturamento 12 Meses",
     type: "financeira",
-    processType: "atualizacao_cadastro",
+    processType: "atualizacao_cedente",
     required: true,
     description: "Declaração de Faturamento dos últimos 12 meses assinada pelo contador da empresa"
   },
@@ -152,27 +152,27 @@ export const documentCategories: DocumentCategory[] = [
     id: "ac_f4",
     name: "Abertura Endividamento Financeiro",
     type: "financeira",
-    processType: "atualizacao_cadastro",
+    processType: "atualizacao_cedente",
     required: true,
     description: "Abertura do Endividamento Financeiro atual detalhado (defasagem máxima de 03 meses). Informar BANCOS, FACTORINGs, FIDCs, modalidades, limites, saldos devedores, valor das parcelas, garantias, vencimentos"
   },
 
-  // ATUALIZAÇÃO DE CADASTRO - EMPRESA
+  // ATUALIZAÇÃO DE CEDENTE - EMPRESA
   {
     id: "ac_e1",
     name: "Último Aditivo ou Ata",
     type: "empresa",
-    processType: "atualizacao_cadastro",
+    processType: "atualizacao_cedente",
     required: true,
     description: "Último aditivo ou última ata arquivados"
   },
 
-  // ATUALIZAÇÃO DE CADASTRO - SÓCIOS
+  // ATUALIZAÇÃO DE CEDENTE - SÓCIOS
   {
     id: "ac_s1",
     name: "Comprovante de Endereço Atualizado",
     type: "socios",
-    processType: "atualizacao_cadastro",
+    processType: "atualizacao_cedente",
     required: true,
     description: "Comprovante de endereço (contas de consumo: energia, água, telefone, gás), defasagem máxima de 90 dias"
   },
@@ -180,22 +180,22 @@ export const documentCategories: DocumentCategory[] = [
     id: "ac_s2",
     name: "Imposto de Renda e Recibo",
     type: "socios",
-    processType: "atualizacao_cadastro",
+    processType: "atualizacao_cedente",
     required: true,
     description: "Imposto de Renda e Recibo dos sócios e representantes do último exercício"
   },
 
-  // ATUALIZAÇÃO DE CADASTRO - COMPLEMENTARES
+  // ATUALIZAÇÃO DE CEDENTE - COMPLEMENTARES
   {
     id: "ac_c1",
     name: "Backlog de Contratos Atualizado",
     type: "empresa",
-    processType: "atualizacao_cadastro",
+    processType: "atualizacao_cedente",
     required: false,
     description: "Backlog de contratos atualizado"
   },
 
-  // RISCO SACADO - Documentos básicos (mock - pode ser expandido conforme necessário)
+  // RISCO SACADO
   {
     id: "rs_f1",
     name: "Demonstrações Financeiras",
@@ -211,17 +211,53 @@ export const documentCategories: DocumentCategory[] = [
     processType: "risco_sacado",
     required: true,
     description: "Documentação da empresa para análise de risco"
-  }
+  },
+
+  // CADASTRO DE SACADO
+  {
+    id: "cs_e1",
+    name: "Contrato Social ou Estatuto",
+    type: "empresa",
+    processType: "cadastro_sacado",
+    required: true,
+    description: "Contrato Social ou Estatuto Social vigente do sacado"
+  },
+  {
+    id: "cs_e2",
+    name: "Comprovante de Inscrição CNPJ",
+    type: "empresa",
+    processType: "cadastro_sacado",
+    required: true,
+    description: "Comprovante de Inscrição e Situação Cadastral no CNPJ"
+  },
+  {
+    id: "cs_s1",
+    name: "Documentos dos Representantes",
+    type: "socios",
+    processType: "cadastro_sacado",
+    required: true,
+    description: "RG/CPF ou CNH dos representantes legais do sacado"
+  },
+  {
+    id: "cs_f1",
+    name: "Demonstrações Financeiras do Sacado",
+    type: "financeira",
+    processType: "cadastro_sacado",
+    required: true,
+    description: "Últimas demonstrações financeiras disponíveis do sacado"
+  },
 ];
 
 export const getProcessTypeLabel = (processType: string) => {
   switch (processType) {
     case 'cadastro_cedente':
       return 'Cadastro Cedente';
+    case 'atualizacao_cedente':
+      return 'Atualização de Cedente';
     case 'risco_sacado':
       return 'Risco Sacado';
-    case 'atualizacao_cadastro':
-      return 'Atualização de Cadastro';
+    case 'cadastro_sacado':
+      return 'Cadastro de Sacado';
     default:
       return processType;
   }
@@ -231,10 +267,12 @@ export const getProcessTypeBadge = (processType: string) => {
   switch (processType) {
     case 'cadastro_cedente':
       return 'bg-blue-100 text-blue-700 border-blue-200';
+    case 'atualizacao_cedente':
+      return 'bg-green-100 text-green-700 border-green-200';
     case 'risco_sacado':
       return 'bg-red-100 text-red-700 border-red-200';
-    case 'atualizacao_cadastro':
-      return 'bg-green-100 text-green-700 border-green-200';
+    case 'cadastro_sacado':
+      return 'bg-purple-100 text-purple-700 border-purple-200';
     default:
       return 'bg-gray-100 text-gray-700 border-gray-200';
   }
@@ -243,12 +281,21 @@ export const getProcessTypeBadge = (processType: string) => {
 export const getProcessTypeIcon = (processType: string) => {
   switch (processType) {
     case 'cadastro_cedente':
-      return 'UserPlus'; // Novo cadastro
+      return 'UserPlus';
+    case 'atualizacao_cedente':
+      return 'RefreshCw';
     case 'risco_sacado':
-      return 'ShieldAlert'; // Análise de risco
-    case 'atualizacao_cadastro':
-      return 'RefreshCw'; // Atualização
+      return 'ShieldAlert';
+    case 'cadastro_sacado':
+      return 'UserCheck';
     default:
       return 'FileText';
   }
 };
+
+export const processTypeOptions = [
+  { value: 'cadastro_cedente', label: 'Cadastro Cedente' },
+  { value: 'atualizacao_cedente', label: 'Atualização de Cedente' },
+  { value: 'risco_sacado', label: 'Risco Sacado' },
+  { value: 'cadastro_sacado', label: 'Cadastro de Sacado' },
+] as const;
