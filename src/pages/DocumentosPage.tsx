@@ -140,10 +140,10 @@ export default function DocumentosPage() {
     const relevantCategories = documentCategories.filter(cat => 
       cat.processType === company.processType
     );
-    const totalRequired = relevantCategories.filter(cat => cat.required).length;
+    const totalRequired = relevantCategories.filter(cat => cat.obligation === 'obrigatorio').length;
     const approvedRequired = mockDocuments.filter(doc => 
       doc.status === 'approved' && 
-      relevantCategories.find(cat => cat.name === doc.category)?.required
+      relevantCategories.find(cat => cat.name === doc.category)?.obligation === 'obrigatorio'
     ).length;
     return totalRequired > 0 ? Math.round((approvedRequired / totalRequired) * 100) : 0;
   };
