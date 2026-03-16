@@ -214,12 +214,10 @@ export default function CarteiraPage() {
                     <p className="text-sm text-muted-foreground">Criado em</p>
                     <p className="text-sm">{company.createdAt.toLocaleDateString('pt-BR')}</p>
                   </div>
-                  {company.approvedAt && (
-                    <div>
-                      <p className="text-sm text-muted-foreground">Aprovado em</p>
-                      <p className="text-sm">{company.approvedAt.toLocaleDateString('pt-BR')}</p>
-                    </div>
-                  )}
+                  <div>
+                    <p className="text-sm text-muted-foreground">Atualizado em</p>
+                    <p className="text-sm">{company.updatedAt.toLocaleDateString('pt-BR')}</p>
+                  </div>
                   <div className="flex gap-2 pt-2">
                     <Button size="sm" className="flex-1" asChild>
                       <Link to={`/documentos/${company.id}`}>
