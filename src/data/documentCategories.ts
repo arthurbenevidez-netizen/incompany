@@ -455,7 +455,7 @@ export const getObligationBadge = (obligation: string) => {
       return 'bg-green-100 text-green-700 border-green-200';
     case 'condicional':
       return 'bg-amber-100 text-amber-700 border-amber-200';
-    case 'complementar':
+    case 'opcional':
       return 'bg-slate-100 text-slate-500 border-slate-200';
     default:
       return 'bg-gray-100 text-gray-700 border-gray-200';
