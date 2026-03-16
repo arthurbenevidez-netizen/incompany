@@ -284,7 +284,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Boletim de Subscrição",
     type: "empresa",
     processType: "risco_sacado",
-    obligation: "obrigatorio",
+    obligation: "condicional",
     description: "Boletim de Subscrição",
     subtypeCondition: "sa",
   },
