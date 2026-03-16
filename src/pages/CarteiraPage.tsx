@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Plus, Search, Building2, FileText, Clock, CheckCircle, UserPlus, ShieldAlert, RefreshCw, UserCheck, AlertTriangle } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -122,14 +123,23 @@ export default function CarteiraPage() {
     }
   };
 
-  const getProcessTypeBadgeElement = (processType: string) => {
+  const getProcessTypeIconWithTooltip = (processType: string) => {
     const classes = getProcessTypeBadge(processType);
     const icon = getProcessTypeIcon(processType);
+    const label = getProcessTypeLabel(processType);
     return (
-      <Badge className={`${classes} border text-xs font-medium flex items-center gap-1`}>
-        {icon}
-        {getProcessTypeLabel(processType)}
-      </Badge>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className={`${classes} border rounded-full p-1.5 flex items-center justify-center shrink-0`}>
+              {icon}
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{label}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     );
   };
 
@@ -193,9 +203,9 @@ export default function CarteiraPage() {
                 </div>
               )}
               <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
-                    {getProcessTypeBadgeElement(company.processType)}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    {getProcessTypeIconWithTooltip(company.processType)}
                     <CardTitle className="text-lg truncate">{company.name}</CardTitle>
                   </div>
                   {getStatusBadge(company.status)}
