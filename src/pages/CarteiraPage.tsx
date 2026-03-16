@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Plus, Search, Building2, FileText, Clock, CheckCircle, UserPlus, ShieldAlert, RefreshCw, UserCheck, AlertTriangle } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
