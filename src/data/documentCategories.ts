@@ -89,7 +89,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Boletim de Subscrição",
     type: "empresa",
     processType: "cadastro_cedente",
-    obligation: "obrigatorio",
+    obligation: "condicional",
     description: "Boletim de Subscrição",
     subtypeCondition: "sa",
   },
