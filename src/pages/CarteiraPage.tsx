@@ -123,14 +123,23 @@ export default function CarteiraPage() {
     }
   };
 
-  const getProcessTypeBadgeElement = (processType: string) => {
+  const getProcessTypeIconWithTooltip = (processType: string) => {
     const classes = getProcessTypeBadge(processType);
     const icon = getProcessTypeIcon(processType);
+    const label = getProcessTypeLabel(processType);
     return (
-      <Badge className={`${classes} border text-xs font-medium flex items-center gap-1`}>
-        {icon}
-        {getProcessTypeLabel(processType)}
-      </Badge>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className={`${classes} border rounded-full p-1.5 flex items-center justify-center shrink-0`}>
+              {icon}
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{label}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     );
   };
 
