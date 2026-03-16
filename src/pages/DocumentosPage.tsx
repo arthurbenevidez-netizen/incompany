@@ -140,10 +140,10 @@ export default function DocumentosPage() {
     const relevantCategories = documentCategories.filter(cat => 
       cat.processType === company.processType
     );
-    const totalRequired = relevantCategories.filter(cat => cat.required).length;
+    const totalRequired = relevantCategories.filter(cat => cat.obligation === 'obrigatorio').length;
     const approvedRequired = mockDocuments.filter(doc => 
       doc.status === 'approved' && 
-      relevantCategories.find(cat => cat.name === doc.category)?.required
+      relevantCategories.find(cat => cat.name === doc.category)?.obligation === 'obrigatorio'
     ).length;
     return totalRequired > 0 ? Math.round((approvedRequired / totalRequired) * 100) : 0;
   };
@@ -260,8 +260,14 @@ function DocumentSection({
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <h3 className="font-semibold">{category.name}</h3>
-                      {category.required && (
+                      {category.obligation === 'obrigatorio' && (
                         <Badge variant="outline" className="text-xs">Obrigatório</Badge>
+                      )}
+                      {category.obligation === 'condicional' && (
+                        <Badge variant="outline" className="text-xs bg-amber-50 text-amber-700 border-amber-200">Condicional</Badge>
+                      )}
+                      {category.obligation === 'complementar' && (
+                        <Badge variant="outline" className="text-xs bg-slate-50 text-slate-500 border-slate-200">Complementar</Badge>
                       )}
                     </div>
                     <p className="text-sm text-muted-foreground mb-3">
@@ -323,7 +329,7 @@ function DocumentSection({
                     }
                     documentName={category.name}
                     documentDescription={category.description}
-                    required={category.required}
+                    required={category.obligation === 'obrigatorio'}
                     existingFiles={uploadedDoc?.files || []}
                     onUpload={(files) => onDocumentUpload(category.name, files)}
                   />

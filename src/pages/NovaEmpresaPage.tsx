@@ -62,7 +62,7 @@ export default function NovaEmpresaPage() {
   };
 
   const pendingDocs = formData.processType
-    ? documentCategories.filter(doc => doc.processType === formData.processType && doc.required)
+    ? documentCategories.filter(doc => doc.processType === formData.processType && doc.obligation === 'obrigatorio')
     : [];
 
   const isFormValid = formData.razaoSocial && formData.cnpj && formData.processType;
@@ -227,7 +227,8 @@ export default function NovaEmpresaPage() {
                       <div key={doc.id} className="flex items-center gap-2 text-sm p-2 bg-muted/30 rounded">
                         <Clock className="h-3 w-3 text-muted-foreground" />
                         <span>{doc.name}</span>
-                        {doc.required && <Badge variant="outline" className="text-xs ml-auto">Obrigatório</Badge>}
+                        {doc.obligation === 'obrigatorio' && <Badge variant="outline" className="text-xs ml-auto">Obrigatório</Badge>}
+                        {doc.obligation === 'condicional' && <Badge variant="outline" className="text-xs ml-auto bg-amber-50 text-amber-700 border-amber-200">Condicional</Badge>}
                       </div>
                     ))}
                   </div>

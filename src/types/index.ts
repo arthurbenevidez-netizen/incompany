@@ -60,13 +60,19 @@ export interface DocumentWithFiles {
   reviewerId?: string;
 }
 
+export type DocumentObligation = 'obrigatorio' | 'condicional' | 'complementar';
+export type DocumentSectionType = 'financeira' | 'empresa' | 'socios' | 'complementar' | 'analise_estruturacao' | 'documentacao_sacado' | 'convenio';
+
 export interface DocumentCategory {
   id: string;
   name: string;
-  type: 'empresa' | 'socios' | 'financeira';
+  type: DocumentSectionType;
   processType: ProcessType;
-  required: boolean;
+  obligation: DocumentObligation;
   description: string;
+  link?: string;
+  observations?: string[];
+  subtypeCondition?: 'ltda' | 'sa';
 }
 
 export interface Notification {
