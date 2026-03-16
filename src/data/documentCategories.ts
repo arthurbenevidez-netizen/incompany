@@ -262,7 +262,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Estatuto Social em vigor",
     type: "empresa",
     processType: "risco_sacado",
-    obligation: "obrigatorio",
+    obligation: "condicional",
     description: "Estatuto Social em vigor",
     subtypeCondition: "sa",
     observations: [
