@@ -76,7 +76,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Estatuto Social em vigor",
     type: "empresa",
     processType: "cadastro_cedente",
-    obligation: "obrigatorio",
+    obligation: "condicional",
     description: "Estatuto Social em vigor",
     subtypeCondition: "sa",
     observations: [
