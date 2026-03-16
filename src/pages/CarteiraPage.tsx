@@ -203,9 +203,9 @@ export default function CarteiraPage() {
                 </div>
               )}
               <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
-                    {getProcessTypeBadgeElement(company.processType)}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    {getProcessTypeIconWithTooltip(company.processType)}
                     <CardTitle className="text-lg truncate">{company.name}</CardTitle>
                   </div>
                   {getStatusBadge(company.status)}
