@@ -429,8 +429,8 @@ export const getObligationLabel = (obligation: string) => {
       return 'Obrigatório';
     case 'condicional':
       return 'Condicional';
-    case 'complementar':
-      return 'Complementar';
+    case 'opcional':
+      return 'Opcional';
     default:
       return obligation;
   }
