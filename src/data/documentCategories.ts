@@ -98,7 +98,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Ata de Eleição da Atual Diretoria",
     type: "empresa",
     processType: "cadastro_cedente",
-    obligation: "obrigatorio",
+    obligation: "condicional",
     description: "Ata de Eleição da Atual Diretoria",
     subtypeCondition: "sa",
   },
