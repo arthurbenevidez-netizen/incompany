@@ -154,7 +154,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Backlog de Contratos",
     type: "complementar",
     processType: "cadastro_cedente",
-    obligation: "complementar",
+    obligation: "opcional",
     description: "Backlog de contratos",
   },
 
