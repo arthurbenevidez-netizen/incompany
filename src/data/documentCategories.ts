@@ -61,7 +61,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Contrato Social + Última Alteração Consolidada",
     type: "empresa",
     processType: "cadastro_cedente",
-    obligation: "obrigatorio",
+    obligation: "condicional",
     description: "Contrato Social + Última Alteração Contratual Consolidada",
     subtypeCondition: "ltda",
     observations: [
@@ -76,7 +76,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Estatuto Social em vigor",
     type: "empresa",
     processType: "cadastro_cedente",
-    obligation: "obrigatorio",
+    obligation: "condicional",
     description: "Estatuto Social em vigor",
     subtypeCondition: "sa",
     observations: [
@@ -89,7 +89,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Boletim de Subscrição",
     type: "empresa",
     processType: "cadastro_cedente",
-    obligation: "obrigatorio",
+    obligation: "condicional",
     description: "Boletim de Subscrição",
     subtypeCondition: "sa",
   },
@@ -98,7 +98,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Ata de Eleição da Atual Diretoria",
     type: "empresa",
     processType: "cadastro_cedente",
-    obligation: "obrigatorio",
+    obligation: "condicional",
     description: "Ata de Eleição da Atual Diretoria",
     subtypeCondition: "sa",
   },
@@ -146,7 +146,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Apólices de Seguro",
     type: "complementar",
     processType: "cadastro_cedente",
-    obligation: "complementar",
+    obligation: "opcional",
     description: "Apólices de seguro vigentes",
   },
   {
@@ -154,7 +154,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Backlog de Contratos",
     type: "complementar",
     processType: "cadastro_cedente",
-    obligation: "complementar",
+    obligation: "opcional",
     description: "Backlog de contratos",
   },
 
@@ -233,7 +233,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Backlog de Contratos",
     type: "complementar",
     processType: "atualizacao_cedente",
-    obligation: "complementar",
+    obligation: "opcional",
     description: "Backlog de contratos",
   },
 
@@ -247,7 +247,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Contrato Social + Última Alteração Consolidada",
     type: "empresa",
     processType: "risco_sacado",
-    obligation: "obrigatorio",
+    obligation: "condicional",
     description: "Contrato Social + Última Alteração Contratual Consolidada",
     subtypeCondition: "ltda",
     observations: [
@@ -262,7 +262,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Estatuto Social em vigor",
     type: "empresa",
     processType: "risco_sacado",
-    obligation: "obrigatorio",
+    obligation: "condicional",
     description: "Estatuto Social em vigor",
     subtypeCondition: "sa",
     observations: [
@@ -275,7 +275,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Ata de Eleição da Atual Diretoria",
     type: "empresa",
     processType: "risco_sacado",
-    obligation: "obrigatorio",
+    obligation: "condicional",
     description: "Ata de Eleição da Atual Diretoria",
     subtypeCondition: "sa",
   },
@@ -284,7 +284,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Boletim de Subscrição",
     type: "empresa",
     processType: "risco_sacado",
-    obligation: "obrigatorio",
+    obligation: "condicional",
     description: "Boletim de Subscrição",
     subtypeCondition: "sa",
   },
@@ -429,8 +429,8 @@ export const getObligationLabel = (obligation: string) => {
       return 'Obrigatório';
     case 'condicional':
       return 'Condicional';
-    case 'complementar':
-      return 'Complementar';
+    case 'opcional':
+      return 'Opcional';
     default:
       return obligation;
   }
@@ -442,7 +442,7 @@ export const getObligationIcon = (obligation: string) => {
       return '✅';
     case 'condicional':
       return '🔀';
-    case 'complementar':
+    case 'opcional':
       return '📎';
     default:
       return '📄';
@@ -455,7 +455,7 @@ export const getObligationBadge = (obligation: string) => {
       return 'bg-green-100 text-green-700 border-green-200';
     case 'condicional':
       return 'bg-amber-100 text-amber-700 border-amber-200';
-    case 'complementar':
+    case 'opcional':
       return 'bg-slate-100 text-slate-500 border-slate-200';
     default:
       return 'bg-gray-100 text-gray-700 border-gray-200';

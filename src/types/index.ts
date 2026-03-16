@@ -60,7 +60,7 @@ export interface DocumentWithFiles {
   reviewerId?: string;
 }
 
-export type DocumentObligation = 'obrigatorio' | 'condicional' | 'complementar';
+export type DocumentObligation = 'obrigatorio' | 'condicional' | 'opcional';
 export type DocumentSectionType = 'financeira' | 'empresa' | 'socios' | 'complementar' | 'analise_estruturacao' | 'documentacao_sacado' | 'convenio';
 
 export interface DocumentCategory {
