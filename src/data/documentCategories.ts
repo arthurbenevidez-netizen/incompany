@@ -442,7 +442,7 @@ export const getObligationIcon = (obligation: string) => {
       return '✅';
     case 'condicional':
       return '🔀';
-    case 'complementar':
+    case 'opcional':
       return '📎';
     default:
       return '📄';
