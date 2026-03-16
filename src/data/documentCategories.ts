@@ -247,7 +247,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Contrato Social + Última Alteração Consolidada",
     type: "empresa",
     processType: "risco_sacado",
-    obligation: "obrigatorio",
+    obligation: "condicional",
     description: "Contrato Social + Última Alteração Contratual Consolidada",
     subtypeCondition: "ltda",
     observations: [
