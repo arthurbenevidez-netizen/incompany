@@ -61,7 +61,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Contrato Social + Última Alteração Consolidada",
     type: "empresa",
     processType: "cadastro_cedente",
-    obligation: "obrigatorio",
+    obligation: "condicional",
     description: "Contrato Social + Última Alteração Contratual Consolidada",
     subtypeCondition: "ltda",
     observations: [
