@@ -275,7 +275,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Ata de Eleição da Atual Diretoria",
     type: "empresa",
     processType: "risco_sacado",
-    obligation: "obrigatorio",
+    obligation: "condicional",
     description: "Ata de Eleição da Atual Diretoria",
     subtypeCondition: "sa",
   },
