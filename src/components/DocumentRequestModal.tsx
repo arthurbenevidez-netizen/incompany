@@ -197,9 +197,14 @@ export function DocumentRequestModal({ company, onRequest }: DocumentRequestModa
                             <div className="flex items-center gap-2">
                               <FileText className="h-4 w-4 text-muted-foreground" />
                               {doc.name}
-                              {doc.required && (
+                              {doc.obligation === 'obrigatorio' && (
                                 <Badge variant="destructive" className="text-xs px-1 py-0">
                                   Obrigatório
+                                </Badge>
+                              )}
+                              {doc.obligation === 'condicional' && (
+                                <Badge className="text-xs px-1 py-0 bg-amber-100 text-amber-700 border-amber-200">
+                                  Condicional
                                 </Badge>
                               )}
                             </div>
