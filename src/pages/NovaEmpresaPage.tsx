@@ -62,7 +62,7 @@ export default function NovaEmpresaPage() {
   };
 
   const pendingDocs = formData.processType
-    ? documentCategories.filter(doc => doc.processType === formData.processType && doc.required)
+    ? documentCategories.filter(doc => doc.processType === formData.processType && doc.obligation === 'obrigatorio')
     : [];
 
   const isFormValid = formData.razaoSocial && formData.cnpj && formData.processType;
