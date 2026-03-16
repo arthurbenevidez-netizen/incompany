@@ -146,7 +146,7 @@ export const documentCategories: DocumentCategory[] = [
     name: "Apólices de Seguro",
     type: "complementar",
     processType: "cadastro_cedente",
-    obligation: "complementar",
+    obligation: "opcional",
     description: "Apólices de seguro vigentes",
   },
   {
