@@ -12,8 +12,8 @@ import { documentCategories, getProcessTypeLabel } from "@/data/documentCategori
 interface DocumentType {
   id: string;
   name: string;
-  category: 'empresa' | 'socios' | 'financeira';
-  required: boolean;
+  category: string;
+  obligation: string;
   isPending: boolean;
   description?: string;
 }
@@ -25,7 +25,7 @@ const getAvailableDocuments = (processType: string): DocumentType[] => {
       id: doc.id,
       name: doc.name,
       category: doc.type,
-      required: doc.required,
+      obligation: doc.obligation,
       isPending: true,
       description: doc.description
     }));

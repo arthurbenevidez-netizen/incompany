@@ -329,7 +329,7 @@ function DocumentSection({
                     }
                     documentName={category.name}
                     documentDescription={category.description}
-                    required={category.required}
+                    required={category.obligation === 'obrigatorio'}
                     existingFiles={uploadedDoc?.files || []}
                     onUpload={(files) => onDocumentUpload(category.name, files)}
                   />
