@@ -390,22 +390,15 @@ function CompanyAnaliseCard({
   approvalNotes,
   setApprovalNotes,
 }: CompanyAnaliseCardProps) {
-  const processClasses = getProcessTypeBadge(company.processType);
-
   return (
     <Card className="shadow-card hover:shadow-elevated transition-shadow">
       <CardContent className="pt-6">
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-3 flex-wrap">
-              <Building2 className="h-5 w-5 text-primary" />
+              {getProcessTypeIconWithTooltip(company.processType)}
               <h3 className="font-semibold text-lg">{company.name}</h3>
               {getStatusBadge(company.status)}
-              {getSavedStatusBadge(company.savedStatus)}
-              <Badge className={`${processClasses} border text-xs font-medium flex items-center gap-1`}>
-                {getProcessTypeIcon(company.processType)}
-                {getProcessTypeLabel(company.processType)}
-              </Badge>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
