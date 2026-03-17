@@ -361,8 +361,7 @@ interface CompanyAnaliseCardProps {
   company: Company;
   getStatusIcon: (s: string) => JSX.Element;
   getStatusBadge: (s: string) => JSX.Element;
-  getSavedStatusBadge: (s?: string) => JSX.Element;
-  getProcessTypeIcon: (s: string) => JSX.Element;
+  getProcessTypeIconWithTooltip: (s: string) => JSX.Element;
   activeFilter: AnaliseFilter;
   onSolicitarDocumentacao: (id: string, docs: string[], msg: string) => void;
   onReprovar: (id: string, notes: string) => void;
