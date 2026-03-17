@@ -1,4 +1,4 @@
-import { Building2, FileText, Users, BarChart3, Bell, Shield } from "lucide-react";
+import { Building2, FileText, Users, BarChart3, Bell, Shield, Home } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { User } from "@/types";
 
@@ -18,11 +18,17 @@ interface AppSidebarProps {
   currentUser: User;
 }
 
-const allItems = [
-  { title: "Home", url: "/", icon: BarChart3 },
+const homeItems = [
+  { title: "Home", url: "/", icon: Home },
+];
+
+const cadastroItems = [
   { title: "Carteira Comercial", url: "/carteira", icon: Building2 },
   { title: "Análise de Cadastro", url: "/analise", icon: FileText },
   { title: "Recrutamento", url: "/recrutamento", icon: Users },
+];
+
+const authItems = [
   { title: "Programação de Avisos", url: "/programacao-avisos", icon: Bell },
   { title: "Gestão de Perfis", url: "/gestao-perfis", icon: Shield },
 ];
@@ -32,12 +38,30 @@ export function AppSidebar({ currentUser }: AppSidebarProps) {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  const isActive = (path: string) => currentPath === path;
   const getNavCls = ({ isActive }: { isActive: boolean }) =>
     isActive ? "bg-primary/10 text-primary font-medium border-r-2 border-primary" : "hover:bg-muted/50";
 
-  const menuItems = allItems;
   const collapsed = state === 'collapsed';
+
+  const renderGroup = (label: string, items: typeof homeItems) => (
+    <SidebarGroup key={label}>
+      <SidebarGroupLabel>{label}</SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {items.map((item) => (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton asChild>
+                <NavLink to={item.url} end className={getNavCls}>
+                  <item.icon className="h-4 w-4" />
+                  {!collapsed && <span>{item.title}</span>}
+                </NavLink>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  );
 
   return (
     <Sidebar className={collapsed ? "w-14" : "w-64"} collapsible="icon">
@@ -56,24 +80,9 @@ export function AppSidebar({ currentUser }: AppSidebarProps) {
           </div>
         </div>
 
-        <SidebarGroup>
-          <SidebarGroupLabel>M7 Cadastro</SidebarGroupLabel>
-          
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {menuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink to={item.url} end className={getNavCls}>
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {renderGroup("Geral", homeItems)}
+        {renderGroup("Cadastro de Empresa", cadastroItems)}
+        {renderGroup("Administração", authItems)}
       </SidebarContent>
     </Sidebar>
   );
