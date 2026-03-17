@@ -140,11 +140,24 @@ export default function AnalisePage() {
     }
   };
 
-  const getSavedStatusBadge = (savedStatus?: string) => {
-    if (savedStatus === 'completo') {
-      return <Badge className="bg-success-light text-success border border-success/20 text-xs">Finalizado</Badge>;
-    }
-    return <Badge className="bg-warning-light text-warning border border-warning/20 text-xs">Incompleto</Badge>;
+  const getProcessTypeIconWithTooltip = (processType: string) => {
+    const classes = getProcessTypeBadge(processType);
+    const icon = getProcessTypeIcon(processType);
+    const label = getProcessTypeLabel(processType);
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className={`${classes} border rounded-full p-1.5 flex items-center justify-center shrink-0`}>
+              {icon}
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{label}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
   };
 
   const getProcessTypeIcon = (processType: string) => {
@@ -213,8 +226,7 @@ export default function AnalisePage() {
   const cardProps = {
     getStatusIcon,
     getStatusBadge,
-    getSavedStatusBadge,
-    getProcessTypeIcon,
+    getProcessTypeIconWithTooltip,
     activeFilter,
     onSolicitarDocumentacao: handleSoliciatarDocumentacao,
     onReprovar: handleReprovar,
@@ -349,8 +361,7 @@ interface CompanyAnaliseCardProps {
   company: Company;
   getStatusIcon: (s: string) => JSX.Element;
   getStatusBadge: (s: string) => JSX.Element;
-  getSavedStatusBadge: (s?: string) => JSX.Element;
-  getProcessTypeIcon: (s: string) => JSX.Element;
+  getProcessTypeIconWithTooltip: (s: string) => JSX.Element;
   activeFilter: AnaliseFilter;
   onSolicitarDocumentacao: (id: string, docs: string[], msg: string) => void;
   onReprovar: (id: string, notes: string) => void;
@@ -367,8 +378,7 @@ function CompanyAnaliseCard({
   company,
   getStatusIcon,
   getStatusBadge,
-  getSavedStatusBadge,
-  getProcessTypeIcon,
+  getProcessTypeIconWithTooltip,
   activeFilter,
   onSolicitarDocumentacao,
   onReprovar,
@@ -380,22 +390,15 @@ function CompanyAnaliseCard({
   approvalNotes,
   setApprovalNotes,
 }: CompanyAnaliseCardProps) {
-  const processClasses = getProcessTypeBadge(company.processType);
-
   return (
     <Card className="shadow-card hover:shadow-elevated transition-shadow">
       <CardContent className="pt-6">
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-3 flex-wrap">
-              <Building2 className="h-5 w-5 text-primary" />
+              {getProcessTypeIconWithTooltip(company.processType)}
               <h3 className="font-semibold text-lg">{company.name}</h3>
               {getStatusBadge(company.status)}
-              {getSavedStatusBadge(company.savedStatus)}
-              <Badge className={`${processClasses} border text-xs font-medium flex items-center gap-1`}>
-                {getProcessTypeIcon(company.processType)}
-                {getProcessTypeLabel(company.processType)}
-              </Badge>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
