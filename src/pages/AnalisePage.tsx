@@ -226,8 +226,7 @@ export default function AnalisePage() {
   const cardProps = {
     getStatusIcon,
     getStatusBadge,
-    getSavedStatusBadge,
-    getProcessTypeIcon,
+    getProcessTypeIconWithTooltip,
     activeFilter,
     onSolicitarDocumentacao: handleSoliciatarDocumentacao,
     onReprovar: handleReprovar,
