@@ -57,7 +57,7 @@ export function AppSidebar({ currentUser }: AppSidebarProps) {
         </div>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Sistema M7 Crédito</SidebarGroupLabel>
+          <SidebarGroupLabel>M7 Cadastro</SidebarGroupLabel>
           
           <SidebarGroupContent>
             <SidebarMenu>
