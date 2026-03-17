@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Search, Building2, Clock, CheckCircle, AlertTriangle, Eye, MessageSquare, FileText, UserPlus, ShieldAlert, RefreshCw, UserCheck } from "lucide-react";
+import { Search, Building2, Clock, CheckCircle, AlertTriangle, Eye, MessageSquare, FileText, UserPlus, ShieldAlert, RefreshCw, UserCheck, Users, LayoutGrid, XCircle } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +13,6 @@ import { Company } from "@/types";
 import { Link } from "react-router-dom";
 import { getProcessTypeLabel, getProcessTypeBadge } from "@/data/documentCategories";
 
-// Mock - empresas salvas pelo gerente
 const mockCompanies: Company[] = [
   {
     id: "1",
@@ -84,9 +84,24 @@ const mockCompanies: Company[] = [
     documentsPending: 4,
     documentsTotal: 4,
   },
+  {
+    id: "6",
+    name: "Distribuidora Norte LTDA",
+    cnpj: "66.777.888/0001-99",
+    status: "rejected",
+    processType: "cadastro_cedente",
+    managerName: "João Silva",
+    managerId: "1",
+    createdAt: new Date("2024-01-08"),
+    updatedAt: new Date("2024-02-15"),
+    savedStatus: "completo",
+    documentsPending: 0,
+    documentsTotal: 8,
+  },
 ];
 
 type AnaliseFilter = "pendentes" | "em_andamento" | "finalizados";
+type ViewMode = "list" | "manager";
 
 export default function AnalisePage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -94,6 +109,7 @@ export default function AnalisePage() {
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [reviewNotes, setReviewNotes] = useState("");
   const [approvalNotes, setApprovalNotes] = useState("");
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -113,7 +129,7 @@ export default function AnalisePage() {
       case 'approved':
         return <Badge className="bg-success-light text-success">Aprovado</Badge>;
       case 'rejected':
-        return <Badge className="bg-destructive-light text-destructive">Rejeitado</Badge>;
+        return <Badge className="bg-destructive-light text-destructive">Reprovado</Badge>;
       case 'awaiting_review':
         return <Badge className="bg-warning-light text-warning">Aguardando Revisão</Badge>;
       case 'pending':
@@ -146,7 +162,6 @@ export default function AnalisePage() {
     }
   };
 
-  // Filter logic
   const filterCompanies = (filter: AnaliseFilter) => {
     let filtered = mockCompanies.filter(c => {
       const matchesSearch = c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -157,24 +172,27 @@ export default function AnalisePage() {
 
     switch (filter) {
       case 'pendentes':
-        // Tem pendência de documento
-        filtered = filtered.filter(c => (c.documentsPending ?? 0) > 0 && c.status !== 'approved');
+        filtered = filtered.filter(c => (c.documentsPending ?? 0) > 0 && c.status !== 'approved' && c.status !== 'rejected');
         break;
       case 'em_andamento':
-        // Cadastro está analisando documentos (in_progress ou awaiting_review)
         filtered = filtered.filter(c => c.status === 'in_progress' || c.status === 'awaiting_review');
         break;
       case 'finalizados':
-        // Cadastro aprovou
-        filtered = filtered.filter(c => c.status === 'approved');
+        filtered = filtered.filter(c => c.status === 'approved' || c.status === 'rejected');
         break;
     }
 
-    // Sort oldest first
     return filtered.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
   };
 
   const filteredCompanies = filterCompanies(activeFilter);
+
+  const companiesByManager = filteredCompanies.reduce<Record<string, Company[]>>((acc, company) => {
+    const key = company.managerName;
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(company);
+    return acc;
+  }, {});
 
   const handleSoliciatarDocumentacao = (companyId: string, selectedDocuments: string[], message: string) => {
     console.log("Solicitando documentação para empresa:", companyId, selectedDocuments, message);
@@ -188,9 +206,71 @@ export default function AnalisePage() {
     console.log("Aprovando empresa:", companyId, "Comentários:", notes);
   };
 
-  const pendentesCount = mockCompanies.filter(c => (c.documentsPending ?? 0) > 0 && c.status !== 'approved').length;
+  const pendentesCount = mockCompanies.filter(c => (c.documentsPending ?? 0) > 0 && c.status !== 'approved' && c.status !== 'rejected').length;
   const andamentoCount = mockCompanies.filter(c => c.status === 'in_progress' || c.status === 'awaiting_review').length;
-  const finalizadosCount = mockCompanies.filter(c => c.status === 'approved').length;
+  const finalizadosCount = mockCompanies.filter(c => c.status === 'approved' || c.status === 'rejected').length;
+
+  const cardProps = {
+    getStatusIcon,
+    getStatusBadge,
+    getSavedStatusBadge,
+    getProcessTypeIcon,
+    activeFilter,
+    onSolicitarDocumentacao: handleSoliciatarDocumentacao,
+    onReprovar: handleReprovar,
+    onAprovar: handleAprovar,
+    selectedCompany,
+    setSelectedCompany,
+    reviewNotes,
+    setReviewNotes,
+    approvalNotes,
+    setApprovalNotes,
+  };
+
+  const renderCompanies = () => {
+    if (filteredCompanies.length === 0) {
+      return (
+        <Card className="shadow-card">
+          <CardContent className="py-12 text-center">
+            <Building2 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2">Nenhuma empresa encontrada</h3>
+            <p className="text-muted-foreground">
+              {searchTerm ? "Tente ajustar os filtros de busca" : "Não há empresas nesta categoria"}
+            </p>
+          </CardContent>
+        </Card>
+      );
+    }
+
+    if (viewMode === "manager") {
+      return (
+        <div className="space-y-8">
+          {Object.entries(companiesByManager).map(([managerName, companies]) => (
+            <div key={managerName}>
+              <div className="flex items-center gap-2 mb-4">
+                <Users className="h-5 w-5 text-primary" />
+                <h2 className="text-lg font-semibold">{managerName}</h2>
+                <Badge variant="secondary" className="ml-1">{companies.length} empresa{companies.length !== 1 ? 's' : ''}</Badge>
+              </div>
+              <div className="space-y-4">
+                {companies.map((company) => (
+                  <CompanyAnaliseCard key={company.id} company={company} {...cardProps} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-4">
+        {filteredCompanies.map((company) => (
+          <CompanyAnaliseCard key={company.id} company={company} {...cardProps} />
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="space-y-6">
@@ -203,22 +283,44 @@ export default function AnalisePage() {
         </div>
       </div>
 
-      {/* Search */}
       <Card className="shadow-card">
         <CardContent className="pt-6">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Buscar por empresa, CNPJ ou gerente..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Buscar por empresa, CNPJ ou gerente..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            <div className="flex gap-1">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant={viewMode === "list" ? "default" : "outline"} onClick={() => setViewMode("list")} size="sm" className="px-2">
+                      <LayoutGrid className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent><p>Visualização em lista</p></TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant={viewMode === "manager" ? "default" : "outline"} onClick={() => setViewMode("manager")} size="sm" className="px-2">
+                      <Users className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent><p>Agrupar por gerente</p></TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Tabs */}
       <Tabs value={activeFilter} onValueChange={(v) => setActiveFilter(v as AnaliseFilter)}>
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="pendentes" className="gap-2">
@@ -236,40 +338,7 @@ export default function AnalisePage() {
         </TabsList>
 
         <TabsContent value={activeFilter} className="mt-6">
-          <div className="space-y-4">
-            {filteredCompanies.map((company) => (
-              <CompanyAnaliseCard
-                key={company.id}
-                company={company}
-                getStatusIcon={getStatusIcon}
-                getStatusBadge={getStatusBadge}
-                getSavedStatusBadge={getSavedStatusBadge}
-                getProcessTypeIcon={getProcessTypeIcon}
-                activeFilter={activeFilter}
-                onSolicitarDocumentacao={handleSoliciatarDocumentacao}
-                onReprovar={handleReprovar}
-                onAprovar={handleAprovar}
-                selectedCompany={selectedCompany}
-                setSelectedCompany={setSelectedCompany}
-                reviewNotes={reviewNotes}
-                setReviewNotes={setReviewNotes}
-                approvalNotes={approvalNotes}
-                setApprovalNotes={setApprovalNotes}
-              />
-            ))}
-          </div>
-
-          {filteredCompanies.length === 0 && (
-            <Card className="shadow-card">
-              <CardContent className="py-12 text-center">
-                <Building2 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Nenhuma empresa encontrada</h3>
-                <p className="text-muted-foreground">
-                  {searchTerm ? "Tente ajustar os filtros de busca" : "Não há empresas nesta categoria"}
-                </p>
-              </CardContent>
-            </Card>
-          )}
+          {renderCompanies()}
         </TabsContent>
       </Tabs>
     </div>
@@ -329,13 +398,13 @@ function CompanyAnaliseCard({
               </Badge>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
               <div>
                 <p className="text-sm text-muted-foreground">CNPJ</p>
                 <p className="font-mono text-sm">{company.cnpj}</p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Gerente Responsável</p>
+                <p className="text-sm text-muted-foreground">Gerente Comercial</p>
                 <p className="text-sm font-medium">{company.managerName}</p>
               </div>
               <div>
@@ -348,6 +417,10 @@ function CompanyAnaliseCard({
               <div>
                 <p className="text-sm text-muted-foreground">Criado em</p>
                 <p className="text-sm">{company.createdAt.toLocaleDateString('pt-BR')}</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Atualizado em</p>
+                <p className="text-sm">{company.updatedAt.toLocaleDateString('pt-BR')}</p>
               </div>
             </div>
           </div>
