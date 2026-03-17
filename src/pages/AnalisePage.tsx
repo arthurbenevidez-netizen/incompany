@@ -140,11 +140,24 @@ export default function AnalisePage() {
     }
   };
 
-  const getSavedStatusBadge = (savedStatus?: string) => {
-    if (savedStatus === 'completo') {
-      return <Badge className="bg-success-light text-success border border-success/20 text-xs">Finalizado</Badge>;
-    }
-    return <Badge className="bg-warning-light text-warning border border-warning/20 text-xs">Incompleto</Badge>;
+  const getProcessTypeIconWithTooltip = (processType: string) => {
+    const classes = getProcessTypeBadge(processType);
+    const icon = getProcessTypeIcon(processType);
+    const label = getProcessTypeLabel(processType);
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className={`${classes} border rounded-full p-1.5 flex items-center justify-center shrink-0`}>
+              {icon}
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{label}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
   };
 
   const getProcessTypeIcon = (processType: string) => {
