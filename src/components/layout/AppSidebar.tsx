@@ -49,8 +49,8 @@ export function AppSidebar({ currentUser }: AppSidebarProps) {
             </div>
             {!collapsed && (
               <div>
-                <h2 className="font-semibold text-sm">M7 Crédito</h2>
-                <p className="text-xs text-muted-foreground">Sistema de Cadastro</p>
+                <h2 className="font-semibold text-sm">M7 Cadastro</h2>
+                <p className="text-xs text-muted-foreground">Operações de Crédito</p>
               </div>
             )}
           </div>
