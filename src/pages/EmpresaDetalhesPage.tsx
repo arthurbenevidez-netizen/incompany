@@ -34,6 +34,31 @@ const mockCompany: Company = {
   requestMessage: "Prezado cliente, solicitamos a complementação dos documentos financeiros para dar continuidade à análise do cadastro. Por favor, encaminhe os documentos atualizados conforme listado."
 };
 
+interface Invite {
+  id: string;
+  email: string;
+  sentAt: Date;
+  expiresAt: Date;
+  status: 'pending' | 'accepted' | 'expired';
+}
+
+const initialInvites: Invite[] = [
+  {
+    id: "inv1",
+    email: "contato@techsolutions.com",
+    sentAt: new Date("2024-01-18T10:30:00"),
+    expiresAt: new Date("2024-01-19T10:30:00"),
+    status: "expired",
+  },
+  {
+    id: "inv2",
+    email: "financeiro@techsolutions.com",
+    sentAt: new Date(Date.now() - 3600000), // 1h ago
+    expiresAt: new Date(Date.now() + 82800000), // 23h from now
+    status: "pending",
+  },
+];
+
 const mockHistory = [
   {
     id: "1",
