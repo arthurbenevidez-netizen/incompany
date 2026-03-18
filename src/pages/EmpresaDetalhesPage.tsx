@@ -93,7 +93,39 @@ const mockHistory = [
 export default function EmpresaDetalhesPage() {
   const { id } = useParams();
   const [emailInvite, setEmailInvite] = useState("");
-  const [messageInvite, setMessageInvite] = useState("Olá! Você foi convidado para fazer o cadastro da sua empresa no sistema M7 Crédito. Clique no link abaixo para começar:");
+  const [messageInvite, setMessageInvite] = useState("Olá! Você foi convidado para fazer o cadastro da sua empresa no sistema M7 Cadastro. Clique no link abaixo para começar:");
+  const [invites, setInvites] = useState<Invite[]>(initialInvites);
+
+  const getInviteStatus = (invite: Invite) => {
+    if (invite.status === 'accepted') return 'accepted';
+    if (new Date() > invite.expiresAt) return 'expired';
+    return 'pending';
+  };
+
+  const getInviteStatusBadge = (invite: Invite) => {
+    const status = getInviteStatus(invite);
+    switch (status) {
+      case 'accepted':
+        return <Badge className="bg-success/10 text-success">Aceito</Badge>;
+      case 'expired':
+        return <Badge className="bg-destructive/10 text-destructive">Expirado</Badge>;
+      case 'pending':
+        return <Badge className="bg-warning/10 text-warning">Pendente</Badge>;
+    }
+  };
+
+  const handleResendInvite = (invite: Invite) => {
+    const now = new Date();
+    const newInvite: Invite = {
+      id: `inv-${Date.now()}`,
+      email: invite.email,
+      sentAt: now,
+      expiresAt: new Date(now.getTime() + 24 * 60 * 60 * 1000),
+      status: 'pending',
+    };
+    setInvites(prev => [newInvite, ...prev]);
+    toast.success(`Convite reenviado para ${invite.email}`);
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -113,8 +145,17 @@ export default function EmpresaDetalhesPage() {
   };
 
   const handleSendInvite = () => {
-    // Simular envio de convite
-    alert(`Convite enviado para: ${emailInvite}`);
+    if (!emailInvite.trim()) return;
+    const now = new Date();
+    const newInvite: Invite = {
+      id: `inv-${Date.now()}`,
+      email: emailInvite,
+      sentAt: now,
+      expiresAt: new Date(now.getTime() + 24 * 60 * 60 * 1000),
+      status: 'pending',
+    };
+    setInvites(prev => [newInvite, ...prev]);
+    toast.success(`Convite enviado para ${emailInvite}`);
     setEmailInvite("");
   };
 
