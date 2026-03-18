@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Building2, Calendar, Mail, Phone, FileText, Send, History, Clock, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Building2, Calendar, Mail, Phone, FileText, Send, History, Clock, AlertTriangle, RefreshCw, CheckCircle, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +8,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { toast } from "sonner";
 import { Company } from "@/types";
 
 // Mock data
@@ -31,6 +33,31 @@ const mockCompany: Company = {
   requestDate: new Date("2024-01-18"),
   requestMessage: "Prezado cliente, solicitamos a complementação dos documentos financeiros para dar continuidade à análise do cadastro. Por favor, encaminhe os documentos atualizados conforme listado."
 };
+
+interface Invite {
+  id: string;
+  email: string;
+  sentAt: Date;
+  expiresAt: Date;
+  status: 'pending' | 'accepted' | 'expired';
+}
+
+const initialInvites: Invite[] = [
+  {
+    id: "inv1",
+    email: "contato@techsolutions.com",
+    sentAt: new Date("2024-01-18T10:30:00"),
+    expiresAt: new Date("2024-01-19T10:30:00"),
+    status: "expired",
+  },
+  {
+    id: "inv2",
+    email: "financeiro@techsolutions.com",
+    sentAt: new Date(Date.now() - 3600000), // 1h ago
+    expiresAt: new Date(Date.now() + 82800000), // 23h from now
+    status: "pending",
+  },
+];
 
 const mockHistory = [
   {
@@ -66,7 +93,39 @@ const mockHistory = [
 export default function EmpresaDetalhesPage() {
   const { id } = useParams();
   const [emailInvite, setEmailInvite] = useState("");
-  const [messageInvite, setMessageInvite] = useState("Olá! Você foi convidado para fazer o cadastro da sua empresa no sistema M7 Crédito. Clique no link abaixo para começar:");
+  const [messageInvite, setMessageInvite] = useState("Olá! Você foi convidado para fazer o cadastro da sua empresa no sistema M7 Cadastro. Clique no link abaixo para começar:");
+  const [invites, setInvites] = useState<Invite[]>(initialInvites);
+
+  const getInviteStatus = (invite: Invite) => {
+    if (invite.status === 'accepted') return 'accepted';
+    if (new Date() > invite.expiresAt) return 'expired';
+    return 'pending';
+  };
+
+  const getInviteStatusBadge = (invite: Invite) => {
+    const status = getInviteStatus(invite);
+    switch (status) {
+      case 'accepted':
+        return <Badge className="bg-success/10 text-success">Aceito</Badge>;
+      case 'expired':
+        return <Badge className="bg-destructive/10 text-destructive">Expirado</Badge>;
+      case 'pending':
+        return <Badge className="bg-warning/10 text-warning">Pendente</Badge>;
+    }
+  };
+
+  const handleResendInvite = (invite: Invite) => {
+    const now = new Date();
+    const newInvite: Invite = {
+      id: `inv-${Date.now()}`,
+      email: invite.email,
+      sentAt: now,
+      expiresAt: new Date(now.getTime() + 24 * 60 * 60 * 1000),
+      status: 'pending',
+    };
+    setInvites(prev => [newInvite, ...prev]);
+    toast.success(`Convite reenviado para ${invite.email}`);
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -86,8 +145,17 @@ export default function EmpresaDetalhesPage() {
   };
 
   const handleSendInvite = () => {
-    // Simular envio de convite
-    alert(`Convite enviado para: ${emailInvite}`);
+    if (!emailInvite.trim()) return;
+    const now = new Date();
+    const newInvite: Invite = {
+      id: `inv-${Date.now()}`,
+      email: emailInvite,
+      sentAt: now,
+      expiresAt: new Date(now.getTime() + 24 * 60 * 60 * 1000),
+      status: 'pending',
+    };
+    setInvites(prev => [newInvite, ...prev]);
+    toast.success(`Convite enviado para ${emailInvite}`);
     setEmailInvite("");
   };
 
@@ -297,6 +365,63 @@ export default function EmpresaDetalhesPage() {
                     <span>{mockCompany.documentsTotal! - mockCompany.documentsPending!}</span>
                   </div>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Histórico de Convites */}
+          <Card className="shadow-card">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Mail className="h-5 w-5" />
+                Convites Enviados
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {invites.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-4">Nenhum convite enviado</p>
+                ) : (
+                  invites.map((invite) => {
+                    const status = getInviteStatus(invite);
+                    return (
+                      <div key={invite.id} className="border rounded-md p-3 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium truncate flex-1">{invite.email}</span>
+                          {getInviteStatusBadge(invite)}
+                        </div>
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <Clock className="h-3 w-3" />
+                          <span>Enviado em {invite.sentAt.toLocaleDateString('pt-BR')} às {invite.sentAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
+                        {status === 'pending' && (
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Calendar className="h-3 w-3" />
+                            <span>Expira em {invite.expiresAt.toLocaleDateString('pt-BR')} às {invite.expiresAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+                          </div>
+                        )}
+                        {status === 'expired' && (
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="w-full mt-1"
+                                  onClick={() => handleResendInvite(invite)}
+                                >
+                                  <RefreshCw className="h-3 w-3 mr-1" />
+                                  Reenviar
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>Envia um novo convite com validade de 24h</TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
+                      </div>
+                    );
+                  })
+                )}
               </div>
             </CardContent>
           </Card>
