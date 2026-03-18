@@ -369,6 +369,63 @@ export default function EmpresaDetalhesPage() {
             </CardContent>
           </Card>
 
+          {/* Histórico de Convites */}
+          <Card className="shadow-card">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Mail className="h-5 w-5" />
+                Convites Enviados
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {invites.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-4">Nenhum convite enviado</p>
+                ) : (
+                  invites.map((invite) => {
+                    const status = getInviteStatus(invite);
+                    return (
+                      <div key={invite.id} className="border rounded-md p-3 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium truncate flex-1">{invite.email}</span>
+                          {getInviteStatusBadge(invite)}
+                        </div>
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <Clock className="h-3 w-3" />
+                          <span>Enviado em {invite.sentAt.toLocaleDateString('pt-BR')} às {invite.sentAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
+                        {status === 'pending' && (
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Calendar className="h-3 w-3" />
+                            <span>Expira em {invite.expiresAt.toLocaleDateString('pt-BR')} às {invite.expiresAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+                          </div>
+                        )}
+                        {status === 'expired' && (
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="w-full mt-1"
+                                  onClick={() => handleResendInvite(invite)}
+                                >
+                                  <RefreshCw className="h-3 w-3 mr-1" />
+                                  Reenviar
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>Envia um novo convite com validade de 24h</TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
         </div>
       </div>
     </div>
