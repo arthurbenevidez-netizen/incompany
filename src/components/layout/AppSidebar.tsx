@@ -1,4 +1,4 @@
-import { Building2, FileText, Users, BarChart3, Bell, Shield, Home } from "lucide-react";
+import { Building2, FileText, Users, BarChart3, Bell, Shield, Home, UserCircle } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { User } from "@/types";
 
@@ -26,6 +26,10 @@ const cadastroItems = [
   { title: "Carteira Comercial", url: "/carteira", icon: Building2 },
   { title: "Análise de Cadastro", url: "/analise", icon: FileText },
   { title: "Recrutamento", url: "/recrutamento", icon: Users },
+];
+
+const clienteItems = [
+  { title: "Portal do Cliente", url: "/cliente/demo", icon: UserCircle },
 ];
 
 const authItems = [
@@ -82,6 +86,7 @@ export function AppSidebar({ currentUser }: AppSidebarProps) {
 
         {renderGroup("Geral", homeItems)}
         {renderGroup("Cadastro de Empresa", cadastroItems)}
+        {renderGroup("Simulação", clienteItems)}
         {renderGroup("Administração", authItems)}
       </SidebarContent>
     </Sidebar>

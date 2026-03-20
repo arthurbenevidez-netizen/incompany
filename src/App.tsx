@@ -16,6 +16,7 @@ import NovaEmpresaPage from "./pages/NovaEmpresaPage";
 import NotificacoesPage from "./pages/NotificacoesPage";
 import ProgramacaoAvisosPage from "./pages/ProgramacaoAvisosPage";
 import GestaoPerfilPage from "./pages/GestaoPerfilPage";
+import ClientePortalPage from "./pages/ClientePortalPage";
 import NotFound from "./pages/NotFound";
 import { User } from "@/types";
 
@@ -101,6 +102,7 @@ const App = () => (
               <GestaoPerfilPage />
             </AppLayout>
           } />
+          <Route path="/cliente/:token" element={<ClientePortalPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
