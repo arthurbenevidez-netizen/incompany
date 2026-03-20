@@ -28,6 +28,10 @@ const cadastroItems = [
   { title: "Recrutamento", url: "/recrutamento", icon: Users },
 ];
 
+const clienteItems = [
+  { title: "Portal do Cliente", url: "/cliente/demo", icon: UserCircle },
+];
+
 const authItems = [
   { title: "Programação de Avisos", url: "/programacao-avisos", icon: Bell },
   { title: "Gestão de Perfis", url: "/gestao-perfis", icon: Shield },
