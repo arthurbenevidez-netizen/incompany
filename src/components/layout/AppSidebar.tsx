@@ -86,6 +86,7 @@ export function AppSidebar({ currentUser }: AppSidebarProps) {
 
         {renderGroup("Geral", homeItems)}
         {renderGroup("Cadastro de Empresa", cadastroItems)}
+        {renderGroup("Simulação", clienteItems)}
         {renderGroup("Administração", authItems)}
       </SidebarContent>
     </Sidebar>
