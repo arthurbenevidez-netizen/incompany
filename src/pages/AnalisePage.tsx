@@ -224,7 +224,8 @@ export default function AnalisePage() {
 
   const pendentesCount = mockCompanies.filter(c => (c.documentsPending ?? 0) > 0 && c.status !== 'approved' && c.status !== 'rejected').length;
   const andamentoCount = mockCompanies.filter(c => c.status === 'in_progress' || c.status === 'awaiting_review').length;
-  const finalizadosCount = mockCompanies.filter(c => c.status === 'approved' || c.status === 'rejected').length;
+  const aprovadosCount = mockCompanies.filter(c => c.status === 'approved').length;
+  const reprovadosCount = mockCompanies.filter(c => c.status === 'rejected').length;
 
   const cardProps = {
     getStatusIcon,
