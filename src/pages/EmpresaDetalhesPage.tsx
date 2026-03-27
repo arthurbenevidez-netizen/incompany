@@ -93,7 +93,7 @@ const mockHistory = [
 export default function EmpresaDetalhesPage() {
   const { id } = useParams();
   const [emailInvite, setEmailInvite] = useState("");
-  const [messageInvite, setMessageInvite] = useState("Olá! Você foi convidado para fazer o cadastro da sua empresa no sistema M7 Cadastro. Clique no link abaixo para começar:");
+  const [messageInvite, setMessageInvite] = useState("Olá! Você foi convidado para fazer o cadastro da sua empresa no Sistema de Cadastro. Clique no link abaixo para começar:");
   const [invites, setInvites] = useState<Invite[]>(initialInvites);
 
   const getInviteStatus = (invite: Invite) => {

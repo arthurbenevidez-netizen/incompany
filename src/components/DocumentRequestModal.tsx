@@ -85,7 +85,7 @@ export function DocumentRequestModal({ company, onRequest }: DocumentRequestModa
     });
 
     message += "Por favor, envie os documentos através do sistema o mais breve possível.\n\n";
-    message += "Atenciosamente,\nEquipe de Análise M7 Crédito";
+    message += "Atenciosamente,\nEquipe de Análise de Cadastro";
 
     return message;
   };
