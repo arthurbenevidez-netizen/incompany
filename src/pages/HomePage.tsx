@@ -137,7 +137,7 @@ export default function HomePage() {
       <div className="bg-gradient-primary rounded-xl p-8 text-primary-foreground">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Bem-vindo ao M7 Crédito</h1>
+            <h1 className="text-3xl font-bold mb-2">Bem-vindo ao Sistema de Cadastro</h1>
             <p className="text-primary-foreground/80 text-lg">
               Gerencie sua carteira comercial e análises de cadastro de forma integrada
             </p>

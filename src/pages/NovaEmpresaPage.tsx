@@ -20,7 +20,7 @@ export default function NovaEmpresaPage() {
     cnpj: "",
     processType: "" as string,
     emailConvite: "",
-    mensagemConvite: "Olá! Sua empresa foi cadastrada no sistema M7 Crédito. Clique no link abaixo para começar o processo de cadastro:",
+    mensagemConvite: "Olá! Sua empresa foi cadastrada no Sistema de Cadastro. Clique no link abaixo para começar o processo de cadastro:",
   });
   const [enviarConvite, setEnviarConvite] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

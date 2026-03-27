@@ -26,7 +26,7 @@ const queryClient = new QueryClient();
 const mockUser: User = {
   id: "1",
   name: "João Silva",
-  email: "joao.silva@m7.com.br",
+  email: "joao.silva@empresa.com.br",
   role: "gerente_comercial", // Mude para "equipe_cadastro" para ver a outra interface
 };
 

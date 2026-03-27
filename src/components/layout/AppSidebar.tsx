@@ -73,12 +73,12 @@ export function AppSidebar({ currentUser }: AppSidebarProps) {
         <div className="p-4 border-b border-border">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">M7</span>
+              <span className="text-primary-foreground font-bold text-sm">SC</span>
             </div>
             {!collapsed && (
               <div>
-                <h2 className="font-semibold text-sm">M7 Cadastro</h2>
-                <p className="text-xs text-muted-foreground">Operações de Crédito</p>
+                <h2 className="font-semibold text-sm">Sistema de Cadastro</h2>
+                <p className="text-xs text-muted-foreground">Habilitação em FIDC</p>
               </div>
             )}
           </div>

@@ -166,10 +166,10 @@ export default function ClientePortalPage() {
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">M7</span>
+              <span className="text-primary-foreground font-bold text-sm">SC</span>
             </div>
             <div>
-              <h1 className="font-semibold text-sm">M7 Cadastro</h1>
+              <h1 className="font-semibold text-sm">Sistema de Cadastro</h1>
               <p className="text-xs text-muted-foreground">Portal do Cliente</p>
             </div>
           </div>

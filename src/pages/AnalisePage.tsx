@@ -100,7 +100,7 @@ const mockCompanies: Company[] = [
   },
 ];
 
-type AnaliseFilter = "pendentes" | "em_andamento" | "finalizados";
+type AnaliseFilter = "pendentes" | "em_andamento" | "aprovados" | "reprovados";
 type ViewMode = "list" | "manager";
 
 export default function AnalisePage() {
@@ -190,8 +190,11 @@ export default function AnalisePage() {
       case 'em_andamento':
         filtered = filtered.filter(c => c.status === 'in_progress' || c.status === 'awaiting_review');
         break;
-      case 'finalizados':
-        filtered = filtered.filter(c => c.status === 'approved' || c.status === 'rejected');
+      case 'aprovados':
+        filtered = filtered.filter(c => c.status === 'approved');
+        break;
+      case 'reprovados':
+        filtered = filtered.filter(c => c.status === 'rejected');
         break;
     }
 
@@ -221,7 +224,8 @@ export default function AnalisePage() {
 
   const pendentesCount = mockCompanies.filter(c => (c.documentsPending ?? 0) > 0 && c.status !== 'approved' && c.status !== 'rejected').length;
   const andamentoCount = mockCompanies.filter(c => c.status === 'in_progress' || c.status === 'awaiting_review').length;
-  const finalizadosCount = mockCompanies.filter(c => c.status === 'approved' || c.status === 'rejected').length;
+  const aprovadosCount = mockCompanies.filter(c => c.status === 'approved').length;
+  const reprovadosCount = mockCompanies.filter(c => c.status === 'rejected').length;
 
   const cardProps = {
     getStatusIcon,
@@ -334,7 +338,7 @@ export default function AnalisePage() {
       </Card>
 
       <Tabs value={activeFilter} onValueChange={(v) => setActiveFilter(v as AnaliseFilter)}>
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="pendentes" className="gap-2">
             <Clock className="h-4 w-4" />
             Pendentes ({pendentesCount})
@@ -343,9 +347,13 @@ export default function AnalisePage() {
             <FileText className="h-4 w-4" />
             Em Andamento ({andamentoCount})
           </TabsTrigger>
-          <TabsTrigger value="finalizados" className="gap-2">
+          <TabsTrigger value="aprovados" className="gap-2">
             <CheckCircle className="h-4 w-4" />
-            Finalizados ({finalizadosCount})
+            Aprovados ({aprovadosCount})
+          </TabsTrigger>
+          <TabsTrigger value="reprovados" className="gap-2">
+            <XCircle className="h-4 w-4" />
+            Reprovados ({reprovadosCount})
           </TabsTrigger>
         </TabsList>
 
@@ -430,7 +438,7 @@ function CompanyAnaliseCard({
         </div>
 
         <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
-          {activeFilter !== 'finalizados' && (
+          {activeFilter !== 'aprovados' && activeFilter !== 'reprovados' && (
             <>
               <DocumentRequestModal
                 company={company}
