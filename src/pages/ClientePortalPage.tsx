@@ -36,6 +36,8 @@ export default function ClientePortalPage() {
   const [timeRemaining, setTimeRemaining] = useState("");
   const [isExpired, setIsExpired] = useState(false);
   const [savedAt, setSavedAt] = useState<Date | null>(null);
+  const [showOnboarding, setShowOnboarding] = useState(true);
+  const [clienteData, setClienteData] = useState<{ nome: string; cpf: string; razaoSocial: string; cnpj: string } | null>(null);
 
   const data = mockInviteData;
 
