@@ -153,6 +153,14 @@ export default function ClientePortalPage() {
 
   return (
     <div className="min-h-screen bg-muted/30">
+      <ClienteOnboardingModal
+        open={showOnboarding}
+        onComplete={(data) => {
+          setClienteData(data);
+          setShowOnboarding(false);
+          toast.success(`Bem-vindo, ${data.nome}!`);
+        }}
+      />
       {/* Top bar */}
       <div className="bg-background border-b border-border sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
