@@ -144,6 +144,10 @@ export default function EmpresaDetalhesPage() {
     }
   };
 
+  const [inviteSent, setInviteSent] = useState(false);
+  const [lastInviteLink, setLastInviteLink] = useState("");
+  const [linkCopied, setLinkCopied] = useState(false);
+
   const handleSendInvite = () => {
     if (!emailInvite.trim()) return;
     const now = new Date();
@@ -155,8 +159,24 @@ export default function EmpresaDetalhesPage() {
       status: 'pending',
     };
     setInvites(prev => [newInvite, ...prev]);
+    const link = `${window.location.origin}/cliente/${newInvite.id}`;
+    setLastInviteLink(link);
+    setInviteSent(true);
+    setLinkCopied(false);
     toast.success(`Convite enviado para ${emailInvite}`);
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(lastInviteLink);
+    setLinkCopied(true);
+    toast.success("Link copiado!");
+    setTimeout(() => setLinkCopied(false), 2000);
+  };
+
+  const handleCloseInviteDialog = () => {
+    setInviteSent(false);
     setEmailInvite("");
+    setLinkCopied(false);
   };
 
   return (
@@ -173,7 +193,7 @@ export default function EmpresaDetalhesPage() {
           <h1 className="text-2xl font-bold">Detalhes da Empresa</h1>
           <p className="text-muted-foreground">Informações completas e histórico de processos</p>
         </div>
-        <Dialog>
+        <Dialog onOpenChange={(open) => { if (!open) handleCloseInviteDialog(); }}>
           <DialogTrigger asChild>
             <Button>
               <Send className="h-4 w-4 mr-2" />
@@ -184,28 +204,51 @@ export default function EmpresaDetalhesPage() {
             <DialogHeader>
               <DialogTitle>Enviar Convite por Email</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium">Email do destinatário</label>
-                <Input
-                  placeholder="contato@empresa.com"
-                  value={emailInvite}
-                  onChange={(e) => setEmailInvite(e.target.value)}
-                />
+            {!inviteSent ? (
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium">Email do destinatário</label>
+                  <Input
+                    placeholder="contato@empresa.com"
+                    value={emailInvite}
+                    onChange={(e) => setEmailInvite(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Mensagem</label>
+                  <Textarea
+                    value={messageInvite}
+                    onChange={(e) => setMessageInvite(e.target.value)}
+                    rows={4}
+                  />
+                </div>
+                <Button onClick={handleSendInvite} className="w-full">
+                  <Send className="h-4 w-4 mr-2" />
+                  Enviar Convite
+                </Button>
               </div>
-              <div>
-                <label className="text-sm font-medium">Mensagem</label>
-                <Textarea
-                  value={messageInvite}
-                  onChange={(e) => setMessageInvite(e.target.value)}
-                  rows={4}
-                />
+            ) : (
+              <div className="space-y-4 text-center py-4">
+                <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center mx-auto">
+                  <CheckCircle className="h-6 w-6 text-emerald-600" />
+                </div>
+                <div>
+                  <p className="font-semibold text-lg">Convite enviado com sucesso!</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    O convite foi enviado para <strong>{emailInvite}</strong> e expira em 24 horas.
+                  </p>
+                </div>
+                <div className="bg-muted rounded-lg p-3">
+                  <p className="text-xs text-muted-foreground mb-2">Link do convite</p>
+                  <div className="flex items-center gap-2">
+                    <Input value={lastInviteLink} readOnly className="text-xs font-mono" />
+                    <Button size="sm" variant="outline" onClick={handleCopyLink} className="flex-shrink-0">
+                      {linkCopied ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                </div>
               </div>
-              <Button onClick={handleSendInvite} className="w-full">
-                <Send className="h-4 w-4 mr-2" />
-                Enviar Convite
-              </Button>
-            </div>
+            )}
           </DialogContent>
         </Dialog>
       </div>
