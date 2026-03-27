@@ -338,7 +338,7 @@ export default function AnalisePage() {
       </Card>
 
       <Tabs value={activeFilter} onValueChange={(v) => setActiveFilter(v as AnaliseFilter)}>
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="pendentes" className="gap-2">
             <Clock className="h-4 w-4" />
             Pendentes ({pendentesCount})
@@ -347,9 +347,13 @@ export default function AnalisePage() {
             <FileText className="h-4 w-4" />
             Em Andamento ({andamentoCount})
           </TabsTrigger>
-          <TabsTrigger value="finalizados" className="gap-2">
+          <TabsTrigger value="aprovados" className="gap-2">
             <CheckCircle className="h-4 w-4" />
-            Finalizados ({finalizadosCount})
+            Aprovados ({aprovadosCount})
+          </TabsTrigger>
+          <TabsTrigger value="reprovados" className="gap-2">
+            <XCircle className="h-4 w-4" />
+            Reprovados ({reprovadosCount})
           </TabsTrigger>
         </TabsList>
 
