@@ -100,7 +100,7 @@ const mockCompanies: Company[] = [
   },
 ];
 
-type AnaliseFilter = "pendentes" | "em_andamento" | "finalizados";
+type AnaliseFilter = "pendentes" | "em_andamento" | "aprovados" | "reprovados";
 type ViewMode = "list" | "manager";
 
 export default function AnalisePage() {
