@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { DocumentCategory, DocumentFile } from "@/types";
 import { documentCategories, getObligationLabel, getSectionLabel } from "@/data/documentCategories";
 import DocumentUploadModal from "@/components/DocumentUploadModal";
+import ClienteOnboardingModal from "@/components/ClienteOnboardingModal";
 
 // Simula dados do convite e empresa
 const mockInviteData = {
@@ -35,6 +36,8 @@ export default function ClientePortalPage() {
   const [timeRemaining, setTimeRemaining] = useState("");
   const [isExpired, setIsExpired] = useState(false);
   const [savedAt, setSavedAt] = useState<Date | null>(null);
+  const [showOnboarding, setShowOnboarding] = useState(true);
+  const [clienteData, setClienteData] = useState<{ nome: string; cpf: string; razaoSocial: string; cnpj: string } | null>(null);
 
   const data = mockInviteData;
 
@@ -150,6 +153,14 @@ export default function ClientePortalPage() {
 
   return (
     <div className="min-h-screen bg-muted/30">
+      <ClienteOnboardingModal
+        open={showOnboarding}
+        onComplete={(data) => {
+          setClienteData(data);
+          setShowOnboarding(false);
+          toast.success(`Bem-vindo, ${data.nome}!`);
+        }}
+      />
       {/* Top bar */}
       <div className="bg-background border-b border-border sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
