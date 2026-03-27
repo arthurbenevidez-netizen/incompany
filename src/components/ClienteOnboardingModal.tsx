@@ -43,7 +43,7 @@ export default function ClienteOnboardingModal({ open, onComplete }: ClienteOnbo
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5 text-primary" />
-            Bem-vindo ao M7 Cadastro
+            Bem-vindo ao Sistema de Cadastro
           </DialogTitle>
           <p className="text-sm text-muted-foreground">
             Para iniciar o envio de documentos, preencha seus dados abaixo.
