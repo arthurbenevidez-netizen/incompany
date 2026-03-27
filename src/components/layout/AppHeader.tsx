@@ -36,7 +36,7 @@ export function AppHeader({ currentUser }: AppHeaderProps) {
       <div className="flex items-center gap-4">
         <SidebarTrigger />
         <div>
-          <h1 className="text-lg font-semibold">M7 Cadastro</h1>
+          <h1 className="text-lg font-semibold">Sistema de Cadastro</h1>
           <p className="text-sm text-muted-foreground">
             {getRoleLabel(currentUser.role)}
           </p>

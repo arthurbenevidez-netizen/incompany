@@ -73,7 +73,7 @@ export default function ClienteOnboardingModal({ open, onComplete }: ClienteOnbo
 
           <div className="border rounded-lg p-3 bg-muted/50 space-y-3">
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Ao prosseguir, declaro que as informações fornecidas são verdadeiras e autorizo a M7 Capital a utilizar os dados e documentos enviados exclusivamente para fins de análise cadastral e de crédito, em conformidade com a Lei Geral de Proteção de Dados (LGPD). Os dados serão tratados com confidencialidade e não serão compartilhados com terceiros sem consentimento prévio, salvo obrigações legais.
+              Ao prosseguir, declaro que as informações fornecidas são verdadeiras e autorizo o uso dos dados e documentos enviados exclusivamente para fins de análise cadastral e habilitação em FIDC, em conformidade com a Lei Geral de Proteção de Dados (LGPD). Os dados serão tratados com confidencialidade e não serão compartilhados com terceiros sem consentimento prévio, salvo obrigações legais.
             </p>
             <div className="flex items-start gap-2">
               <Checkbox id="optIn" checked={optIn} onCheckedChange={(v) => setOptIn(v === true)} className="mt-0.5" />

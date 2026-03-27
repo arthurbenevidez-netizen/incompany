@@ -438,7 +438,7 @@ function CompanyAnaliseCard({
         </div>
 
         <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
-          {activeFilter !== 'finalizados' && (
+          {activeFilter !== 'aprovados' && activeFilter !== 'reprovados' && (
             <>
               <DocumentRequestModal
                 company={company}
