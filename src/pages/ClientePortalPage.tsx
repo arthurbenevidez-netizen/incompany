@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { DocumentCategory, DocumentFile } from "@/types";
 import { documentCategories, getObligationLabel, getSectionLabel } from "@/data/documentCategories";
 import DocumentUploadModal from "@/components/DocumentUploadModal";
+import ClienteOnboardingModal from "@/components/ClienteOnboardingModal";
 
 // Simula dados do convite e empresa
 const mockInviteData = {
