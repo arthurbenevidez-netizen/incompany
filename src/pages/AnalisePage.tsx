@@ -190,8 +190,11 @@ export default function AnalisePage() {
       case 'em_andamento':
         filtered = filtered.filter(c => c.status === 'in_progress' || c.status === 'awaiting_review');
         break;
-      case 'finalizados':
-        filtered = filtered.filter(c => c.status === 'approved' || c.status === 'rejected');
+      case 'aprovados':
+        filtered = filtered.filter(c => c.status === 'approved');
+        break;
+      case 'reprovados':
+        filtered = filtered.filter(c => c.status === 'rejected');
         break;
     }
 
