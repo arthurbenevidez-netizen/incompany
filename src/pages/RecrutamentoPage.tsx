@@ -36,6 +36,8 @@ interface RecruitmentItem {
   notes?: string;
   stepsCompleted: number;
   totalSteps: number;
+  startedAt?: Date;
+  finishedAt?: Date;
 }
 
 // Mock data - companies approved in Análise de Cadastro
