@@ -778,6 +778,42 @@ export default function RecrutamentoPage() {
     );
   }
 
+  // === Sorting logic ===
+  type SortField = 'companyName' | 'processType' | 'managerName' | 'status' | 'progress' | 'lastUpdated';
+  type SortDir = 'asc' | 'desc';
+  const [sortField, setSortField] = useState<SortField | null>(null);
+  const [sortDir, setSortDir] = useState<SortDir>('asc');
+
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortDir(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDir('asc');
+    }
+  };
+
+  const SortIcon = ({ field }: { field: SortField }) => {
+    if (sortField !== field) return <ArrowUpDown className="h-3.5 w-3.5 ml-1 text-muted-foreground/50" />;
+    return sortDir === 'asc'
+      ? <ArrowUp className="h-3.5 w-3.5 ml-1 text-primary" />
+      : <ArrowDown className="h-3.5 w-3.5 ml-1 text-primary" />;
+  };
+
+  const sortedQueue = [...filteredQueue].sort((a, b) => {
+    if (!sortField) return 0;
+    const dir = sortDir === 'asc' ? 1 : -1;
+    switch (sortField) {
+      case 'companyName': return a.companyName.localeCompare(b.companyName) * dir;
+      case 'processType': return a.processType.localeCompare(b.processType) * dir;
+      case 'managerName': return a.managerName.localeCompare(b.managerName) * dir;
+      case 'status': return a.status.localeCompare(b.status) * dir;
+      case 'progress': return (a.progress - b.progress) * dir;
+      case 'lastUpdated': return (a.lastUpdated.getTime() - b.lastUpdated.getTime()) * dir;
+      default: return 0;
+    }
+  });
+
   // === Queue view ===
   return (
     <div className="space-y-6">
@@ -850,24 +886,48 @@ export default function RecrutamentoPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Empresa</TableHead>
-                    <TableHead>Tipo</TableHead>
-                    <TableHead>Gerente</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Progresso</TableHead>
-                    <TableHead>Atualizado em</TableHead>
+                    <TableHead>
+                      <button className="flex items-center hover:text-foreground transition-colors" onClick={() => handleSort('companyName')}>
+                        Empresa <SortIcon field="companyName" />
+                      </button>
+                    </TableHead>
+                    <TableHead>
+                      <button className="flex items-center hover:text-foreground transition-colors" onClick={() => handleSort('processType')}>
+                        Tipo <SortIcon field="processType" />
+                      </button>
+                    </TableHead>
+                    <TableHead>
+                      <button className="flex items-center hover:text-foreground transition-colors" onClick={() => handleSort('managerName')}>
+                        Gerente <SortIcon field="managerName" />
+                      </button>
+                    </TableHead>
+                    <TableHead>
+                      <button className="flex items-center hover:text-foreground transition-colors" onClick={() => handleSort('status')}>
+                        Status <SortIcon field="status" />
+                      </button>
+                    </TableHead>
+                    <TableHead>
+                      <button className="flex items-center hover:text-foreground transition-colors" onClick={() => handleSort('progress')}>
+                        Progresso <SortIcon field="progress" />
+                      </button>
+                    </TableHead>
+                    <TableHead>
+                      <button className="flex items-center hover:text-foreground transition-colors" onClick={() => handleSort('lastUpdated')}>
+                        Atualizado em <SortIcon field="lastUpdated" />
+                      </button>
+                    </TableHead>
                     <TableHead className="text-right">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredQueue.length === 0 ? (
+                  {sortedQueue.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
                         Nenhuma empresa nesta fila
                       </TableCell>
                     </TableRow>
                   ) : (
-                    filteredQueue.map((item) => {
+                    sortedQueue.map((item) => {
                       const statusConfig = getStatusConfig(item.status);
                       return (
                         <TableRow key={item.id}>
