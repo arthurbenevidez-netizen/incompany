@@ -14,7 +14,7 @@ import { toast } from "@/hooks/use-toast";
 import { 
   Plus, Building2, User, Users, Briefcase, ArrowLeft, 
   Clock, CheckCircle2, PlayCircle, Pause, FileText,
-  RefreshCcw, UserPlus, ArrowRight
+  RefreshCcw, UserPlus, ArrowRight, Timer
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { ProcessType } from "@/types";
