@@ -104,6 +104,11 @@ const App = () => (
             </AppLayout>
           } />
           <Route path="/cliente/:token" element={<ClientePortalPage />} />
+          <Route path="/workflow/:companyId" element={
+            <AppLayout currentUser={mockUser}>
+              <WorkflowPage />
+            </AppLayout>
+          } />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
