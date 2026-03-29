@@ -101,21 +101,42 @@ const mockWorkflowData: Record<string, {
     ratings: { credito: "BB", compliance: "A", garantia: "CCC" },
     comments: [
       {
+        initials: "RF",
+        name: "Roberto Ferreira",
+        content: (
+          <div className="space-y-2">
+            <p className="font-semibold text-foreground">Empresa criada no sistema.</p>
+            <p>Grupo composto por 2 empresas: Indústria ABC S.A. e ABC Logística LTDA.</p>
+          </div>
+        ),
+      },
+      {
+        initials: "AP",
+        name: "Ana Paula Mendes",
+        content: (
+          <div className="space-y-2">
+            <p className="font-semibold text-foreground">Formalização aprovada.</p>
+            <p>Documentação societária e estatutária validada para ambas as empresas do grupo.</p>
+          </div>
+        ),
+      },
+      {
+        initials: "CM",
+        name: "Carlos Mendes",
+        content: (
+          <div className="space-y-2">
+            <p className="font-semibold text-foreground">Etapa Comercial aprovada.</p>
+            <p>Serasa Indústria ABC: Sem restrições relevantes. Score 780.</p>
+          </div>
+        ),
+      },
+      {
         initials: "FO",
         name: "Fernanda Oliveira",
         content: (
           <div className="space-y-2">
-            <p className="font-semibold text-foreground">Grupo composto por 2 empresas:</p>
-            <div className="space-y-1">
-              <p>Indústria ABC S.A.</p>
-              <p>CNPJ: 98.765.432/0001-10</p>
-              <p className="pt-1">ABC Logística LTDA</p>
-              <p>CNPJ: 98.765.432/0002-00</p>
-            </div>
-            <p className="pt-2">
-              <span className="font-semibold text-foreground">Serasa Indústria ABC:</span>{" "}
-              Sem restrições relevantes. Score 780.
-            </p>
+            <p className="font-semibold text-foreground">Diretoria Comercial aprovada.</p>
+            <p>Operação aprovada pela diretoria. Encaminhado para Comitê Redator.</p>
           </div>
         ),
       },
@@ -125,6 +146,7 @@ const mockWorkflowData: Record<string, {
       { name: "Carlos Mendes", date: "15/03/2026 10:30", action: "Etapa Comercial Aprovada" },
       { name: "Ana Paula Mendes", date: "05/02/2026 09:00", action: "Etapa Formalização Aprovada" },
       { name: "Roberto Ferreira", date: "20/01/2026 15:45", action: "Etapa Recrutamento Concluída" },
+      { name: "Roberto Ferreira", date: "10/12/2025 08:45", action: "Empresa criada no sistema" },
     ],
     documents: [
       "Estatuto Social", "Ata de Assembleia", "Balanço DRE", "Balancete",
