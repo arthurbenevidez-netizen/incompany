@@ -6,6 +6,19 @@ export interface User {
   avatar?: string;
 }
 
+export interface EconomicGroup {
+  id: string;
+  name: string;
+  companies: Company[];
+  processType: ProcessType;
+  status: CompanyStatus;
+  managerName: string;
+  managerId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  approvedAt?: Date;
+}
+
 export interface Company {
   id: string;
   name: string;
@@ -23,6 +36,7 @@ export interface Company {
   requestedDocuments?: string[];
   requestDate?: Date;
   requestMessage?: string;
+  groupId?: string;
 }
 
 export interface Document {
