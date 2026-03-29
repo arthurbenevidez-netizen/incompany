@@ -1,18 +1,20 @@
 import { useState } from "react";
-import { Plus, Search, Building2, FileText, Clock, CheckCircle, AlertTriangle, XCircle, Users, LayoutGrid, List } from "lucide-react";
+import { Plus, Search, Building2, FileText, Clock, CheckCircle, AlertTriangle, XCircle, Users, LayoutGrid, List, ChevronDown, ChevronRight } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { getProcessTypeIconWithTooltip } from "@/utils/processTypeUtils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Company } from "@/types";
+import { Company, EconomicGroup } from "@/types";
 import { Link } from "react-router-dom";
 import { getProcessTypeLabel, getProcessTypeBadge } from "@/data/documentCategories";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const SIX_MONTHS_MS = 6 * 30 * 24 * 60 * 60 * 1000;
 
-const mockCompanies: Company[] = [
+// Standalone companies (not in a group)
+const standaloneCompanies: Company[] = [
   {
     id: "1",
     name: "Tech Solutions LTDA",
@@ -23,29 +25,6 @@ const mockCompanies: Company[] = [
     managerId: "1",
     createdAt: new Date("2024-01-15"),
     updatedAt: new Date("2024-01-20"),
-  },
-  {
-    id: "2",
-    name: "Indústria ABC S.A.",
-    cnpj: "98.765.432/0001-10",
-    status: "pending",
-    processType: "risco_sacado",
-    managerName: "João Silva",
-    managerId: "1",
-    createdAt: new Date("2024-01-10"),
-    updatedAt: new Date("2024-01-18"),
-  },
-  {
-    id: "3",
-    name: "Comércio XYZ LTDA",
-    cnpj: "11.222.333/0001-44",
-    status: "approved",
-    processType: "atualizacao_cedente",
-    managerName: "Maria Santos",
-    managerId: "2",
-    createdAt: new Date("2024-01-05"),
-    updatedAt: new Date("2024-01-22"),
-    approvedAt: new Date("2024-06-01"),
   },
   {
     id: "4",
@@ -61,116 +40,14 @@ const mockCompanies: Company[] = [
   },
   {
     id: "5",
-    name: "Logística Rápida LTDA",
+    name: "Distribuidora Nacional LTDA",
     cnpj: "33.444.555/0001-66",
     status: "pending",
     processType: "cadastro_sacado",
     managerName: "Pedro Costa",
     managerId: "3",
-    createdAt: new Date("2024-02-01"),
-    updatedAt: new Date("2024-02-05"),
-  },
-  {
-    id: "6",
-    name: "Distribuidora Norte LTDA",
-    cnpj: "44.555.666/0001-77",
-    status: "rejected",
-    processType: "cadastro_cedente",
-    managerName: "Pedro Costa",
-    managerId: "3",
-    createdAt: new Date("2024-01-20"),
-    updatedAt: new Date("2024-02-10"),
-  },
-  {
-    id: "7",
-    name: "Metalúrgica Progresso Ltda",
-    cnpj: "88.999.111/0001-33",
-    status: "approved",
-    processType: "cadastro_cedente",
-    managerName: "Roberto Ferreira",
-    managerId: "4",
     createdAt: new Date("2024-01-08"),
-    updatedAt: new Date("2024-02-18"),
-    approvedAt: new Date("2024-02-18"),
-  },
-  {
-    id: "8",
-    name: "Agro Safra S.A.",
-    cnpj: "99.111.222/0001-44",
-    status: "in_progress",
-    processType: "risco_sacado",
-    managerName: "Fernanda Oliveira",
-    managerId: "5",
-    createdAt: new Date("2024-01-25"),
-    updatedAt: new Date("2024-02-20"),
-  },
-  {
-    id: "9",
-    name: "Energia Verde Ltda",
-    cnpj: "10.222.333/0001-55",
-    status: "pending",
-    processType: "atualizacao_cedente",
-    managerName: "Fernanda Oliveira",
-    managerId: "5",
-    createdAt: new Date("2024-02-10"),
-    updatedAt: new Date("2024-02-15"),
-  },
-  {
-    id: "10",
-    name: "Transportes União Ltda",
-    cnpj: "20.333.444/0001-66",
-    status: "in_progress",
-    processType: "cadastro_sacado",
-    managerName: "Roberto Ferreira",
-    managerId: "4",
-    createdAt: new Date("2024-02-05"),
-    updatedAt: new Date("2024-02-22"),
-  },
-  {
-    id: "11",
-    name: "Farmacêutica Saúde Ltda",
-    cnpj: "30.444.555/0001-77",
-    status: "approved",
-    processType: "cadastro_cedente",
-    managerName: "Ana Paula Mendes",
-    managerId: "6",
-    createdAt: new Date("2024-01-03"),
-    updatedAt: new Date("2024-02-14"),
-    approvedAt: new Date("2024-02-14"),
-  },
-  {
-    id: "12",
-    name: "Têxtil Nordeste S.A.",
-    cnpj: "40.555.666/0001-88",
-    status: "pending",
-    processType: "cadastro_cedente",
-    managerName: "Ana Paula Mendes",
-    managerId: "6",
-    createdAt: new Date("2024-02-12"),
-    updatedAt: new Date("2024-02-20"),
-  },
-  {
-    id: "13",
-    name: "Construtora Horizonte S.A.",
-    cnpj: "50.666.777/0001-99",
-    status: "in_progress",
-    processType: "risco_sacado",
-    managerName: "João Silva",
-    managerId: "1",
-    createdAt: new Date("2024-02-08"),
-    updatedAt: new Date("2024-02-25"),
-  },
-  {
-    id: "14",
-    name: "Alimentos Brasil Ltda",
-    cnpj: "60.777.888/0001-11",
-    status: "approved",
-    processType: "cadastro_sacado",
-    managerName: "Maria Santos",
-    managerId: "2",
-    createdAt: new Date("2024-01-18"),
-    updatedAt: new Date("2024-02-10"),
-    approvedAt: new Date("2025-02-10"),
+    updatedAt: new Date("2024-01-15"),
   },
   {
     id: "15",
@@ -185,9 +62,137 @@ const mockCompanies: Company[] = [
   },
 ];
 
-function needsRenewal(company: Company): boolean {
-  if (company.status !== 'approved' || !company.approvedAt) return false;
-  return Date.now() - company.approvedAt.getTime() >= SIX_MONTHS_MS;
+// Economic groups with their companies
+const mockGroups: EconomicGroup[] = [
+  {
+    id: "grp-1",
+    name: "Grupo Alpha Holdings",
+    processType: "cadastro_cedente",
+    status: "in_progress",
+    managerName: "João Silva",
+    managerId: "1",
+    createdAt: new Date("2024-01-05"),
+    updatedAt: new Date("2024-01-22"),
+    companies: [
+      {
+        id: "2",
+        name: "Indústria ABC S.A.",
+        cnpj: "98.765.432/0001-10",
+        status: "pending",
+        processType: "cadastro_cedente",
+        managerName: "João Silva",
+        managerId: "1",
+        createdAt: new Date("2024-01-10"),
+        updatedAt: new Date("2024-01-18"),
+        groupId: "grp-1",
+      },
+      {
+        id: "6",
+        name: "ABC Logística LTDA",
+        cnpj: "98.765.432/0002-00",
+        status: "pending",
+        processType: "cadastro_cedente",
+        managerName: "João Silva",
+        managerId: "1",
+        createdAt: new Date("2024-01-10"),
+        updatedAt: new Date("2024-01-18"),
+        groupId: "grp-1",
+      },
+    ],
+  },
+  {
+    id: "grp-2",
+    name: "Grupo Beta Participações",
+    processType: "risco_sacado",
+    status: "approved",
+    managerName: "Maria Santos",
+    managerId: "2",
+    createdAt: new Date("2024-01-03"),
+    updatedAt: new Date("2024-02-01"),
+    approvedAt: new Date("2025-06-15"),
+    companies: [
+      {
+        id: "3",
+        name: "Comércio XYZ LTDA",
+        cnpj: "11.222.333/0001-44",
+        status: "approved",
+        processType: "risco_sacado",
+        managerName: "Maria Santos",
+        managerId: "2",
+        createdAt: new Date("2024-01-05"),
+        updatedAt: new Date("2024-01-22"),
+        approvedAt: new Date("2024-06-01"),
+        groupId: "grp-2",
+      },
+      {
+        id: "7",
+        name: "XYZ Distribuidora LTDA",
+        cnpj: "11.222.333/0002-25",
+        status: "approved",
+        processType: "risco_sacado",
+        managerName: "Maria Santos",
+        managerId: "2",
+        createdAt: new Date("2024-01-05"),
+        updatedAt: new Date("2024-01-22"),
+        approvedAt: new Date("2024-06-01"),
+        groupId: "grp-2",
+      },
+      {
+        id: "8",
+        name: "XYZ Transportes S.A.",
+        cnpj: "11.222.333/0003-06",
+        status: "approved",
+        processType: "risco_sacado",
+        managerName: "Maria Santos",
+        managerId: "2",
+        createdAt: new Date("2024-01-05"),
+        updatedAt: new Date("2024-01-22"),
+        approvedAt: new Date("2024-06-01"),
+        groupId: "grp-2",
+      },
+    ],
+  },
+  {
+    id: "grp-3",
+    name: "Grupo Inovação Tech",
+    processType: "atualizacao_cedente",
+    status: "in_progress",
+    managerName: "Roberto Ferreira",
+    managerId: "4",
+    createdAt: new Date("2024-01-18"),
+    updatedAt: new Date("2024-02-10"),
+    companies: [
+      {
+        id: "10",
+        name: "Consultoria Delta LTDA",
+        cnpj: "55.666.777/0001-88",
+        status: "in_progress",
+        processType: "atualizacao_cedente",
+        managerName: "Roberto Ferreira",
+        managerId: "4",
+        createdAt: new Date("2024-01-18"),
+        updatedAt: new Date("2024-02-10"),
+        groupId: "grp-3",
+      },
+      {
+        id: "11",
+        name: "Delta Sistemas S.A.",
+        cnpj: "55.666.777/0002-69",
+        status: "in_progress",
+        processType: "atualizacao_cedente",
+        managerName: "Roberto Ferreira",
+        managerId: "4",
+        createdAt: new Date("2024-01-18"),
+        updatedAt: new Date("2024-02-10"),
+        groupId: "grp-3",
+      },
+    ],
+  },
+];
+
+function needsRenewal(item: { status: string; approvedAt?: Date }): boolean {
+  if (item.status !== 'approved' || !item.approvedAt) return false;
+  return Date.now() - item.approvedAt.getTime() >= SIX_MONTHS_MS;
 }
 
 const getStatusBadge = (status: string) => {
@@ -205,7 +210,6 @@ const getStatusBadge = (status: string) => {
   }
 };
 
-
 type ViewMode = 'grid' | 'manager';
 
 export default function CarteiraPage() {
@@ -213,17 +217,33 @@ export default function CarteiraPage() {
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
 
-  const filteredCompanies = mockCompanies.filter(company => {
+  // Filter groups
+  const filteredGroups = mockGroups.filter(group => {
+    const matchesSearch = group.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      group.companies.some(c => c.name.toLowerCase().includes(searchTerm.toLowerCase()) || c.cnpj.includes(searchTerm));
+    const matchesStatus = selectedStatus === "all" || group.status === selectedStatus ||
+      group.companies.some(c => c.status === selectedStatus);
+    return matchesSearch && matchesStatus;
+  });
+
+  // Filter standalone companies
+  const filteredStandalone = standaloneCompanies.filter(company => {
     const matchesSearch = company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          company.cnpj.includes(searchTerm);
     const matchesStatus = selectedStatus === "all" || company.status === selectedStatus;
     return matchesSearch && matchesStatus;
   });
 
-  const companiesByManager = filteredCompanies.reduce<Record<string, Company[]>>((acc, company) => {
-    const key = company.managerName;
+  // For manager view
+  const allItems = [
+    ...filteredGroups.map(g => ({ type: 'group' as const, data: g, managerName: g.managerName })),
+    ...filteredStandalone.map(c => ({ type: 'company' as const, data: c, managerName: c.managerName })),
+  ];
+
+  const itemsByManager = allItems.reduce<Record<string, typeof allItems>>((acc, item) => {
+    const key = item.managerName;
     if (!acc[key]) acc[key] = [];
-    acc[key].push(company);
+    acc[key].push(item);
     return acc;
   }, {});
 
@@ -233,13 +253,13 @@ export default function CarteiraPage() {
         <div>
           <h1 className="text-2xl font-bold">Carteira Comercial</h1>
           <p className="text-muted-foreground">
-            Gerencie as empresas da sua carteira e seus processos de cadastro
+            Gerencie as empresas e grupos econômicos da sua carteira
           </p>
         </div>
         <Button className="bg-gradient-primary hover:bg-primary-hover" asChild>
           <Link to="/nova-empresa">
             <Plus className="h-4 w-4 mr-2" />
-            Nova Empresa
+            Novo Cadastro
           </Link>
         </Button>
       </div>
@@ -251,7 +271,7 @@ export default function CarteiraPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Buscar por nome ou CNPJ..."
+                  placeholder="Buscar por nome, CNPJ ou grupo..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
@@ -292,31 +312,50 @@ export default function CarteiraPage() {
       </Card>
 
       {viewMode === "grid" ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCompanies.map((company) => (
-            <CompanyCard key={company.id} company={company} />
-          ))}
+        <div className="space-y-6">
+          {/* Groups */}
+          {filteredGroups.length > 0 && (
+            <div className="space-y-4">
+              {filteredGroups.map(group => (
+                <GroupCard key={group.id} group={group} />
+              ))}
+            </div>
+          )}
+          {/* Standalone companies */}
+          {filteredStandalone.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredStandalone.map((company) => (
+                <CompanyCard key={company.id} company={company} />
+              ))}
+            </div>
+          )}
         </div>
       ) : (
         <div className="space-y-8">
-          {Object.entries(companiesByManager).map(([managerName, companies]) => (
+          {Object.entries(itemsByManager).map(([managerName, items]) => (
             <div key={managerName}>
               <div className="flex items-center gap-2 mb-4">
                 <Users className="h-5 w-5 text-primary" />
                 <h2 className="text-lg font-semibold">{managerName}</h2>
-                <Badge variant="secondary" className="ml-1">{companies.length} empresa{companies.length !== 1 ? 's' : ''}</Badge>
+                <Badge variant="secondary" className="ml-1">{items.length} item(ns)</Badge>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {companies.map((company) => (
-                  <CompanyCard key={company.id} company={company} />
-                ))}
+              <div className="space-y-4">
+                {items.map(item =>
+                  item.type === 'group'
+                    ? <GroupCard key={item.data.id} group={item.data as EconomicGroup} />
+                    : (
+                      <div key={item.data.id} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <CompanyCard company={item.data as Company} />
+                      </div>
+                    )
+                )}
               </div>
             </div>
           ))}
         </div>
       )}
 
-      {filteredCompanies.length === 0 && (
+      {filteredGroups.length === 0 && filteredStandalone.length === 0 && (
         <Card className="shadow-card">
           <CardContent className="py-12 text-center">
             <Building2 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
@@ -328,6 +367,87 @@ export default function CarteiraPage() {
         </Card>
       )}
     </div>
+  );
+}
+
+function GroupCard({ group }: { group: EconomicGroup }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const renewal = needsRenewal(group);
+
+  return (
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <Card className={`shadow-card hover:shadow-elevated transition-shadow ${renewal ? 'border-warning' : ''}`}>
+        {renewal && (
+          <div className="bg-warning/10 border-b border-warning/30 px-4 py-2 rounded-t-xl flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 text-warning" />
+            <span className="text-xs font-medium text-warning">Atualização necessária — aprovado há mais de 6 meses</span>
+          </div>
+        )}
+        <CollapsibleTrigger asChild>
+          <CardHeader className="cursor-pointer hover:bg-muted/30 transition-colors pb-3">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-3 min-w-0">
+                {isOpen ? <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0" /> : <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />}
+                <div className="p-1.5 rounded-full bg-primary/10 shrink-0">
+                  <Users className="h-4 w-4 text-primary" />
+                </div>
+                {getProcessTypeIconWithTooltip(group.processType)}
+                <div className="min-w-0">
+                  <CardTitle className="text-lg truncate">{group.name}</CardTitle>
+                  <p className="text-xs text-muted-foreground">{group.companies.length} empresa(s) • {group.managerName}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                {getStatusBadge(group.status)}
+              </div>
+            </div>
+          </CardHeader>
+        </CollapsibleTrigger>
+
+        <CollapsibleContent>
+          <CardContent className="pt-0">
+            <div className="border-t border-border pt-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {group.companies.map(company => (
+                  <Card key={company.id} className="border-dashed">
+                    <CardContent className="p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-semibold text-sm">{company.name}</h4>
+                        {getStatusBadge(company.status)}
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">CNPJ</p>
+                        <p className="font-mono text-xs">{company.cnpj}</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button size="sm" variant="outline" className="flex-1 text-xs" asChild>
+                          <Link to={`/documentos/${company.id}`}>
+                            <FileText className="h-3 w-3 mr-1" />
+                            Documentos
+                          </Link>
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              <div className="flex gap-2 mt-4">
+                <Button size="sm" asChild>
+                  <Link to={`/workflow/${group.companies[0]?.id || '1'}`}>
+                    Ver Workflow do Grupo
+                  </Link>
+                </Button>
+                <Button size="sm" variant="outline" asChild>
+                  <Link to={`/empresa/${group.companies[0]?.id || '1'}`}>
+                    Ver Detalhes
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </CollapsibleContent>
+      </Card>
+    </Collapsible>
   );
 }
 

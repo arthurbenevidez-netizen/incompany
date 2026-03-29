@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Users, Building2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { StepperProgress, WorkflowStep } from "@/components/workflow/StepperProgress";
 import { WorkflowInfoPanel } from "@/components/workflow/WorkflowInfoPanel";
@@ -11,6 +12,8 @@ import { WorkflowDocuments } from "@/components/workflow/WorkflowDocuments";
 // Mock data - em produção viria do backend
 const mockWorkflowData: Record<string, {
   companyName: string;
+  groupName?: string;
+  groupCompanies?: string[];
   steps: WorkflowStep[];
   etapa: string;
   responsavel: string;
@@ -83,7 +86,9 @@ const mockWorkflowData: Record<string, {
     ],
   },
   "2": {
-    companyName: "Indústria ABC S.A.",
+    companyName: "Grupo Alpha Holdings",
+    groupName: "Grupo Alpha Holdings",
+    groupCompanies: ["Indústria ABC S.A.", "ABC Logística LTDA"],
     steps: [
       { label: "Recrutamento", status: "completed" },
       { label: "Formalização", status: "completed" },
@@ -218,9 +223,25 @@ export default function WorkflowPage() {
           <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-xl font-semibold text-foreground">
-            Análise de Documentos: {data.companyName}
-          </h1>
+          <div>
+            <h1 className="text-xl font-semibold text-foreground">
+              Análise de Documentos: {data.companyName}
+            </h1>
+            {data.groupName && data.groupCompanies && (
+              <div className="flex items-center gap-2 mt-1">
+                <Users className="h-3.5 w-3.5 text-primary" />
+                <span className="text-sm text-muted-foreground">Grupo Econômico</span>
+                <div className="flex gap-1.5">
+                  {data.groupCompanies.map(name => (
+                    <Badge key={name} variant="outline" className="text-xs">
+                      <Building2 className="h-3 w-3 mr-1" />
+                      {name}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
         <nav className="text-sm text-muted-foreground">
           Home &gt; Workflow &gt; Análise de Documentos
