@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Upload, FileText, Check, X, Clock, AlertTriangle, Eye, UserPlus, ShieldAlert, RefreshCw } from "lucide-react";
+import { Upload, FileText, Check, X, Clock, AlertTriangle, Eye } from "lucide-react";
+import { getProcessTypeIconComponent } from "@/utils/processTypeUtils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
