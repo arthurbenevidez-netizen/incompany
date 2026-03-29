@@ -17,6 +17,7 @@ import NotificacoesPage from "./pages/NotificacoesPage";
 import ProgramacaoAvisosPage from "./pages/ProgramacaoAvisosPage";
 import GestaoPerfilPage from "./pages/GestaoPerfilPage";
 import ClientePortalPage from "./pages/ClientePortalPage";
+import WorkflowPage from "./pages/WorkflowPage";
 import NotFound from "./pages/NotFound";
 import { User } from "@/types";
 
@@ -103,6 +104,11 @@ const App = () => (
             </AppLayout>
           } />
           <Route path="/cliente/:token" element={<ClientePortalPage />} />
+          <Route path="/workflow/:companyId" element={
+            <AppLayout currentUser={mockUser}>
+              <WorkflowPage />
+            </AppLayout>
+          } />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

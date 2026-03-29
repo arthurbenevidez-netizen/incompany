@@ -74,6 +74,11 @@ export default {
 					foreground: 'hsl(var(--info-foreground))',
 					light: 'hsl(var(--info-light))'
 				},
+				step: {
+					completed: 'hsl(var(--step-completed))',
+					current: 'hsl(var(--step-current))',
+					pending: 'hsl(var(--step-pending))',
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',

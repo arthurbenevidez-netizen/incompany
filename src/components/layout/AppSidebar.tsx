@@ -1,4 +1,4 @@
-import { Building2, FileText, Users, BarChart3, Bell, Shield, Home, UserCircle } from "lucide-react";
+import { Building2, FileText, Users, BarChart3, Bell, Shield, Home, UserCircle, GitBranch } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { User } from "@/types";
 
@@ -25,6 +25,7 @@ const homeItems = [
 const cadastroItems = [
   { title: "Carteira Comercial", url: "/carteira", icon: Building2 },
   { title: "Análise de Cadastro", url: "/analise", icon: FileText },
+  { title: "Workflow", url: "/workflow/1", icon: GitBranch },
   { title: "Recrutamento", url: "/recrutamento", icon: Users },
 ];
 
