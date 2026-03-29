@@ -405,6 +405,15 @@ export default function RecrutamentoPage() {
     finalizado: queue.filter(i => i.status === 'finalizado').length,
   };
 
+  // Calculate average recruitment time from finished items
+  const finishedItems = queue.filter(i => i.status === 'finalizado' && i.startedAt && i.finishedAt);
+  const avgDays = finishedItems.length > 0
+    ? Math.round(finishedItems.reduce((sum, i) => {
+        const diff = (i.finishedAt!.getTime() - i.startedAt!.getTime()) / (1000 * 60 * 60 * 24);
+        return sum + diff;
+      }, 0) / finishedItems.length)
+    : 0;
+
   // === Entity/form helpers (kept from original) ===
   const addPersonToBlock = (blockId: string, type: 'socio_pf' | 'socio_pj' | 'procurador') => {
     setEntities(entities.map(entity => {
