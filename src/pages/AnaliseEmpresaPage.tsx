@@ -212,20 +212,7 @@ export default function AnaliseEmpresaPage() {
 
   const getProcessTypeName = (type: string) => getProcessTypeLabel(type);
 
-  const getProcessIcon = (processType: string) => {
-    switch (processType) {
-      case 'cadastro_cedente':
-        return <UserPlus className="h-5 w-5 text-blue-600" />;
-      case 'risco_sacado':
-        return <ShieldAlert className="h-5 w-5 text-red-600" />;
-      case 'atualizacao_cedente':
-        return <RefreshCw className="h-5 w-5 text-green-600" />;
-      case 'cadastro_sacado':
-        return <UserCheck className="h-5 w-5 text-purple-600" />;
-      default:
-        return <FileText className="h-5 w-5 text-muted-foreground" />;
-    }
-  };
+  const getProcessIcon = (processType: string) => getProcessTypeIconComponent(processType, "md");
 
   const handleReprovar = (id: string, notes: string) => {
     console.log("Reprovando empresa:", id, "Notas:", notes);

@@ -149,18 +149,7 @@ export default function DocumentosPage() {
     return totalRequired > 0 ? Math.round((approvedRequired / totalRequired) * 100) : 0;
   };
 
-  const getProcessIcon = (processType: string) => {
-    switch (processType) {
-      case 'cadastro_cedente':
-        return <UserPlus className="h-5 w-5 text-blue-600" />;
-      case 'risco_sacado':
-        return <ShieldAlert className="h-5 w-5 text-red-600" />;
-      case 'atualizacao_cedente':
-        return <RefreshCw className="h-5 w-5 text-green-600" />;
-      default:
-        return <FileText className="h-5 w-5 text-muted-foreground" />;
-    }
-  };
+  const getProcessIcon = (processType: string) => getProcessTypeIconComponent(processType, "md");
 
   return (
     <div className="space-y-6">
