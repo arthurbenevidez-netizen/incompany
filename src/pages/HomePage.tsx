@@ -142,7 +142,7 @@ export default function HomePage() {
     }
   };
 
-  const getProcessTypeBadgeEl = (processType: string) => getProcessTypeBadgeElement(processType);
+  
 
   return (
     <div className="space-y-8 animate-fade-in">
