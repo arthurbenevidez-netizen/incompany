@@ -14,7 +14,7 @@ import { toast } from "@/hooks/use-toast";
 import { 
   Plus, Building2, User, Users, Briefcase, ArrowLeft, 
   Clock, CheckCircle2, PlayCircle, Pause, FileText,
-  ArrowRight, Timer
+  ArrowRight, Timer, ArrowUpDown, ArrowUp, ArrowDown
 } from "lucide-react";
 import { getProcessTypeIconComponent } from "@/utils/processTypeUtils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
