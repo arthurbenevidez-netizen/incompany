@@ -8,12 +8,12 @@ import { getProcessTypeLabel, getProcessTypeBadge } from "@/data/documentCategor
 
 // Mock data para métricas
 const metricsData = {
-  totalEmpresas: 156,
-  empresasAtivas: 143,
-  pendentesAnalise: 23,
-  aprovadosUltimoMes: 45,
-  taxaAprovacao: 87,
-  tempoMedioAnalise: 3.2,
+  totalEmpresas: 215,
+  empresasAtivas: 189,
+  pendentesAnalise: 34,
+  aprovadosUltimoMes: 52,
+  taxaAprovacao: 84,
+  tempoMedioAnalise: 4.1,
 };
 
 const recentCompanies = [
@@ -50,6 +50,28 @@ const recentCompanies = [
     documentsPending: 0,
     documentsTotal: 9,
   },
+  {
+    id: "8",
+    name: "Agro Safra S.A.",
+    cnpj: "99.111.222/0001-44",
+    status: "in_progress",
+    processType: "risco_sacado",
+    managerName: "Fernanda Oliveira",
+    updatedAt: new Date("2024-02-20"),
+    documentsPending: 3,
+    documentsTotal: 10,
+  },
+  {
+    id: "11",
+    name: "Farmacêutica Saúde Ltda",
+    cnpj: "30.444.555/0001-77",
+    status: "approved",
+    processType: "cadastro_cedente",
+    managerName: "Ana Paula Mendes",
+    updatedAt: new Date("2024-02-14"),
+    documentsPending: 0,
+    documentsTotal: 8,
+  },
 ];
 
 const pendingAnalysis = [
@@ -73,6 +95,20 @@ const pendingAnalysis = [
     documentsCount: 15,
     priority: "low",
     waitingDays: 1,
+  },
+  {
+    id: "9",
+    companyName: "Energia Verde Ltda",
+    documentsCount: 6,
+    priority: "high",
+    waitingDays: 4,
+  },
+  {
+    id: "13",
+    companyName: "Construtora Horizonte S.A.",
+    documentsCount: 10,
+    priority: "medium",
+    waitingDays: 3,
   },
 ];
 

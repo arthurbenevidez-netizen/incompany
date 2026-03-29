@@ -14,7 +14,7 @@ import { toast } from "@/hooks/use-toast";
 import { 
   Plus, Building2, User, Users, Briefcase, ArrowLeft, 
   Clock, CheckCircle2, PlayCircle, Pause, FileText,
-  RefreshCcw, UserPlus, ArrowRight
+  RefreshCcw, UserPlus, ArrowRight, Timer
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { ProcessType } from "@/types";
@@ -36,6 +36,8 @@ interface RecruitmentItem {
   notes?: string;
   stepsCompleted: number;
   totalSteps: number;
+  startedAt?: Date;
+  finishedAt?: Date;
 }
 
 // Mock data - companies approved in Análise de Cadastro
@@ -53,6 +55,7 @@ const mockRecruitmentQueue: RecruitmentItem[] = [
     assignedTo: "Ana Souza",
     stepsCompleted: 4,
     totalSteps: 6,
+    startedAt: new Date(2024, 2, 21),
   },
   {
     id: "rec-2",
@@ -81,6 +84,7 @@ const mockRecruitmentQueue: RecruitmentItem[] = [
     notes: "Aguardando documentação complementar do sócio",
     stepsCompleted: 2,
     totalSteps: 5,
+    startedAt: new Date(2024, 2, 19),
   },
   {
     id: "rec-4",
@@ -95,6 +99,8 @@ const mockRecruitmentQueue: RecruitmentItem[] = [
     assignedTo: "Ana Souza",
     stepsCompleted: 4,
     totalSteps: 4,
+    startedAt: new Date(2024, 2, 16),
+    finishedAt: new Date(2024, 2, 26),
   },
   {
     id: "rec-5",
@@ -121,6 +127,96 @@ const mockRecruitmentQueue: RecruitmentItem[] = [
     lastUpdated: new Date(2024, 2, 26),
     assignedTo: "Pedro Lima",
     stepsCompleted: 2,
+    totalSteps: 7,
+    startedAt: new Date(2024, 2, 20),
+  },
+  {
+    id: "rec-7",
+    companyName: "Metalúrgica Progresso Ltda",
+    cnpj: "88.999.111/0001-33",
+    processType: "cadastro_cedente",
+    managerName: "Roberto Ferreira",
+    approvedAt: new Date(2024, 2, 10),
+    status: "finalizado",
+    progress: 100,
+    lastUpdated: new Date(2024, 2, 18),
+    assignedTo: "Ana Souza",
+    stepsCompleted: 5,
+    totalSteps: 5,
+    startedAt: new Date(2024, 2, 11),
+    finishedAt: new Date(2024, 2, 18),
+  },
+  {
+    id: "rec-8",
+    companyName: "Agro Safra S.A.",
+    cnpj: "99.111.222/0001-44",
+    processType: "risco_sacado",
+    managerName: "Fernanda Oliveira",
+    approvedAt: new Date(2024, 2, 12),
+    status: "finalizado",
+    progress: 100,
+    lastUpdated: new Date(2024, 2, 22),
+    assignedTo: "Pedro Lima",
+    stepsCompleted: 6,
+    totalSteps: 6,
+    startedAt: new Date(2024, 2, 13),
+    finishedAt: new Date(2024, 2, 22),
+  },
+  {
+    id: "rec-9",
+    companyName: "Energia Verde Ltda",
+    cnpj: "10.222.333/0001-55",
+    processType: "atualizacao_cedente",
+    managerName: "Fernanda Oliveira",
+    approvedAt: new Date(2024, 2, 25),
+    status: "aguardando",
+    progress: 0,
+    lastUpdated: new Date(2024, 2, 25),
+    stepsCompleted: 0,
+    totalSteps: 5,
+  },
+  {
+    id: "rec-10",
+    companyName: "Transportes União Ltda",
+    cnpj: "20.333.444/0001-66",
+    processType: "cadastro_sacado",
+    managerName: "Roberto Ferreira",
+    approvedAt: new Date(2024, 2, 23),
+    status: "em_andamento",
+    progress: 50,
+    lastUpdated: new Date(2024, 2, 27),
+    assignedTo: "Ana Souza",
+    stepsCompleted: 3,
+    totalSteps: 6,
+    startedAt: new Date(2024, 2, 24),
+  },
+  {
+    id: "rec-11",
+    companyName: "Farmacêutica Saúde Ltda",
+    cnpj: "30.444.555/0001-77",
+    processType: "cadastro_cedente",
+    managerName: "Ana Paula Mendes",
+    approvedAt: new Date(2024, 2, 8),
+    status: "finalizado",
+    progress: 100,
+    lastUpdated: new Date(2024, 2, 14),
+    assignedTo: "Pedro Lima",
+    stepsCompleted: 4,
+    totalSteps: 4,
+    startedAt: new Date(2024, 2, 9),
+    finishedAt: new Date(2024, 2, 14),
+  },
+  {
+    id: "rec-12",
+    companyName: "Têxtil Nordeste S.A.",
+    cnpj: "40.555.666/0001-88",
+    processType: "cadastro_cedente",
+    managerName: "Ana Paula Mendes",
+    approvedAt: new Date(2024, 2, 26),
+    status: "aguardando",
+    progress: 0,
+    lastUpdated: new Date(2024, 2, 26),
+    stepsCompleted: 0,
     totalSteps: 7,
   },
 ];
@@ -308,6 +404,15 @@ export default function RecrutamentoPage() {
     em_andamento: queue.filter(i => i.status === 'em_andamento' || i.status === 'pausado').length,
     finalizado: queue.filter(i => i.status === 'finalizado').length,
   };
+
+  // Calculate average recruitment time from finished items
+  const finishedItems = queue.filter(i => i.status === 'finalizado' && i.startedAt && i.finishedAt);
+  const avgDays = finishedItems.length > 0
+    ? Math.round(finishedItems.reduce((sum, i) => {
+        const diff = (i.finishedAt!.getTime() - i.startedAt!.getTime()) / (1000 * 60 * 60 * 24);
+        return sum + diff;
+      }, 0) / finishedItems.length)
+    : 0;
 
   // === Entity/form helpers (kept from original) ===
   const addPersonToBlock = (blockId: string, type: 'socio_pf' | 'socio_pj' | 'procurador') => {
@@ -536,7 +641,7 @@ export default function RecrutamentoPage() {
           </div>
           <Button variant="outline" onClick={handleSaveAndPause}>
             <Pause className="h-4 w-4 mr-2" />
-            Salvar e Pausar
+            Salvar cadastro
           </Button>
         </div>
 
@@ -669,7 +774,7 @@ export default function RecrutamentoPage() {
 
         <div className="flex justify-end gap-3">
           <Button variant="outline" onClick={handleSaveAndPause}>
-            <Pause className="h-4 w-4 mr-2" />Salvar e Pausar
+            <Pause className="h-4 w-4 mr-2" />Salvar cadastro
           </Button>
           <Button size="lg" className="px-8" onClick={handleContinue}>
             Continuar <ArrowRight className="h-4 w-4 ml-2" />
@@ -690,7 +795,7 @@ export default function RecrutamentoPage() {
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4 flex items-center gap-4">
             <div className="p-3 rounded-full bg-amber-100">
@@ -721,6 +826,17 @@ export default function RecrutamentoPage() {
             <div>
               <p className="text-2xl font-bold">{counts.finalizado}</p>
               <p className="text-sm text-muted-foreground">Finalizados</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4 flex items-center gap-4">
+            <div className="p-3 rounded-full bg-primary/10">
+              <Timer className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold">{avgDays > 0 ? `${avgDays} dias` : '—'}</p>
+              <p className="text-sm text-muted-foreground">Tempo Médio de Cadastro</p>
             </div>
           </CardContent>
         </Card>
