@@ -86,7 +86,9 @@ const mockWorkflowData: Record<string, {
     ],
   },
   "2": {
-    companyName: "Indústria ABC S.A.",
+    companyName: "Grupo Alpha Holdings",
+    groupName: "Grupo Alpha Holdings",
+    groupCompanies: ["Indústria ABC S.A.", "ABC Logística LTDA"],
     steps: [
       { label: "Recrutamento", status: "completed" },
       { label: "Formalização", status: "completed" },
