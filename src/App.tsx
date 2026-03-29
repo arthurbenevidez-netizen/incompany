@@ -17,6 +17,7 @@ import NotificacoesPage from "./pages/NotificacoesPage";
 import ProgramacaoAvisosPage from "./pages/ProgramacaoAvisosPage";
 import GestaoPerfilPage from "./pages/GestaoPerfilPage";
 import ClientePortalPage from "./pages/ClientePortalPage";
+import WorkflowPage from "./pages/WorkflowPage";
 import NotFound from "./pages/NotFound";
 import { User } from "@/types";
 
