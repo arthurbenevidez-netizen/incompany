@@ -1,4 +1,4 @@
-import { Building2, FileText, Users, BarChart3, Bell, Shield, Home, UserCircle } from "lucide-react";
+import { Building2, FileText, Users, BarChart3, Bell, Shield, Home, UserCircle, GitBranch } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { User } from "@/types";
 
