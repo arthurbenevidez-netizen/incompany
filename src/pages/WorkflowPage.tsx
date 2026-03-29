@@ -11,6 +11,8 @@ import { WorkflowDocuments } from "@/components/workflow/WorkflowDocuments";
 // Mock data - em produção viria do backend
 const mockWorkflowData: Record<string, {
   companyName: string;
+  groupName?: string;
+  groupCompanies?: string[];
   steps: WorkflowStep[];
   etapa: string;
   responsavel: string;
