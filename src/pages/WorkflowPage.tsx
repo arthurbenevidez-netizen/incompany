@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Users, Building2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { StepperProgress, WorkflowStep } from "@/components/workflow/StepperProgress";
 import { WorkflowInfoPanel } from "@/components/workflow/WorkflowInfoPanel";
