@@ -632,7 +632,7 @@ export default function RecrutamentoPage() {
           </div>
           <Button variant="outline" onClick={handleSaveAndPause}>
             <Pause className="h-4 w-4 mr-2" />
-            Salvar e Pausar
+            Salvar cadastro
           </Button>
         </div>
 
