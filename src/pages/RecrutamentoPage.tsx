@@ -785,11 +785,6 @@ export default function RecrutamentoPage() {
   }
 
   // === Sorting logic ===
-  type SortField = 'companyName' | 'processType' | 'managerName' | 'status' | 'progress' | 'lastUpdated';
-  type SortDir = 'asc' | 'desc';
-  const [sortField, setSortField] = useState<SortField | null>(null);
-  const [sortDir, setSortDir] = useState<SortDir>('asc');
-
   const handleSort = (field: SortField) => {
     if (sortField === field) {
       setSortDir(prev => prev === 'asc' ? 'desc' : 'asc');
