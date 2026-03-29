@@ -83,6 +83,11 @@
 
     --sidebar-ring: 217.2 91.2% 59.8%;
 
+    /* Step/Workflow Colors */
+    --step-completed: 217 91% 47%;
+    --step-current: 217 91% 47%;
+    --step-pending: 220 14% 80%;
+
     /* Animation and transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
