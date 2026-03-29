@@ -1,10 +1,11 @@
-import { Building2, FileText, BarChart3, TrendingUp, Clock, CheckCircle, AlertTriangle, UserPlus, ShieldAlert, RefreshCw, UserCheck } from "lucide-react";
+import { Building2, FileText, BarChart3, TrendingUp, Clock, CheckCircle, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Link } from "react-router-dom";
 import { getProcessTypeLabel, getProcessTypeBadge } from "@/data/documentCategories";
+import { getProcessTypeBadgeElement } from "@/utils/processTypeUtils";
 
 // Mock data para métricas
 const metricsData = {
