@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Building2, CheckCircle, AlertTriangle, Calendar, User, FileText, Clock, Check, X, Eye, Upload, UserPlus, ShieldAlert, RefreshCw, UserCheck } from "lucide-react";
+import { ArrowLeft, Building2, CheckCircle, AlertTriangle, Calendar, User, FileText, Clock, Check, X, Eye, Upload } from "lucide-react";
+import { getProcessTypeIconComponent } from "@/utils/processTypeUtils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
