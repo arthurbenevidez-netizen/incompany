@@ -282,6 +282,12 @@ export default function RecrutamentoPage() {
   const [selectedCompany, setSelectedCompany] = useState<RecruitmentItem | null>(null);
   const [queue, setQueue] = useState(mockRecruitmentQueue);
 
+  // === Sorting state ===
+  type SortField = 'companyName' | 'processType' | 'managerName' | 'status' | 'progress' | 'lastUpdated';
+  type SortDir = 'asc' | 'desc';
+  const [sortField, setSortField] = useState<SortField | null>(null);
+  const [sortDir, setSortDir] = useState<SortDir>('asc');
+
   // === Form state (from original) ===
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [formSteps, setFormSteps] = useState<FormStep[]>([{ type: 'documents' }]);
