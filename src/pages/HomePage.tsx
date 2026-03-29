@@ -1,10 +1,11 @@
-import { Building2, FileText, BarChart3, TrendingUp, Clock, CheckCircle, AlertTriangle, UserPlus, ShieldAlert, RefreshCw, UserCheck } from "lucide-react";
+import { Building2, FileText, BarChart3, TrendingUp, Clock, CheckCircle, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Link } from "react-router-dom";
 import { getProcessTypeLabel, getProcessTypeBadge } from "@/data/documentCategories";
+import { getProcessTypeBadgeElement } from "@/utils/processTypeUtils";
 
 // Mock data para métricas
 const metricsData = {
@@ -141,31 +142,7 @@ export default function HomePage() {
     }
   };
 
-  const getProcessTypeIconComponent = (processType: string) => {
-    switch (processType) {
-      case 'cadastro_cedente':
-        return <UserPlus className="h-4 w-4 text-blue-600" />;
-      case 'risco_sacado':
-        return <ShieldAlert className="h-4 w-4 text-red-600" />;
-      case 'atualizacao_cedente':
-        return <RefreshCw className="h-4 w-4 text-green-600" />;
-      case 'cadastro_sacado':
-        return <UserCheck className="h-4 w-4 text-purple-600" />;
-      default:
-        return <FileText className="h-4 w-4 text-muted-foreground" />;
-    }
-  };
-
-  const getProcessTypeBadgeElement = (processType: string) => {
-    const classes = getProcessTypeBadge(processType);
-    const icon = getProcessTypeIconComponent(processType);
-    return (
-      <Badge className={`${classes} border text-xs font-medium flex items-center gap-1`}>
-        {icon}
-        {getProcessTypeLabel(processType)}
-      </Badge>
-    );
-  };
+  
 
   return (
     <div className="space-y-8 animate-fade-in">

@@ -14,8 +14,9 @@ import { toast } from "@/hooks/use-toast";
 import { 
   Plus, Building2, User, Users, Briefcase, ArrowLeft, 
   Clock, CheckCircle2, PlayCircle, Pause, FileText,
-  RefreshCcw, UserPlus, ArrowRight, Timer
+  ArrowRight, Timer
 } from "lucide-react";
+import { getProcessTypeIconComponent } from "@/utils/processTypeUtils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { ProcessType } from "@/types";
 
@@ -261,14 +262,7 @@ const getProcessTypeLabel = (type: ProcessType) => {
   }
 };
 
-const getProcessIcon = (type: ProcessType) => {
-  switch (type) {
-    case 'cadastro_cedente': return <UserPlus className="h-4 w-4" />;
-    case 'atualizacao_cedente': return <RefreshCcw className="h-4 w-4" />;
-    case 'risco_sacado': return <FileText className="h-4 w-4" />;
-    case 'cadastro_sacado': return <UserPlus className="h-4 w-4" />;
-  }
-};
+const getProcessIcon = (type: ProcessType) => getProcessTypeIconComponent(type);
 
 const getStatusConfig = (status: RecruitmentStatus) => {
   switch (status) {

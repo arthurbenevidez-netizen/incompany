@@ -25,8 +25,8 @@ const homeItems = [
 const cadastroItems = [
   { title: "Carteira Comercial", url: "/carteira", icon: Building2 },
   { title: "Análise de Cadastro", url: "/analise", icon: FileText },
-  { title: "Workflow", url: "/workflow/1", icon: GitBranch },
   { title: "Recrutamento", url: "/recrutamento", icon: Users },
+  { title: "Workflow", url: "/workflow/1", icon: GitBranch },
 ];
 
 const clienteItems = [
