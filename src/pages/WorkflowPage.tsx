@@ -173,11 +173,22 @@ const mockWorkflowData: Record<string, {
     ratings: { credito: "BBB", compliance: "BBB", garantia: "BB" },
     comments: [
       {
+        initials: "AP",
+        name: "Ana Paula Mendes",
+        content: (
+          <div className="space-y-2">
+            <p className="font-semibold text-foreground">Empresa criada no sistema.</p>
+            <p>Distribuidora com faturamento anual de R$ 45M. Processo de habilitação iniciado.</p>
+          </div>
+        ),
+      },
+      {
         initials: "RF",
         name: "Roberto Ferreira",
         content: (
           <div className="space-y-2">
-            <p>Empresa com faturamento anual de R$ 45M. Documentação completa e sem pendências.</p>
+            <p className="font-semibold text-foreground">Formalização aprovada.</p>
+            <p>Documentação completa e sem pendências. Encaminhado para etapa Comercial.</p>
           </div>
         ),
       },
@@ -185,6 +196,7 @@ const mockWorkflowData: Record<string, {
     history: [
       { name: "Roberto Ferreira", date: "25/03/2026 11:30", action: "Etapa Formalização Aprovada" },
       { name: "Ana Paula Mendes", date: "10/03/2026 08:15", action: "Etapa Recrutamento Concluída" },
+      { name: "Ana Paula Mendes", date: "05/02/2026 10:00", action: "Empresa criada no sistema" },
     ],
     documents: [
       "Contrato Social", "Balanço DRE", "Comprovante de Endereço",
