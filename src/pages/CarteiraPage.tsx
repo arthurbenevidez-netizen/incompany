@@ -205,40 +205,6 @@ const getStatusBadge = (status: string) => {
   }
 };
 
-const getProcessTypeIcon = (processType: string) => {
-  switch (processType) {
-    case 'cadastro_cedente':
-      return <UserPlus className="h-4 w-4 text-blue-600" />;
-    case 'risco_sacado':
-      return <ShieldAlert className="h-4 w-4 text-red-600" />;
-    case 'atualizacao_cedente':
-      return <RefreshCw className="h-4 w-4 text-green-600" />;
-    case 'cadastro_sacado':
-      return <UserCheck className="h-4 w-4 text-purple-600" />;
-    default:
-      return <FileText className="h-4 w-4 text-muted-foreground" />;
-  }
-};
-
-const getProcessTypeIconWithTooltip = (processType: string) => {
-  const classes = getProcessTypeBadge(processType);
-  const icon = getProcessTypeIcon(processType);
-  const label = getProcessTypeLabel(processType);
-  return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div className={`${classes} border rounded-full p-1.5 flex items-center justify-center shrink-0`}>
-            {icon}
-          </div>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>{label}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  );
-};
 
 type ViewMode = 'grid' | 'manager';
 
