@@ -40,12 +40,32 @@ const mockWorkflowData: Record<string, {
     ratings: { credito: "A", compliance: "AA", garantia: "BBB" },
     comments: [
       {
+        initials: "RF",
+        name: "Roberto Ferreira",
+        content: (
+          <div className="space-y-2">
+            <p className="font-semibold text-foreground">Empresa criada no sistema.</p>
+            <p>Cadastro inicial realizado. Processo de habilitação em FIDC iniciado.</p>
+          </div>
+        ),
+      },
+      {
+        initials: "AP",
+        name: "Ana Paula Mendes",
+        content: (
+          <div className="space-y-2">
+            <p className="font-semibold text-foreground">Formalização aprovada.</p>
+            <p>Documentação societária validada. Todos os documentos obrigatórios entregues.</p>
+          </div>
+        ),
+      },
+      {
         initials: "JS",
         name: "João Silva",
         content: (
           <div className="space-y-2">
-            <p className="font-semibold text-foreground">Empresa aprovada na análise de cadastro.</p>
-            <p>Todos os documentos obrigatórios foram entregues e validados. Faturamento compatível com a operação solicitada.</p>
+            <p className="font-semibold text-foreground">Etapa Comercial aprovada.</p>
+            <p>Faturamento compatível com a operação solicitada. Encaminhado para Diretoria Comercial.</p>
           </div>
         ),
       },
@@ -54,6 +74,7 @@ const mockWorkflowData: Record<string, {
       { name: "João Silva", date: "28/03/2026 09:15", action: "Etapa Comercial Aprovada" },
       { name: "Ana Paula Mendes", date: "20/03/2026 16:40", action: "Etapa Formalização Aprovada" },
       { name: "Roberto Ferreira", date: "10/03/2026 11:22", action: "Etapa Recrutamento Concluída" },
+      { name: "Roberto Ferreira", date: "15/01/2026 14:30", action: "Empresa criada no sistema" },
     ],
     documents: [
       "Contrato Social", "Balanço DRE", "Balancete", "Certidão Trabalhista",
