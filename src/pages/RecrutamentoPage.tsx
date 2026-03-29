@@ -786,7 +786,7 @@ export default function RecrutamentoPage() {
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4 flex items-center gap-4">
             <div className="p-3 rounded-full bg-amber-100">
@@ -817,6 +817,17 @@ export default function RecrutamentoPage() {
             <div>
               <p className="text-2xl font-bold">{counts.finalizado}</p>
               <p className="text-sm text-muted-foreground">Finalizados</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4 flex items-center gap-4">
+            <div className="p-3 rounded-full bg-primary/10">
+              <Timer className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold">{avgDays > 0 ? `${avgDays} dias` : '—'}</p>
+              <p className="text-sm text-muted-foreground">Tempo Médio de Cadastro</p>
             </div>
           </CardContent>
         </Card>
