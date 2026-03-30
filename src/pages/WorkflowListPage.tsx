@@ -44,7 +44,7 @@ const mockWorkflowItems: WorkflowItem[] = [
   { id: "10", status: "aguardando", processType: "cadastro_cedente", etapa: "Formalização", responsavel: "Gerente Teste", cnpj: "34.974.588/0001-04", razaoSocial: "Teste IA WORKER", ultimaAtualizacao: "20/01/2026" },
   // Group examples
   { id: "grp-1", status: "em_andamento", processType: "cadastro_cedente", etapa: "Diretoria Comercial", responsavel: "João Silva", cnpj: "12.345.678/0001-90", razaoSocial: "Grupo Alpha Holdings", ultimaAtualizacao: "27/03/2026", isGroup: true, groupCompanies: ["Indústria ABC S.A.", "ABC Logística LTDA"] },
-  { id: "grp-2", status: "aguardando", processType: "cadastro_cedente", etapa: "Comitê Redator", responsavel: "Fernanda Oliveira", cnpj: "55.666.777/0001-88", razaoSocial: "Grupo Beta Participações", ultimaAtualizacao: "25/03/2026", isGroup: true, groupCompanies: ["Beta Comércio LTDA", "Beta Serviços S.A.", "Beta Tech LTDA"] },
+  { id: "grp-2", status: "em_andamento", processType: "cadastro_cedente", etapa: "Comercial", responsavel: "Maria Santos", cnpj: "55.666.777/0001-88", razaoSocial: "Grupo Beta Participações", ultimaAtualizacao: "29/03/2026", isGroup: true, groupCompanies: ["Beta Comércio LTDA", "Beta Serviços S.A.", "Beta Tech LTDA"] },
 ];
 
 const getProcessTypeLabel = (type: ProcessType) => {
