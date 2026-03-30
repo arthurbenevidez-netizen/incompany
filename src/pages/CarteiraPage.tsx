@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Search, Building2, FileText, Clock, CheckCircle, AlertTriangle, XCircle, Users, LayoutGrid, List, ChevronDown, ChevronRight } from "lucide-react";
+import { Plus, Search, Building2, FileText, Clock, CheckCircle, AlertTriangle, XCircle, Users, LayoutGrid, List, ChevronLeft, ChevronRight } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { getProcessTypeIconWithTooltip } from "@/utils/processTypeUtils";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { Company, EconomicGroup } from "@/types";
 import { Link } from "react-router-dom";
 import { getProcessTypeLabel, getProcessTypeBadge } from "@/data/documentCategories";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+// Collapsible kept for potential future use
 
 const SIX_MONTHS_MS = 6 * 30 * 24 * 60 * 60 * 1000;
 
@@ -312,23 +313,13 @@ export default function CarteiraPage() {
       </Card>
 
       {viewMode === "grid" ? (
-        <div className="space-y-6">
-          {/* Groups */}
-          {filteredGroups.length > 0 && (
-            <div className="space-y-4">
-              {filteredGroups.map(group => (
-                <GroupCard key={group.id} group={group} />
-              ))}
-            </div>
-          )}
-          {/* Standalone companies */}
-          {filteredStandalone.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredStandalone.map((company) => (
-                <CompanyCard key={company.id} company={company} />
-              ))}
-            </div>
-          )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredGroups.map(group => (
+            <GroupCard key={group.id} group={group} />
+          ))}
+          {filteredStandalone.map((company) => (
+            <CompanyCard key={company.id} company={company} />
+          ))}
         </div>
       ) : (
         <div className="space-y-8">
@@ -371,83 +362,91 @@ export default function CarteiraPage() {
 }
 
 function GroupCard({ group }: { group: EconomicGroup }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const renewal = needsRenewal(group);
+  const company = group.companies[currentIndex];
+  const total = group.companies.length;
+
+  const prev = () => setCurrentIndex(i => (i - 1 + total) % total);
+  const next = () => setCurrentIndex(i => (i + 1) % total);
 
   return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <Card className={`shadow-card hover:shadow-elevated transition-shadow ${renewal ? 'border-warning' : ''}`}>
-        {renewal && (
-          <div className="bg-warning/10 border-b border-warning/30 px-4 py-2 rounded-t-xl flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 text-warning" />
-            <span className="text-xs font-medium text-warning">Atualização necessária — aprovado há mais de 6 meses</span>
+    <Card className={`shadow-card hover:shadow-elevated transition-shadow ${renewal ? 'border-warning' : ''}`}>
+      {renewal && (
+        <div className="bg-warning/10 border-b border-warning/30 px-4 py-2 rounded-t-xl flex items-center gap-2">
+          <AlertTriangle className="h-4 w-4 text-warning" />
+          <span className="text-xs font-medium text-warning">Atualização necessária — aprovado há mais de 6 meses</span>
+        </div>
+      )}
+      <div className="bg-primary/5 border-b border-border px-4 py-1.5 flex items-center gap-2">
+        <Users className="h-3.5 w-3.5 text-primary" />
+        <span className="text-xs font-semibold text-primary truncate">{group.name}</span>
+        <Badge variant="secondary" className="ml-auto text-[10px] px-1.5 py-0">{total} empresa(s)</Badge>
+      </div>
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            {getProcessTypeIconWithTooltip(company.processType)}
+            <CardTitle className="text-lg truncate">{company.name}</CardTitle>
           </div>
-        )}
-        <CollapsibleTrigger asChild>
-          <CardHeader className="cursor-pointer hover:bg-muted/30 transition-colors pb-3">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-3 min-w-0">
-                {isOpen ? <ChevronDown className="h-4 w-4 text-muted-foreground shrink-0" /> : <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />}
-                <div className="p-1.5 rounded-full bg-primary/10 shrink-0">
-                  <Users className="h-4 w-4 text-primary" />
-                </div>
-                {getProcessTypeIconWithTooltip(group.processType)}
-                <div className="min-w-0">
-                  <CardTitle className="text-lg truncate">{group.name}</CardTitle>
-                  <p className="text-xs text-muted-foreground">{group.companies.length} empresa(s) • {group.managerName}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 shrink-0">
-                {getStatusBadge(group.status)}
-              </div>
+          {getStatusBadge(company.status)}
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-3">
+          <div>
+            <p className="text-sm text-muted-foreground">CNPJ</p>
+            <p className="font-mono text-sm">{company.cnpj}</p>
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground">Gerente Comercial</p>
+            <p className="text-sm font-medium">{group.managerName}</p>
+          </div>
+          <div className="flex gap-4">
+            <div>
+              <p className="text-sm text-muted-foreground">Criado em</p>
+              <p className="text-sm">{company.createdAt.toLocaleDateString('pt-BR')}</p>
             </div>
-          </CardHeader>
-        </CollapsibleTrigger>
-
-        <CollapsibleContent>
-          <CardContent className="pt-0">
-            <div className="border-t border-border pt-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {group.companies.map(company => (
-                  <Card key={company.id} className="border-dashed">
-                    <CardContent className="p-4 space-y-3">
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-semibold text-sm">{company.name}</h4>
-                        {getStatusBadge(company.status)}
-                      </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground">CNPJ</p>
-                        <p className="font-mono text-xs">{company.cnpj}</p>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button size="sm" variant="outline" className="flex-1 text-xs" asChild>
-                          <Link to={`/documentos/${company.id}`}>
-                            <FileText className="h-3 w-3 mr-1" />
-                            Documentos
-                          </Link>
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+            <div>
+              <p className="text-sm text-muted-foreground">Atualizado em</p>
+              <p className="text-sm">{company.updatedAt.toLocaleDateString('pt-BR')}</p>
+            </div>
+          </div>
+          {total > 1 && (
+            <div className="flex items-center justify-center gap-3 pt-1">
+              <Button size="icon" variant="outline" className="h-7 w-7 rounded-full" onClick={prev}>
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <div className="flex gap-1.5">
+                {group.companies.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentIndex(idx)}
+                    className={`h-2 w-2 rounded-full transition-colors ${idx === currentIndex ? 'bg-primary' : 'bg-muted-foreground/30'}`}
+                  />
                 ))}
               </div>
-              <div className="flex gap-2 mt-4">
-                <Button size="sm" asChild>
-                  <Link to={`/workflow/${group.companies[0]?.id || '1'}`}>
-                    Ver Workflow do Grupo
-                  </Link>
-                </Button>
-                <Button size="sm" variant="outline" asChild>
-                  <Link to={`/empresa/${group.companies[0]?.id || '1'}`}>
-                    Ver Detalhes
-                  </Link>
-                </Button>
-              </div>
+              <Button size="icon" variant="outline" className="h-7 w-7 rounded-full" onClick={next}>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
             </div>
-          </CardContent>
-        </CollapsibleContent>
-      </Card>
-    </Collapsible>
+          )}
+          <div className="flex gap-2 pt-2">
+            <Button size="sm" className="flex-1" asChild>
+              <Link to={`/documentos/${company.id}`}>
+                <FileText className="h-4 w-4 mr-2" />
+                Documentos
+              </Link>
+            </Button>
+            <Button size="sm" variant="outline" className="flex-1" asChild>
+              <Link to={`/workflow/${company.id}`}>
+                Ver Workflow
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
