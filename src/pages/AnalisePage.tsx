@@ -264,6 +264,8 @@ export default function AnalisePage() {
     });
 
     switch (filter) {
+      case 'todos':
+        break;
       case 'pendentes':
         filtered = filtered.filter(c => (c.documentsPending ?? 0) > 0 && c.status !== 'approved' && c.status !== 'rejected');
         break;
