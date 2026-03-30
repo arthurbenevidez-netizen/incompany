@@ -367,11 +367,17 @@ function GroupDetalhes({ group }: { group: EconomicGroup }) {
                   <p className="font-medium">{company.updatedAt.toLocaleDateString('pt-BR')}</p>
                 </div>
               </div>
-              <div className="pt-2">
-                <Button className="w-full" asChild>
+              <div className="pt-2 flex gap-2">
+                <Button className="flex-1" asChild>
                   <Link to={`/documentos/${company.id}`}>
                     <FileText className="h-4 w-4 mr-2" />
-                    Ver Documentos desta Empresa
+                    Documentos desta Empresa
+                  </Link>
+                </Button>
+                <Button variant="outline" className="flex-1" asChild>
+                  <Link to={`/documentos/${group.id}`}>
+                    <Users className="h-4 w-4 mr-2" />
+                    Documentos do Grupo
                   </Link>
                 </Button>
               </div>
