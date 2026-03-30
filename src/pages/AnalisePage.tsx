@@ -641,11 +641,11 @@ function CompanyAnaliseCard({
                           />
                         </div>
                         <div className="flex gap-2">
-                          <Button variant="destructive" onClick={handleRejectConfirm} disabled={!reviewNotes.trim()}>
-                            Reprovar Cadastro
-                          </Button>
                           <Button variant="outline" onClick={() => setRejectionOpen(false)}>
                             Cancelar
+                          </Button>
+                          <Button variant="destructive" onClick={handleRejectConfirm} disabled={!reviewNotes.trim()}>
+                            Reprovar Cadastro
                           </Button>
                         </div>
                       </div>
