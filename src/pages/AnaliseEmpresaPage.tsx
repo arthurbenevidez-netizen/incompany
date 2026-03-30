@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Building2, CheckCircle, AlertTriangle, Calendar, User, FileText, Clock, Check, X, Eye, Users, ChevronLeft, ChevronRight } from "lucide-react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { ArrowLeft, Building2, CheckCircle, AlertTriangle, Calendar, User, FileText, Clock, Check, X, Eye, Users, ChevronLeft, ChevronRight, XCircle } from "lucide-react";
 import { getProcessTypeIconComponent } from "@/utils/processTypeUtils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
