@@ -78,7 +78,7 @@ const mockRecruitmentQueue: RecruitmentItem[] = [
     processType: "atualizacao_cedente",
     managerName: "Carlos Silva",
     approvedAt: new Date(2024, 2, 18),
-    status: "pausado",
+    status: "em_andamento",
     progress: 40,
     lastUpdated: new Date(2024, 2, 23),
     assignedTo: "Pedro Lima",
