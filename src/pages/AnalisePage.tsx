@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Building2, Clock, CheckCircle, AlertTriangle, Eye, MessageSquare, FileText, Users, LayoutGrid, XCircle } from "lucide-react";
+import { Search, Building2, Clock, CheckCircle, AlertTriangle, Eye, MessageSquare, FileText, Users, LayoutGrid, XCircle, ChevronRight } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { getProcessTypeIconWithTooltip as getProcessTypeIconWithTooltipUtil } from "@/utils/processTypeUtils";
 import { Button } from "@/components/ui/button";
@@ -238,7 +238,15 @@ const mockCompanies: Company[] = [
     savedStatus: "incompleto",
     documentsPending: 4,
     documentsTotal: 24,
+    groupId: "grp-beta",
   },
+];
+
+// Empresas membro do Grupo Beta Participações
+const grupoBetaEmpresas = [
+  { name: "Beta Logística S.A.", cnpj: "55.666.777/0002-69", docsApproved: 5, docsTotal: 8, docsPending: 2, status: "in_progress" as const },
+  { name: "Beta Transportes Ltda", cnpj: "55.666.778/0001-11", docsApproved: 6, docsTotal: 8, docsPending: 1, status: "awaiting_review" as const },
+  { name: "Beta Armazéns S.A.", cnpj: "55.666.779/0001-22", docsApproved: 3, docsTotal: 8, docsPending: 1, status: "pending" as const },
 ];
 
 type AnaliseFilter = "todos" | "pendentes" | "em_andamento" | "aprovados" | "reprovados";
@@ -518,11 +526,17 @@ function CompanyAnaliseCard({
       <CardContent className="pt-6">
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <div className="flex items-center gap-3 mb-3 flex-wrap">
-              {getProcessTypeIconWithTooltip(company.processType)}
-              <h3 className="font-semibold text-lg">{company.name}</h3>
-              {getStatusBadge(company.status)}
-            </div>
+             <div className="flex items-center gap-3 mb-3 flex-wrap">
+               {company.id.startsWith('grp-') && (
+                 <Badge variant="secondary" className="bg-accent text-accent-foreground gap-1">
+                   <Users className="h-3 w-3" />
+                   Grupo
+                 </Badge>
+               )}
+               {getProcessTypeIconWithTooltip(company.processType)}
+               <h3 className="font-semibold text-lg">{company.name}</h3>
+               {getStatusBadge(company.status)}
+             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
               <div>
@@ -551,6 +565,45 @@ function CompanyAnaliseCard({
             </div>
           </div>
         </div>
+
+        {/* Empresas do grupo */}
+         {company.id === 'grp-2' && (
+           <div className="mb-4 border border-border rounded-lg overflow-hidden">
+             <div className="bg-muted/50 px-4 py-2 flex items-center gap-2">
+               <Users className="h-4 w-4 text-primary" />
+               <span className="text-sm font-medium">Empresas do Grupo ({grupoBetaEmpresas.length})</span>
+             </div>
+             <div className="divide-y divide-border">
+               {grupoBetaEmpresas.map((emp, idx) => {
+                 const progress = Math.round(((emp.docsTotal - emp.docsPending) / emp.docsTotal) * 100);
+                 const statusLabel = emp.status === 'awaiting_review' ? 'Aguardando Revisão' : emp.status === 'in_progress' ? 'Em Análise' : 'Pendente';
+                 const statusColor = emp.status === 'awaiting_review' ? 'text-warning' : emp.status === 'in_progress' ? 'text-primary' : 'text-pending';
+                 return (
+                   <div key={idx} className="px-4 py-3 flex items-center gap-4">
+                     <Building2 className="h-4 w-4 text-muted-foreground shrink-0" />
+                     <div className="flex-1 min-w-0">
+                       <p className="text-sm font-medium truncate">{emp.name}</p>
+                       <p className="text-xs text-muted-foreground font-mono">{emp.cnpj}</p>
+                     </div>
+                     <div className="flex items-center gap-3 shrink-0">
+                       <div className="w-24">
+                         <div className="flex justify-between text-xs mb-1">
+                           <span className="text-muted-foreground">Docs</span>
+                           <span className="font-medium">{progress}%</span>
+                         </div>
+                         <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                           <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${progress}%` }} />
+                         </div>
+                       </div>
+                       <span className={`text-xs font-medium ${statusColor} whitespace-nowrap`}>{statusLabel}</span>
+                       <span className="text-xs text-destructive font-medium">{emp.docsPending} pend.</span>
+                     </div>
+                   </div>
+                 );
+               })}
+             </div>
+           </div>
+         )}
 
         <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
           {activeFilter !== 'aprovados' && activeFilter !== 'reprovados' && (
