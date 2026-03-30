@@ -504,50 +504,114 @@ function GroupAnaliseView({ group }: { group: AnaliseGroup }) {
           </div>
         </div>
         <div className="flex gap-2">
-          <Dialog>
+          {/* Reprovação Grupo */}
+          <Dialog open={rejectionOpen} onOpenChange={(o) => { setRejectionOpen(o); if (!o) setRejectionConfirmed(false); }}>
             <DialogTrigger asChild>
-              <Button size="sm" variant="destructive" onClick={() => setReviewNotes("")}>
+              <Button size="sm" variant="destructive" onClick={() => { setReviewNotes(""); setRejectionConfirmed(false); }}>
                 <AlertTriangle className="h-4 w-4 mr-2" />Reprovar Grupo
               </Button>
             </DialogTrigger>
             <DialogContent>
-              <DialogHeader><DialogTitle>Reprovar Grupo</DialogTitle></DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-2">Grupo:</p>
-                  <p className="font-medium">{group.name}</p>
-                  <p className="text-sm text-muted-foreground">{group.members.length} empresas</p>
+              {rejectionConfirmed ? (
+                <div className="flex flex-col items-center py-8 space-y-4">
+                  <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center">
+                    <XCircle className="h-8 w-8 text-destructive" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-center">Grupo Reprovado</h3>
+                  <p className="text-sm text-muted-foreground text-center max-w-md">
+                    O grupo <strong>{group.name}</strong> ({group.members.length} empresas) foi reprovado. A decisão foi registrada no workflow.
+                  </p>
+                  {reviewNotes && (
+                    <div className="bg-muted/50 rounded-lg p-4 w-full max-w-md">
+                      <p className="text-xs text-muted-foreground mb-1">Motivo registrado:</p>
+                      <p className="text-sm">{reviewNotes}</p>
+                    </div>
+                  )}
+                  <Button variant="outline" onClick={() => { setRejectionOpen(false); navigate("/analise"); }} className="mt-4">
+                    Retomar a Análise
+                  </Button>
                 </div>
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Motivo da reprovação:</label>
-                  <Textarea placeholder="Descreva o motivo..." value={reviewNotes} onChange={(e) => setReviewNotes(e.target.value)} rows={4} />
-                </div>
-                <Button variant="destructive" onClick={() => console.log("Reprovar grupo", reviewNotes)}>Reprovar Grupo</Button>
-              </div>
+              ) : (
+                <>
+                  <DialogHeader><DialogTitle>Reprovar Grupo</DialogTitle></DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-2">Grupo:</p>
+                      <p className="font-medium">{group.name}</p>
+                      <p className="text-sm text-muted-foreground">{group.members.length} empresas</p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Motivo da reprovação:</label>
+                      <Textarea placeholder="Descreva o motivo..." value={reviewNotes} onChange={(e) => setReviewNotes(e.target.value)} rows={4} />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="destructive" onClick={() => { console.log("Reprovar grupo", reviewNotes); setRejectionConfirmed(true); }} disabled={!reviewNotes.trim()}>Reprovar Grupo</Button>
+                      <Button variant="outline" onClick={() => setRejectionOpen(false)}>Cancelar</Button>
+                    </div>
+                  </div>
+                </>
+              )}
             </DialogContent>
           </Dialog>
-          <Dialog>
+
+          {/* Aprovação Grupo */}
+          <Dialog open={approvalOpen} onOpenChange={(o) => { setApprovalOpen(o); if (!o) setApprovalConfirmed(false); }}>
             <DialogTrigger asChild>
-              <Button size="sm" className="bg-success hover:bg-success/90 text-success-foreground" onClick={() => setApprovalNotes("")} disabled={approvedCount < group.members.length}>
+              <Button size="sm" className="bg-success hover:bg-success/90 text-success-foreground" onClick={() => { setApprovalNotes(""); setApprovalConfirmed(false); }} disabled={approvedCount < group.members.length}>
                 <CheckCircle className="h-4 w-4 mr-2" />Aprovar Grupo
               </Button>
             </DialogTrigger>
             <DialogContent>
-              <DialogHeader><DialogTitle>Aprovar Grupo</DialogTitle></DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-2">Grupo:</p>
-                  <p className="font-medium">{group.name}</p>
-                  <p className="text-sm text-muted-foreground">{approvedCount}/{group.members.length} empresas aprovadas</p>
+              {approvalConfirmed ? (
+                <div className="flex flex-col items-center py-8 space-y-4">
+                  <div className="w-16 h-16 rounded-full bg-success/10 flex items-center justify-center">
+                    <CheckCircle className="h-8 w-8 text-success" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-center">Grupo Aprovado!</h3>
+                  <p className="text-sm text-muted-foreground text-center max-w-md">
+                    O grupo <strong>{group.name}</strong> ({group.members.length} empresas) foi aprovado com sucesso. A decisão foi registrada no workflow.
+                  </p>
+                  {approvalNotes && (
+                    <div className="bg-muted/50 rounded-lg p-4 w-full max-w-md">
+                      <p className="text-xs text-muted-foreground mb-1">Comentário registrado:</p>
+                      <p className="text-sm">{approvalNotes}</p>
+                    </div>
+                  )}
+                  <div className="flex gap-3 mt-4">
+                    <Button
+                      className="bg-success hover:bg-success/90 text-success-foreground"
+                      onClick={() => { setApprovalOpen(false); navigate("/recrutamento"); }}
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      Continuar Recrutamento
+                    </Button>
+                    <Button variant="outline" onClick={() => { setApprovalOpen(false); navigate("/analise"); }}>
+                      Retomar a Análise
+                    </Button>
+                  </div>
                 </div>
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Comentários:</label>
-                  <Textarea placeholder="Adicione comentários... (opcional)" value={approvalNotes} onChange={(e) => setApprovalNotes(e.target.value)} rows={4} />
-                </div>
-                <Button className="bg-success hover:bg-success/90 text-success-foreground" onClick={() => console.log("Aprovar grupo", approvalNotes)}>
-                  <CheckCircle className="h-4 w-4 mr-2" />Aprovar Grupo
-                </Button>
-              </div>
+              ) : (
+                <>
+                  <DialogHeader><DialogTitle>Aprovar Grupo</DialogTitle></DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-2">Grupo:</p>
+                      <p className="font-medium">{group.name}</p>
+                      <p className="text-sm text-muted-foreground">{approvedCount}/{group.members.length} empresas aprovadas</p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Comentários:</label>
+                      <Textarea placeholder="Adicione comentários... (opcional)" value={approvalNotes} onChange={(e) => setApprovalNotes(e.target.value)} rows={4} />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button className="bg-success hover:bg-success/90 text-success-foreground" onClick={() => { console.log("Aprovar grupo", approvalNotes); setApprovalConfirmed(true); }}>
+                        <CheckCircle className="h-4 w-4 mr-2" />Aprovar Grupo
+                      </Button>
+                      <Button variant="outline" onClick={() => setApprovalOpen(false)}>Cancelar</Button>
+                    </div>
+                  </div>
+                </>
+              )}
             </DialogContent>
           </Dialog>
         </div>
