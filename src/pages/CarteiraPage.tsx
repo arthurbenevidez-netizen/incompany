@@ -437,7 +437,7 @@ function GroupCard({ group }: { group: EconomicGroup }) {
           )}
           <div className="flex gap-2 pt-2">
             <Button size="sm" className="flex-1" asChild>
-              <Link to={`/documentos/${company.id}`}>
+              <Link to={`/documentos/${group.id}`}>
                 <FileText className="h-4 w-4 mr-2" />
                 Documentos
               </Link>
