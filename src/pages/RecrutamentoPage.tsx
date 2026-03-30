@@ -740,7 +740,6 @@ export default function RecrutamentoPage() {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-3xl font-bold">Dados da Empresa</h1>
-                {isGroup && <Badge variant="secondary" className="gap-1"><Users className="h-3 w-3" />Grupo</Badge>}
               </div>
               <p className="text-muted-foreground">{currentMemberName} — Preencha as informações da empresa</p>
             </div>
