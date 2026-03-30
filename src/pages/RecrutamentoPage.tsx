@@ -412,7 +412,7 @@ export default function RecrutamentoPage() {
   const filteredQueue = queue.filter(item => {
     if (activeTab === 'todos') return true;
     if (activeTab === 'aguardando') return item.status === 'aguardando';
-    if (activeTab === 'em_andamento') return item.status === 'em_andamento' || item.status === 'pausado';
+    if (activeTab === 'em_andamento') return item.status === 'em_andamento';
     if (activeTab === 'finalizado') return item.status === 'finalizado';
     return true;
   });
