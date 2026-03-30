@@ -313,31 +313,6 @@ export default function WorkflowPage() {
         </nav>
       </div>
 
-      {/* Group companies block */}
-      {isGroup && data.groupCompanies && (
-        <Card>
-          <CardContent className="py-4">
-            <div className="flex items-center gap-2 mb-3">
-              <Building2 className="h-4 w-4 text-primary" />
-              <span className="text-sm font-semibold">Empresas do Grupo</span>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              {data.groupCompanies.map((company, i) => (
-                <div
-                  key={company.name}
-                  className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/20"
-                >
-                  <div className={`w-3 h-3 rounded-full ${companyDotColors[i % companyDotColors.length]} shrink-0`} />
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium truncate">{company.name}</p>
-                    <p className="text-xs text-muted-foreground font-mono">{company.cnpj}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
       {/* Stepper + Actions */}
       <div className="bg-card border border-border rounded-lg p-6 flex items-center gap-6">
