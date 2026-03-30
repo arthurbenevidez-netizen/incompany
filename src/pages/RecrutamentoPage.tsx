@@ -419,7 +419,7 @@ export default function RecrutamentoPage() {
 
   const counts = {
     aguardando: queue.filter(i => i.status === 'aguardando').length,
-    em_andamento: queue.filter(i => i.status === 'em_andamento' || i.status === 'pausado').length,
+    em_andamento: queue.filter(i => i.status === 'em_andamento').length,
     finalizado: queue.filter(i => i.status === 'finalizado').length,
   };
 
