@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Users, Building2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { StepperProgress, WorkflowStep } from "@/components/workflow/StepperProgress";
 import { WorkflowInfoPanel } from "@/components/workflow/WorkflowInfoPanel";
 import { WorkflowRiskIndicators } from "@/components/workflow/WorkflowRiskIndicators";
@@ -9,7 +10,7 @@ import { WorkflowComments } from "@/components/workflow/WorkflowComments";
 import { WorkflowHistory } from "@/components/workflow/WorkflowHistory";
 import { WorkflowDocuments } from "@/components/workflow/WorkflowDocuments";
 
-// Mock data - em produção viria do backend
+// Mock data
 const mockWorkflowData: Record<string, {
   companyName: string;
   groupName?: string;
@@ -110,7 +111,7 @@ const mockWorkflowData: Record<string, {
         name: "Roberto Ferreira",
         content: (
           <div className="space-y-2">
-            <p className="font-semibold text-foreground">Empresa criada no sistema.</p>
+            <p className="font-semibold text-foreground">Grupo criado no sistema.</p>
             <p>Grupo composto por 2 empresas: Indústria ABC S.A. e ABC Logística LTDA.</p>
           </div>
         ),
@@ -151,7 +152,7 @@ const mockWorkflowData: Record<string, {
       { name: "Carlos Mendes", date: "15/03/2026 10:30", action: "Etapa Comercial Aprovada" },
       { name: "Ana Paula Mendes", date: "05/02/2026 09:00", action: "Etapa Formalização Aprovada" },
       { name: "Roberto Ferreira", date: "20/01/2026 15:45", action: "Etapa Recrutamento Concluída" },
-      { name: "Roberto Ferreira", date: "10/12/2025 08:45", action: "Empresa criada no sistema" },
+      { name: "Roberto Ferreira", date: "10/12/2025 08:45", action: "Grupo criado no sistema" },
     ],
     documents: [
       "Estatuto Social", "Ata de Assembleia", "Balanço DRE", "Balancete",
@@ -208,13 +209,70 @@ const mockWorkflowData: Record<string, {
       "Declaração de Faturamento", "CNPJ Atualizado", "Certidão Trabalhista",
     ],
   },
+  // New group scenario
+  "grp-2": {
+    companyName: "Grupo Beta Participações",
+    groupName: "Grupo Beta Participações",
+    groupCompanies: ["Beta Comércio LTDA", "Beta Serviços S.A.", "Beta Tech LTDA"],
+    steps: [
+      { label: "Recrutamento", status: "completed" },
+      { label: "Formalização", status: "completed" },
+      { label: "Comercial", status: "current" },
+      { label: "Diretoria Comercial", status: "pending" },
+      { label: "Comitê Redator", status: "pending" },
+      { label: "Comitê de Crédito", status: "pending" },
+      { label: "Cadastro Emissão", status: "pending" },
+      { label: "Concluído", status: "pending" },
+    ],
+    etapa: "Comercial",
+    responsavel: "Maria Santos",
+    criadoEm: "15/01/2026, 09:00",
+    atualizadoEm: "29/03/2026, 16:30",
+    ratings: { credito: "A", compliance: "BBB", garantia: "AA" },
+    comments: [
+      {
+        initials: "MS",
+        name: "Maria Santos",
+        content: (
+          <div className="space-y-2">
+            <p className="font-semibold text-foreground">Grupo criado no sistema.</p>
+            <p>Grupo composto por 3 empresas: Beta Comércio, Beta Serviços e Beta Tech.</p>
+          </div>
+        ),
+      },
+      {
+        initials: "AP",
+        name: "Ana Paula Mendes",
+        content: (
+          <div className="space-y-2">
+            <p className="font-semibold text-foreground">Formalização aprovada para todas as empresas.</p>
+            <p>Documentação societária validada. Todas as 3 empresas possuem documentação completa.</p>
+          </div>
+        ),
+      },
+    ],
+    history: [
+      { name: "Ana Paula Mendes", date: "29/03/2026 16:30", action: "Etapa Formalização Aprovada" },
+      { name: "Maria Santos", date: "20/03/2026 14:00", action: "Etapa Recrutamento Concluída" },
+      { name: "Maria Santos", date: "15/01/2026 09:00", action: "Grupo criado no sistema" },
+    ],
+    documents: [
+      "Contrato Social", "Balanço DRE", "Balancete", "Certidão Trabalhista",
+      "Comprovante de Endereço", "Declaração de Faturamento", "CNPJ Atualizado",
+      "Endividamento Financeiro", "Imposto de Renda",
+    ],
+  },
 };
+
+// Company colors for the group block
+const companyDotColors = ["bg-blue-500", "bg-emerald-500", "bg-amber-500", "bg-purple-500"];
 
 export default function WorkflowPage() {
   const { companyId } = useParams();
   const navigate = useNavigate();
 
   const data = mockWorkflowData[companyId || "1"] || mockWorkflowData["1"];
+  const isGroup = !!data.groupName && !!data.groupCompanies;
 
   return (
     <div className="space-y-5">
@@ -224,21 +282,21 @@ export default function WorkflowPage() {
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
-            <h1 className="text-xl font-semibold text-foreground">
-              Análise de Documentos: {data.companyName}
-            </h1>
-            {data.groupName && data.groupCompanies && (
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl font-semibold text-foreground">
+                Análise de Documentos: {data.companyName}
+              </h1>
+              {isGroup && (
+                <Badge variant="secondary" className="gap-1">
+                  <Users className="h-3 w-3" />
+                  Grupo
+                </Badge>
+              )}
+            </div>
+            {isGroup && data.groupCompanies && (
               <div className="flex items-center gap-2 mt-1">
                 <Users className="h-3.5 w-3.5 text-primary" />
-                <span className="text-sm text-muted-foreground">Grupo Econômico</span>
-                <div className="flex gap-1.5">
-                  {data.groupCompanies.map(name => (
-                    <Badge key={name} variant="outline" className="text-xs">
-                      <Building2 className="h-3 w-3 mr-1" />
-                      {name}
-                    </Badge>
-                  ))}
-                </div>
+                <span className="text-sm text-muted-foreground">{data.groupCompanies.length} empresas vinculadas</span>
               </div>
             )}
           </div>
@@ -247,6 +305,32 @@ export default function WorkflowPage() {
           Home &gt; Workflow &gt; Análise de Documentos
         </nav>
       </div>
+
+      {/* Group companies block */}
+      {isGroup && data.groupCompanies && (
+        <Card>
+          <CardContent className="py-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Building2 className="h-4 w-4 text-primary" />
+              <span className="text-sm font-semibold">Empresas do Grupo</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {data.groupCompanies.map((company, i) => (
+                <div
+                  key={company}
+                  className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/20"
+                >
+                  <div className={`w-3 h-3 rounded-full ${companyDotColors[i % companyDotColors.length]} shrink-0`} />
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium truncate">{company}</p>
+                    <p className="text-xs text-muted-foreground">Empresa {i + 1} de {data.groupCompanies!.length}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Stepper + Actions */}
       <div className="bg-card border border-border rounded-lg p-6 flex items-center gap-6">
@@ -280,7 +364,11 @@ export default function WorkflowPage() {
           <WorkflowComments comments={data.comments} />
           <WorkflowHistory items={data.history} />
         </div>
-        <WorkflowDocuments documents={data.documents} />
+        <WorkflowDocuments
+          documents={data.documents}
+          isGroup={isGroup}
+          groupCompanies={data.groupCompanies}
+        />
       </div>
     </div>
   );
