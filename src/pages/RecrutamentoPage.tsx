@@ -401,15 +401,6 @@ export default function RecrutamentoPage() {
     setFormSteps([{ type: 'documents' }]);
   };
 
-  const handlePauseItem = (id: string) => {
-    setQueue(q => q.map(r => r.id === id ? { ...r, status: 'pausado' as RecruitmentStatus, lastUpdated: new Date() } : r));
-    toast({ title: "Processo pausado", description: "O recrutamento foi pausado e pode ser retomado a qualquer momento." });
-  };
-
-  const handleResumeItem = (id: string) => {
-    setQueue(q => q.map(r => r.id === id ? { ...r, status: 'em_andamento' as RecruitmentStatus, lastUpdated: new Date() } : r));
-    toast({ title: "Processo retomado", description: "O recrutamento foi retomado." });
-  };
 
   const handleFinalizeItem = (id: string) => {
     setQueue(q => q.map(r => r.id === id ? { ...r, status: 'finalizado' as RecruitmentStatus, progress: 100, stepsCompleted: r.totalSteps, lastUpdated: new Date() } : r));
