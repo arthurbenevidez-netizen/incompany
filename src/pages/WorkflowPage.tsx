@@ -89,7 +89,10 @@ const mockWorkflowData: Record<string, {
   "2": {
     companyName: "Grupo Alpha Holdings",
     groupName: "Grupo Alpha Holdings",
-    groupCompanies: ["Indústria ABC S.A.", "ABC Logística LTDA"],
+    groupCompanies: [
+      { name: "Indústria ABC S.A.", cnpj: "12.345.678/0001-90" },
+      { name: "ABC Logística LTDA", cnpj: "12.345.678/0002-71" },
+    ],
     steps: [
       { label: "Recrutamento", status: "completed" },
       { label: "Formalização", status: "completed" },
