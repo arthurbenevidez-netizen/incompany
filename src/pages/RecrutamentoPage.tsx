@@ -417,6 +417,7 @@ const createEntitiesForCompany = (companyName: string, hasPreUploaded: boolean):
 };
 
 export default function RecrutamentoPage() {
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState<string>("aguardando");
   const [selectedCompany, setSelectedCompany] = useState<RecruitmentItem | null>(null);
   const [queue, setQueue] = useState(mockRecruitmentQueue);
