@@ -14,7 +14,7 @@ import { WorkflowDocuments } from "@/components/workflow/WorkflowDocuments";
 const mockWorkflowData: Record<string, {
   companyName: string;
   groupName?: string;
-  groupCompanies?: string[];
+  groupCompanies?: { name: string; cnpj: string }[];
   steps: WorkflowStep[];
   etapa: string;
   responsavel: string;
