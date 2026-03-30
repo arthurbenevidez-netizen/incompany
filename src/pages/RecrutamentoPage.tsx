@@ -655,8 +655,8 @@ export default function RecrutamentoPage() {
               {getProcessTypeLabel(selectedCompany.processType)} — Organize e envie a documentação necessária
             </p>
           </div>
-          <Button variant="outline" onClick={handleSaveAndPause}>
-            <Pause className="h-4 w-4 mr-2" />
+          <Button variant="outline" onClick={handleSaveProgress}>
+            <FileText className="h-4 w-4 mr-2" />
             Salvar cadastro
           </Button>
         </div>
