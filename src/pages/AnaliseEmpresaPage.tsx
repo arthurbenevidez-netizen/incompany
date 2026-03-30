@@ -315,7 +315,7 @@ export default function AnaliseEmpresaPage() {
                     </Button>
                     <Button
                       className="bg-success hover:bg-success/90 text-success-foreground"
-                      onClick={() => { setApprovalOpen(false); navigate("/recrutamento"); }}
+                      onClick={() => { setApprovalOpen(false); navigate("/recrutamento", { state: { autoOpenCompany: company.name } }); }}
                     >
                       <FileText className="h-4 w-4 mr-2" />
                       Continuar Recrutamento
