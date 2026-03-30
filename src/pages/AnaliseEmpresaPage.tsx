@@ -277,8 +277,8 @@ export default function AnaliseEmpresaPage() {
                       <Textarea placeholder="Descreva o motivo..." value={reviewNotes} onChange={(e) => setReviewNotes(e.target.value)} rows={4} />
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="destructive" onClick={handleReprovar} disabled={!reviewNotes.trim()}>Reprovar Cadastro</Button>
                       <Button variant="outline" onClick={() => setRejectionOpen(false)}>Cancelar</Button>
+                      <Button variant="destructive" onClick={handleReprovar} disabled={!reviewNotes.trim()}>Reprovar Cadastro</Button>
                     </div>
                   </div>
                 </>
@@ -335,10 +335,10 @@ export default function AnaliseEmpresaPage() {
                       <Textarea placeholder="Adicione comentários... (opcional)" value={approvalNotes} onChange={(e) => setApprovalNotes(e.target.value)} rows={4} />
                     </div>
                     <div className="flex gap-2">
+                      <Button variant="outline" onClick={() => setApprovalOpen(false)}>Cancelar</Button>
                       <Button className="bg-success hover:bg-success/90 text-success-foreground" onClick={handleAprovar}>
                         <CheckCircle className="h-4 w-4 mr-2" />Aprovar Cadastro
                       </Button>
-                      <Button variant="outline" onClick={() => setApprovalOpen(false)}>Cancelar</Button>
                     </div>
                   </div>
                 </>
@@ -545,8 +545,8 @@ function GroupAnaliseView({ group }: { group: AnaliseGroup }) {
                       <Textarea placeholder="Descreva o motivo..." value={reviewNotes} onChange={(e) => setReviewNotes(e.target.value)} rows={4} />
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="destructive" onClick={() => { console.log("Reprovar grupo", reviewNotes); setRejectionConfirmed(true); }} disabled={!reviewNotes.trim()}>Reprovar Grupo</Button>
                       <Button variant="outline" onClick={() => setRejectionOpen(false)}>Cancelar</Button>
+                      <Button variant="destructive" onClick={() => { console.log("Reprovar grupo", reviewNotes); setRejectionConfirmed(true); }} disabled={!reviewNotes.trim()}>Reprovar Grupo</Button>
                     </div>
                   </div>
                 </>
@@ -604,10 +604,10 @@ function GroupAnaliseView({ group }: { group: AnaliseGroup }) {
                       <Textarea placeholder="Adicione comentários... (opcional)" value={approvalNotes} onChange={(e) => setApprovalNotes(e.target.value)} rows={4} />
                     </div>
                     <div className="flex gap-2">
+                      <Button variant="outline" onClick={() => setApprovalOpen(false)}>Cancelar</Button>
                       <Button className="bg-success hover:bg-success/90 text-success-foreground" onClick={() => { console.log("Aprovar grupo", approvalNotes); setApprovalConfirmed(true); }}>
                         <CheckCircle className="h-4 w-4 mr-2" />Aprovar Grupo
                       </Button>
-                      <Button variant="outline" onClick={() => setApprovalOpen(false)}>Cancelar</Button>
                     </div>
                   </div>
                 </>
