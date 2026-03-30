@@ -14,7 +14,7 @@ import { toast } from "@/hooks/use-toast";
 import { 
   Plus, Building2, User, Users, Briefcase, ArrowLeft, 
   Clock, CheckCircle2, PlayCircle, FileText,
-  ArrowRight, Timer, ArrowUpDown, ArrowUp, ArrowDown
+  ArrowRight, Timer, ArrowUpDown, ArrowUp, ArrowDown, Check
 } from "lucide-react";
 import { getProcessTypeIconComponent } from "@/utils/processTypeUtils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -22,6 +22,13 @@ import { ProcessType } from "@/types";
 
 // Types for the recruitment queue
 type RecruitmentStatus = 'aguardando' | 'em_andamento' | 'finalizado';
+
+interface GroupMember {
+  id: string;
+  name: string;
+  cnpj: string;
+  progress: number;
+}
 
 interface RecruitmentItem {
   id: string;
@@ -31,7 +38,7 @@ interface RecruitmentItem {
   managerName: string;
   approvedAt: Date;
   status: RecruitmentStatus;
-  progress: number; // 0-100
+  progress: number;
   lastUpdated: Date;
   assignedTo?: string;
   notes?: string;
@@ -39,9 +46,11 @@ interface RecruitmentItem {
   totalSteps: number;
   startedAt?: Date;
   finishedAt?: Date;
+  isGroup?: boolean;
+  groupMembers?: GroupMember[];
 }
 
-// Mock data - companies approved in Análise de Cadastro
+// Mock data
 const mockRecruitmentQueue: RecruitmentItem[] = [
   {
     id: "rec-1",
@@ -234,6 +243,12 @@ const mockRecruitmentQueue: RecruitmentItem[] = [
     stepsCompleted: 3,
     totalSteps: 7,
     startedAt: new Date(2024, 2, 23),
+    isGroup: true,
+    groupMembers: [
+      { id: "alpha-1", name: "Alpha Comércio Ltda", cnpj: "12.345.678/0001-90", progress: 70 },
+      { id: "alpha-2", name: "Alpha Serviços S.A.", cnpj: "12.345.678/0002-71", progress: 30 },
+      { id: "alpha-3", name: "Alpha Logística Ltda", cnpj: "12.345.678/0003-52", progress: 35 },
+    ],
   },
   {
     id: "rec-grp-2",
@@ -247,14 +262,42 @@ const mockRecruitmentQueue: RecruitmentItem[] = [
     lastUpdated: new Date(2024, 2, 25),
     stepsCompleted: 0,
     totalSteps: 8,
+    isGroup: true,
+    groupMembers: [
+      { id: "beta-1", name: "Beta Logística Ltda", cnpj: "55.666.777/0001-88", progress: 0 },
+      { id: "beta-2", name: "Beta Transportes S.A.", cnpj: "55.666.777/0002-69", progress: 0 },
+      { id: "beta-3", name: "Beta Armazéns Ltda", cnpj: "55.666.777/0003-40", progress: 0 },
+    ],
+  },
+  {
+    id: "rec-grp-3",
+    companyName: "Grupo Gamma Investimentos",
+    cnpj: "66.777.888/0001-99",
+    processType: "cadastro_cedente",
+    managerName: "Roberto Ferreira",
+    approvedAt: new Date(2024, 2, 20),
+    status: "em_andamento",
+    progress: 60,
+    lastUpdated: new Date(2024, 2, 28),
+    assignedTo: "Pedro Lima",
+    stepsCompleted: 5,
+    totalSteps: 8,
+    startedAt: new Date(2024, 2, 21),
+    isGroup: true,
+    groupMembers: [
+      { id: "gamma-1", name: "Gamma Mineração Ltda", cnpj: "66.777.888/0001-99", progress: 80 },
+      { id: "gamma-2", name: "Gamma Energia S.A.", cnpj: "66.777.888/0002-70", progress: 55 },
+      { id: "gamma-3", name: "Gamma Agrícola Ltda", cnpj: "66.777.888/0003-51", progress: 45 },
+    ],
   },
 ];
 
-// === Document/Form types (kept from original) ===
+// === Document/Form types ===
 interface DocumentBlock {
   id: string;
   name: string;
   uploaded: boolean;
+  uploadedAt?: Date;
 }
 
 interface Person {
@@ -303,93 +346,132 @@ const getStatusConfig = (status: RecruitmentStatus) => {
   }
 };
 
+// Generate entities with pre-uploaded docs from registration
+const createEntitiesForCompany = (companyName: string, hasPreUploaded: boolean): EntityBlock[] => {
+  const uploadDate = new Date(2024, 2, 15);
+  return [
+    {
+      id: "empresa-1",
+      name: companyName || "Empresa",
+      type: "empresa",
+      documents: [
+        { id: "doc-1", name: "Contrato Social", uploaded: hasPreUploaded, uploadedAt: hasPreUploaded ? uploadDate : undefined },
+        { id: "doc-2", name: "Cartão CNPJ", uploaded: hasPreUploaded, uploadedAt: hasPreUploaded ? uploadDate : undefined },
+        { id: "doc-3", name: "Balanço Patrimonial", uploaded: hasPreUploaded, uploadedAt: hasPreUploaded ? uploadDate : undefined },
+        { id: "doc-4", name: "Faturamento dos últimos 12 meses", uploaded: false },
+        { id: "doc-5", name: "Certidões Negativas", uploaded: false },
+      ],
+    },
+    {
+      id: "socio-pf-block",
+      name: "Sócio PF",
+      type: "socio_pf",
+      people: [
+        {
+          id: "socio-pf-1",
+          name: "Sócio PF 1",
+          documents: [
+            { id: "doc-6", name: "RG/CPF/CNH", uploaded: hasPreUploaded, uploadedAt: hasPreUploaded ? uploadDate : undefined },
+            { id: "doc-7", name: "Comprovante de Residência", uploaded: hasPreUploaded, uploadedAt: hasPreUploaded ? uploadDate : undefined },
+            { id: "doc-8", name: "Declaração de IR", uploaded: false },
+          ],
+          hasSpouse: false,
+        },
+      ],
+    },
+    {
+      id: "socio-pj-block",
+      name: "Sócio PJ",
+      type: "socio_pj",
+      people: [
+        {
+          id: "socio-pj-1",
+          name: "Sócio PJ 1",
+          documents: [
+            { id: "doc-9", name: "Contrato Social", uploaded: false },
+            { id: "doc-10", name: "Cartão CNPJ", uploaded: false },
+            { id: "doc-11", name: "Balanço Patrimonial", uploaded: false },
+          ],
+        },
+      ],
+    },
+    {
+      id: "procurador-block",
+      name: "Procurador",
+      type: "procurador",
+      people: [
+        {
+          id: "procurador-1",
+          name: "Procurador 1",
+          documents: [
+            { id: "doc-12", name: "RG/CPF/CNH", uploaded: false },
+            { id: "doc-13", name: "Procuração", uploaded: false },
+            { id: "doc-14", name: "Comprovante de Residência", uploaded: false },
+          ],
+          hasSpouse: false,
+        },
+      ],
+    },
+  ];
+};
+
 export default function RecrutamentoPage() {
   const [activeTab, setActiveTab] = useState<string>("aguardando");
   const [selectedCompany, setSelectedCompany] = useState<RecruitmentItem | null>(null);
   const [queue, setQueue] = useState(mockRecruitmentQueue);
 
-  // === Sorting state ===
+  // Sorting state
   type SortField = 'companyName' | 'processType' | 'managerName' | 'status' | 'progress' | 'lastUpdated';
   type SortDir = 'asc' | 'desc';
   const [sortField, setSortField] = useState<SortField | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>('asc');
 
-  // === Form state (from original) ===
+  // Form state
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [formSteps, setFormSteps] = useState<FormStep[]>([{ type: 'documents' }]);
   const [entities, setEntities] = useState<EntityBlock[]>([]);
 
-  const initializeEntities = () => {
-    setEntities([
-      {
-        id: "empresa-1",
-        name: "Empresa",
-        type: "empresa",
-        documents: [
-          { id: "doc-1", name: "Contrato Social", uploaded: false },
-          { id: "doc-2", name: "Cartão CNPJ", uploaded: false },
-          { id: "doc-3", name: "Balanço Patrimonial", uploaded: false },
-        ],
-      },
-      {
-        id: "socio-pf-block",
-        name: "Sócio PF",
-        type: "socio_pf",
-        people: [
-          {
-            id: "socio-pf-1",
-            name: "Sócio PF 1",
-            documents: [
-              { id: "doc-4", name: "RG/CPF/CNH", uploaded: false },
-              { id: "doc-5", name: "Comprovante de Residência", uploaded: false },
-              { id: "doc-6", name: "Declaração de IR", uploaded: false },
-            ],
-            hasSpouse: false,
-          },
-        ],
-      },
-      {
-        id: "socio-pj-block",
-        name: "Sócio PJ",
-        type: "socio_pj",
-        people: [
-          {
-            id: "socio-pj-1",
-            name: "Sócio PJ 1",
-            documents: [
-              { id: "doc-7", name: "Contrato Social", uploaded: false },
-              { id: "doc-8", name: "Cartão CNPJ", uploaded: false },
-              { id: "doc-9", name: "Balanço Patrimonial", uploaded: false },
-            ],
-          },
-        ],
-      },
-      {
-        id: "procurador-block",
-        name: "Procurador",
-        type: "procurador",
-        people: [
-          {
-            id: "procurador-1",
-            name: "Procurador 1",
-            documents: [
-              { id: "doc-10", name: "RG/CPF/CNH", uploaded: false },
-              { id: "doc-11", name: "Procuração", uploaded: false },
-              { id: "doc-12", name: "Comprovante de Residência", uploaded: false },
-            ],
-            hasSpouse: false,
-          },
-        ],
-      },
-    ]);
+  // Group state
+  const [selectedMemberIndex, setSelectedMemberIndex] = useState(0);
+  const [groupEntitiesMap, setGroupEntitiesMap] = useState<Record<string, EntityBlock[]>>({});
+
+  const initializeEntities = (item: RecruitmentItem) => {
+    const hasPreUploaded = item.status !== 'aguardando'; // items already started have pre-uploaded docs
+
+    if (item.isGroup && item.groupMembers) {
+      const map: Record<string, EntityBlock[]> = {};
+      item.groupMembers.forEach((member) => {
+        map[member.id] = createEntitiesForCompany(member.name, hasPreUploaded || member.progress > 0);
+      });
+      setGroupEntitiesMap(map);
+      setSelectedMemberIndex(0);
+      // Set current entities to first member
+      const firstMember = item.groupMembers[0];
+      setEntities(map[firstMember.id]);
+    } else {
+      setEntities(createEntitiesForCompany(item.companyName, hasPreUploaded));
+    }
+    setCurrentStepIndex(0);
+    setFormSteps([{ type: 'documents' }]);
+  };
+
+  const handleSelectGroupMember = (index: number) => {
+    if (!selectedCompany?.groupMembers) return;
+    // Save current entities for previous member
+    const prevMember = selectedCompany.groupMembers[selectedMemberIndex];
+    setGroupEntitiesMap(prev => ({ ...prev, [prevMember.id]: entities }));
+    
+    // Load entities for new member
+    const newMember = selectedCompany.groupMembers[index];
+    setSelectedMemberIndex(index);
+    setEntities(groupEntitiesMap[newMember.id] || createEntitiesForCompany(newMember.name, false));
     setCurrentStepIndex(0);
     setFormSteps([{ type: 'documents' }]);
   };
 
   const handleOpenCompany = (item: RecruitmentItem) => {
     setSelectedCompany(item);
-    initializeEntities();
-    // Update status to em_andamento if aguardando
+    initializeEntities(item);
     if (item.status === 'aguardando') {
       setQueue(q => q.map(r => r.id === item.id ? { ...r, status: 'em_andamento' as RecruitmentStatus, lastUpdated: new Date() } : r));
     }
@@ -399,13 +481,16 @@ export default function RecrutamentoPage() {
     setSelectedCompany(null);
     setCurrentStepIndex(0);
     setFormSteps([{ type: 'documents' }]);
+    setGroupEntitiesMap({});
+    setSelectedMemberIndex(0);
   };
-
 
   const handleFinalizeItem = (id: string) => {
     setQueue(q => q.map(r => r.id === id ? { ...r, status: 'finalizado' as RecruitmentStatus, progress: 100, stepsCompleted: r.totalSteps, lastUpdated: new Date() } : r));
-    toast({ title: "Recrutamento finalizado!", description: "O cadastro foi concluído com sucesso." });
+    toast({ title: "Recrutamento finalizado!", description: selectedCompany?.isGroup ? "O cadastro do grupo foi concluído com sucesso." : "O cadastro foi concluído com sucesso." });
     setSelectedCompany(null);
+    setGroupEntitiesMap({});
+    setSelectedMemberIndex(0);
   };
 
   // Filter queue by tab
@@ -423,7 +508,6 @@ export default function RecrutamentoPage() {
     finalizado: queue.filter(i => i.status === 'finalizado').length,
   };
 
-  // Calculate average recruitment time from finished items
   const finishedItems = queue.filter(i => i.status === 'finalizado' && i.startedAt && i.finishedAt);
   const avgDays = finishedItems.length > 0
     ? Math.round(finishedItems.reduce((sum, i) => {
@@ -432,7 +516,7 @@ export default function RecrutamentoPage() {
       }, 0) / finishedItems.length)
     : 0;
 
-  // === Entity/form helpers (kept from original) ===
+  // Entity helpers
   const addPersonToBlock = (blockId: string, type: 'socio_pf' | 'socio_pj' | 'procurador') => {
     setEntities(entities.map(entity => {
       if (entity.id === blockId && entity.people) {
@@ -560,6 +644,17 @@ export default function RecrutamentoPage() {
     } else if (currentStepIndex < formSteps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
     } else {
+      // If group, check if we need to move to next member
+      if (selectedCompany?.isGroup && selectedCompany.groupMembers) {
+        if (selectedMemberIndex < selectedCompany.groupMembers.length - 1) {
+          // Save current member and move to next
+          const currentMember = selectedCompany.groupMembers[selectedMemberIndex];
+          setGroupEntitiesMap(prev => ({ ...prev, [currentMember.id]: entities }));
+          handleSelectGroupMember(selectedMemberIndex + 1);
+          toast({ title: "Empresa finalizada!", description: `Avançando para ${selectedCompany.groupMembers[selectedMemberIndex + 1].name}` });
+          return;
+        }
+      }
       if (selectedCompany) {
         handleFinalizeItem(selectedCompany.id);
       }
@@ -578,11 +673,64 @@ export default function RecrutamentoPage() {
   const handleSaveProgress = () => {
     toast({ title: "Cadastro salvo", description: "O progresso foi salvo com sucesso." });
     setSelectedCompany(null);
+    setGroupEntitiesMap({});
+    setSelectedMemberIndex(0);
   };
 
   // === Render form steps (when inside a company) ===
   if (selectedCompany) {
     const currentStep = formSteps[currentStepIndex];
+    const isGroup = selectedCompany.isGroup && selectedCompany.groupMembers;
+    const currentMemberName = isGroup ? selectedCompany.groupMembers![selectedMemberIndex].name : selectedCompany.companyName;
+
+    // Group company selector
+    const GroupMemberSelector = () => {
+      if (!isGroup) return null;
+      const members = selectedCompany.groupMembers!;
+      return (
+        <div className="mb-6">
+          <div className="flex items-center gap-2 mb-3">
+            <Users className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm font-medium text-muted-foreground">Empresas do grupo</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {members.map((member, index) => {
+              const memberEntities = index === selectedMemberIndex ? entities : groupEntitiesMap[member.id];
+              let memberProgress = member.progress;
+              if (memberEntities) {
+                let total = 0, uploaded = 0;
+                memberEntities.forEach(e => {
+                  const p = calculateProgress(e);
+                  total += p.total;
+                  uploaded += p.uploaded;
+                });
+                memberProgress = total > 0 ? Math.round((uploaded / total) * 100) : 0;
+              }
+              
+              return (
+                <button
+                  key={member.id}
+                  onClick={() => {
+                    if (index !== selectedMemberIndex) handleSelectGroupMember(index);
+                  }}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all text-sm ${
+                    index === selectedMemberIndex
+                      ? 'border-primary bg-primary/5 text-primary font-medium shadow-sm'
+                      : 'border-border hover:border-primary/30 text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  <Building2 className="h-3.5 w-3.5" />
+                  <span>{member.name}</span>
+                  <Badge variant="outline" className="ml-1 text-xs px-1.5 py-0">
+                    {memberProgress}%
+                  </Badge>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      );
+    };
 
     if (currentStep?.type === 'empresa') {
       return (
@@ -590,10 +738,14 @@ export default function RecrutamentoPage() {
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" onClick={handleBackToQueue}><ArrowLeft className="h-5 w-5" /></Button>
             <div>
-              <h1 className="text-3xl font-bold">Dados da Empresa</h1>
-              <p className="text-muted-foreground">{selectedCompany.companyName} — Preencha as informações da empresa</p>
+              <div className="flex items-center gap-2">
+                <h1 className="text-3xl font-bold">Dados da Empresa</h1>
+                {isGroup && <Badge variant="secondary" className="gap-1"><Users className="h-3 w-3" />Grupo</Badge>}
+              </div>
+              <p className="text-muted-foreground">{currentMemberName} — Preencha as informações da empresa</p>
             </div>
           </div>
+          {isGroup && <GroupMemberSelector />}
           <EmpresaForm onSubmit={handleFormSubmit} onBack={handleBack} />
         </div>
       );
@@ -605,10 +757,14 @@ export default function RecrutamentoPage() {
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" onClick={handleBackToQueue}><ArrowLeft className="h-5 w-5" /></Button>
             <div>
-              <h1 className="text-3xl font-bold">Dados do Sócio PF</h1>
-              <p className="text-muted-foreground">{selectedCompany.companyName}</p>
+              <div className="flex items-center gap-2">
+                <h1 className="text-3xl font-bold">Dados do Sócio PF</h1>
+                {isGroup && <Badge variant="secondary" className="gap-1"><Users className="h-3 w-3" />Grupo</Badge>}
+              </div>
+              <p className="text-muted-foreground">{currentMemberName}</p>
             </div>
           </div>
+          {isGroup && <GroupMemberSelector />}
           <SocioPFForm personName={currentStep.personName || "Sócio PF"} hasSpouse={currentStep.hasSpouse || false} onSubmit={handleFormSubmit} onBack={handleBack} />
         </div>
       );
@@ -620,10 +776,14 @@ export default function RecrutamentoPage() {
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" onClick={handleBackToQueue}><ArrowLeft className="h-5 w-5" /></Button>
             <div>
-              <h1 className="text-3xl font-bold">Dados do Sócio PJ</h1>
-              <p className="text-muted-foreground">{selectedCompany.companyName}</p>
+              <div className="flex items-center gap-2">
+                <h1 className="text-3xl font-bold">Dados do Sócio PJ</h1>
+                {isGroup && <Badge variant="secondary" className="gap-1"><Users className="h-3 w-3" />Grupo</Badge>}
+              </div>
+              <p className="text-muted-foreground">{currentMemberName}</p>
             </div>
           </div>
+          {isGroup && <GroupMemberSelector />}
           <SocioPJForm personName={currentStep.personName || "Sócio PJ"} onSubmit={handleFormSubmit} onBack={handleBack} />
         </div>
       );
@@ -635,10 +795,14 @@ export default function RecrutamentoPage() {
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" onClick={handleBackToQueue}><ArrowLeft className="h-5 w-5" /></Button>
             <div>
-              <h1 className="text-3xl font-bold">Dados do Procurador</h1>
-              <p className="text-muted-foreground">{selectedCompany.companyName}</p>
+              <div className="flex items-center gap-2">
+                <h1 className="text-3xl font-bold">Dados do Procurador</h1>
+                {isGroup && <Badge variant="secondary" className="gap-1"><Users className="h-3 w-3" />Grupo</Badge>}
+              </div>
+              <p className="text-muted-foreground">{currentMemberName}</p>
             </div>
           </div>
+          {isGroup && <GroupMemberSelector />}
           <ProcuradorForm personName={currentStep.personName || "Procurador"} hasSpouse={currentStep.hasSpouse || false} onSubmit={handleFormSubmit} onBack={handleBack} />
         </div>
       );
@@ -650,7 +814,10 @@ export default function RecrutamentoPage() {
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="icon" onClick={handleBackToQueue}><ArrowLeft className="h-5 w-5" /></Button>
           <div className="flex-1">
-            <h1 className="text-3xl font-bold">{selectedCompany.companyName}</h1>
+            <div className="flex items-center gap-2">
+              <h1 className="text-3xl font-bold">{selectedCompany.companyName}</h1>
+              {isGroup && <Badge variant="secondary" className="gap-1"><Users className="h-3 w-3" />Grupo</Badge>}
+            </div>
             <p className="text-muted-foreground">
               {getProcessTypeLabel(selectedCompany.processType)} — Organize e envie a documentação necessária
             </p>
@@ -660,6 +827,9 @@ export default function RecrutamentoPage() {
             Salvar cadastro
           </Button>
         </div>
+
+        {/* Group member selector */}
+        {isGroup && <GroupMemberSelector />}
 
         {/* Document blocks */}
         <div className="space-y-4">
@@ -691,16 +861,25 @@ export default function RecrutamentoPage() {
                 {entity.type === 'empresa' && entity.documents && (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {entity.documents.map((doc) => (
-                      <Card key={doc.id} className="border-dashed">
+                      <Card key={doc.id} className={`border-dashed ${doc.uploaded ? 'border-green-300 bg-green-50/50' : ''}`}>
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between">
                             <div className="flex-1">
                               <h4 className="font-medium text-sm">{doc.name}</h4>
-                              <p className="text-xs text-muted-foreground mt-1">
-                                {doc.uploaded ? "Documento enviado" : "Nenhum documento enviado"}
-                              </p>
+                              {doc.uploaded ? (
+                                <div className="flex items-center gap-1 mt-1">
+                                  <Check className="h-3 w-3 text-green-600" />
+                                  <p className="text-xs text-green-600">
+                                    Enviado no cadastro{doc.uploadedAt ? ` em ${doc.uploadedAt.toLocaleDateString('pt-BR')}` : ''}
+                                  </p>
+                                </div>
+                              ) : (
+                                <p className="text-xs text-muted-foreground mt-1">Nenhum documento enviado</p>
+                              )}
                             </div>
-                            <Button variant="ghost" size="icon"><Plus className="h-4 w-4" /></Button>
+                            <Button variant="ghost" size="icon">
+                              {doc.uploaded ? <FileText className="h-4 w-4 text-green-600" /> : <Plus className="h-4 w-4" />}
+                            </Button>
                           </div>
                         </CardContent>
                       </Card>
@@ -726,16 +905,25 @@ export default function RecrutamentoPage() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {person.documents.map((doc) => (
-                        <Card key={doc.id} className="border-dashed">
+                        <Card key={doc.id} className={`border-dashed ${doc.uploaded ? 'border-green-300 bg-green-50/50' : ''}`}>
                           <CardContent className="p-4">
                             <div className="flex items-center justify-between">
                               <div className="flex-1">
                                 <h4 className="font-medium text-sm">{doc.name}</h4>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                  {doc.uploaded ? "Documento enviado" : "Nenhum documento enviado"}
-                                </p>
+                                {doc.uploaded ? (
+                                  <div className="flex items-center gap-1 mt-1">
+                                    <Check className="h-3 w-3 text-green-600" />
+                                    <p className="text-xs text-green-600">
+                                      Enviado no cadastro{doc.uploadedAt ? ` em ${doc.uploadedAt.toLocaleDateString('pt-BR')}` : ''}
+                                    </p>
+                                  </div>
+                                ) : (
+                                  <p className="text-xs text-muted-foreground mt-1">Nenhum documento enviado</p>
+                                )}
                               </div>
-                              <Button variant="ghost" size="icon"><Plus className="h-4 w-4" /></Button>
+                              <Button variant="ghost" size="icon">
+                                {doc.uploaded ? <FileText className="h-4 w-4 text-green-600" /> : <Plus className="h-4 w-4" />}
+                              </Button>
                             </div>
                           </CardContent>
                         </Card>
@@ -950,9 +1138,31 @@ export default function RecrutamentoPage() {
                       return (
                         <TableRow key={item.id}>
                           <TableCell>
-                            <div>
-                              <p className="font-medium">{item.companyName}</p>
-                              <p className="text-xs text-muted-foreground">{item.cnpj}</p>
+                            <div className="flex items-center gap-2">
+                              {item.isGroup && (
+                                <Tooltip>
+                                  <TooltipTrigger>
+                                    <div className="p-1 rounded bg-primary/10">
+                                      <Users className="h-3.5 w-3.5 text-primary" />
+                                    </div>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p className="font-medium mb-1">Grupo Econômico</p>
+                                    {item.groupMembers?.map(m => (
+                                      <p key={m.id} className="text-xs">{m.name}</p>
+                                    ))}
+                                  </TooltipContent>
+                                </Tooltip>
+                              )}
+                              <div>
+                                <p className="font-medium">{item.companyName}</p>
+                                <p className="text-xs text-muted-foreground">
+                                  {item.cnpj}
+                                  {item.isGroup && item.groupMembers && (
+                                    <span className="ml-1 text-primary">· {item.groupMembers.length} empresas</span>
+                                  )}
+                                </p>
+                              </div>
                             </div>
                           </TableCell>
                           <TableCell>
