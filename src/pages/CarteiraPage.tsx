@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Search, Building2, FileText, Clock, CheckCircle, AlertTriangle, XCircle, Users, LayoutGrid, List, ChevronDown, ChevronRight } from "lucide-react";
+import { Plus, Search, Building2, FileText, Clock, CheckCircle, AlertTriangle, XCircle, Users, LayoutGrid, List, ChevronDown, ChevronRight, ChevronLeft } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { getProcessTypeIconWithTooltip } from "@/utils/processTypeUtils";
 import { Button } from "@/components/ui/button";
