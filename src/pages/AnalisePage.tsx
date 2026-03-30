@@ -520,6 +520,19 @@ function CompanyAnaliseCard({
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-3 flex-wrap">
               {getProcessTypeIconWithTooltip(company.processType)}
+              {company.id.startsWith('grp-') && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Badge variant="outline" className="gap-1 text-xs">
+                        <Users className="h-3 w-3" />
+                        Grupo
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent><p>Grupo Econômico</p></TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
               <h3 className="font-semibold text-lg">{company.name}</h3>
               {getStatusBadge(company.status)}
             </div>
