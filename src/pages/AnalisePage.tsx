@@ -690,7 +690,7 @@ function CompanyAnaliseCard({
                           className="bg-success hover:bg-success/90 text-success-foreground"
                           onClick={() => {
                             setApprovalOpen(false);
-                            navigate("/recrutamento");
+                            navigate("/recrutamento", { state: { autoOpenCompany: selectedCompany?.name } });
                           }}
                         >
                           <FileText className="h-4 w-4 mr-2" />
