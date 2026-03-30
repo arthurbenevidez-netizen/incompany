@@ -298,8 +298,6 @@ const getStatusConfig = (status: RecruitmentStatus) => {
       return { label: 'Aguardando', icon: <Clock className="h-3.5 w-3.5" />, className: 'bg-amber-100 text-amber-800 border-amber-200' };
     case 'em_andamento':
       return { label: 'Em Andamento', icon: <PlayCircle className="h-3.5 w-3.5" />, className: 'bg-blue-100 text-blue-800 border-blue-200' };
-    case 'pausado':
-      return { label: 'Pausado', icon: <Pause className="h-3.5 w-3.5" />, className: 'bg-orange-100 text-orange-800 border-orange-200' };
     case 'finalizado':
       return { label: 'Finalizado', icon: <CheckCircle2 className="h-3.5 w-3.5" />, className: 'bg-green-100 text-green-800 border-green-200' };
   }
