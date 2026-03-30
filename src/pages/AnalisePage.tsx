@@ -11,7 +11,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DocumentRequestModal } from "@/components/DocumentRequestModal";
 import { Company } from "@/types";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getProcessTypeLabel, getProcessTypeBadge } from "@/data/documentCategories";
 
 const mockCompanies: Company[] = [
@@ -513,6 +513,22 @@ function CompanyAnaliseCard({
   approvalNotes,
   setApprovalNotes,
 }: CompanyAnaliseCardProps) {
+  const navigate = useNavigate();
+  const [rejectionConfirmed, setRejectionConfirmed] = useState(false);
+  const [approvalConfirmed, setApprovalConfirmed] = useState(false);
+  const [rejectionOpen, setRejectionOpen] = useState(false);
+  const [approvalOpen, setApprovalOpen] = useState(false);
+
+  const handleRejectConfirm = () => {
+    onReprovar(company.id, reviewNotes);
+    setRejectionConfirmed(true);
+  };
+
+  const handleApproveConfirm = () => {
+    onAprovar(company.id, approvalNotes);
+    setApprovalConfirmed(true);
+  };
+
   return (
     <Card className="shadow-card hover:shadow-elevated transition-shadow">
       <CardContent className="pt-6">
@@ -573,83 +589,149 @@ function CompanyAnaliseCard({
                 onRequest={onSolicitarDocumentacao}
               />
 
-              <Dialog>
+              {/* Reprovação */}
+              <Dialog open={rejectionOpen} onOpenChange={(o) => { setRejectionOpen(o); if (!o) { setRejectionConfirmed(false); } }}>
                 <DialogTrigger asChild>
                   <Button
                     size="sm"
                     variant="destructive"
-                    onClick={() => { setSelectedCompany(company); setReviewNotes(""); }}
+                    onClick={() => { setSelectedCompany(company); setReviewNotes(""); setRejectionConfirmed(false); }}
                   >
                     <AlertTriangle className="h-4 w-4 mr-2" />
                     Reprovar
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Reprovar Cadastro</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-2">Empresa:</p>
-                      <p className="font-medium">{company.name} - {company.cnpj}</p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">Motivo da reprovação:</label>
-                      <Textarea
-                        placeholder="Descreva o motivo da reprovação do cadastro..."
-                        value={reviewNotes}
-                        onChange={(e) => setReviewNotes(e.target.value)}
-                        rows={4}
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                      <Button variant="destructive" onClick={() => onReprovar(company.id, reviewNotes)}>
-                        Reprovar Cadastro
+                  {rejectionConfirmed ? (
+                    <div className="flex flex-col items-center py-8 space-y-4">
+                      <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center">
+                        <XCircle className="h-8 w-8 text-destructive" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-center">Cadastro Reprovado</h3>
+                      <p className="text-sm text-muted-foreground text-center max-w-md">
+                        O cadastro de <strong>{company.name}</strong> foi reprovado com sucesso. A decisão foi registrada no workflow.
+                      </p>
+                      {reviewNotes && (
+                        <div className="bg-muted/50 rounded-lg p-4 w-full max-w-md">
+                          <p className="text-xs text-muted-foreground mb-1">Motivo registrado:</p>
+                          <p className="text-sm">{reviewNotes}</p>
+                        </div>
+                      )}
+                      <Button variant="outline" onClick={() => setRejectionOpen(false)} className="mt-4">
+                        Retomar a Análise
                       </Button>
                     </div>
-                  </div>
+                  ) : (
+                    <>
+                      <DialogHeader>
+                        <DialogTitle>Reprovar Cadastro</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-2">Empresa:</p>
+                          <p className="font-medium">{company.name} - {company.cnpj}</p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">Motivo da reprovação:</label>
+                          <Textarea
+                            placeholder="Descreva o motivo da reprovação do cadastro..."
+                            value={reviewNotes}
+                            onChange={(e) => setReviewNotes(e.target.value)}
+                            rows={4}
+                          />
+                        </div>
+                        <div className="flex gap-2">
+                          <Button variant="destructive" onClick={handleRejectConfirm} disabled={!reviewNotes.trim()}>
+                            Reprovar Cadastro
+                          </Button>
+                          <Button variant="outline" onClick={() => setRejectionOpen(false)}>
+                            Cancelar
+                          </Button>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </DialogContent>
               </Dialog>
 
-              <Dialog>
+              {/* Aprovação */}
+              <Dialog open={approvalOpen} onOpenChange={(o) => { setApprovalOpen(o); if (!o) { setApprovalConfirmed(false); } }}>
                 <DialogTrigger asChild>
                   <Button
                     size="sm"
                     className="bg-success hover:bg-success/90 text-success-foreground"
-                    onClick={() => { setSelectedCompany(company); setApprovalNotes(""); }}
+                    onClick={() => { setSelectedCompany(company); setApprovalNotes(""); setApprovalConfirmed(false); }}
                   >
                     <CheckCircle className="h-4 w-4 mr-2" />
                     Aprovar
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Aprovar Cadastro</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-2">Empresa:</p>
-                      <p className="font-medium">{company.name} - {company.cnpj}</p>
+                  {approvalConfirmed ? (
+                    <div className="flex flex-col items-center py-8 space-y-4">
+                      <div className="w-16 h-16 rounded-full bg-success/10 flex items-center justify-center">
+                        <CheckCircle className="h-8 w-8 text-success" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-center">Cadastro Aprovado!</h3>
+                      <p className="text-sm text-muted-foreground text-center max-w-md">
+                        O cadastro de <strong>{company.name}</strong> foi aprovado com sucesso. A decisão foi registrada no workflow.
+                      </p>
+                      {approvalNotes && (
+                        <div className="bg-muted/50 rounded-lg p-4 w-full max-w-md">
+                          <p className="text-xs text-muted-foreground mb-1">Comentário registrado:</p>
+                          <p className="text-sm">{approvalNotes}</p>
+                        </div>
+                      )}
+                      <div className="flex gap-3 mt-4">
+                        <Button
+                          className="bg-success hover:bg-success/90 text-success-foreground"
+                          onClick={() => {
+                            setApprovalOpen(false);
+                            navigate("/recrutamento");
+                          }}
+                        >
+                          <FileText className="h-4 w-4 mr-2" />
+                          Continuar Recrutamento
+                        </Button>
+                        <Button variant="outline" onClick={() => setApprovalOpen(false)}>
+                          Retomar a Análise
+                        </Button>
+                      </div>
                     </div>
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">Comentários sobre a aprovação:</label>
-                      <Textarea
-                        placeholder="Adicione comentários sobre a aprovação do cadastro... (opcional)"
-                        value={approvalNotes}
-                        onChange={(e) => setApprovalNotes(e.target.value)}
-                        rows={4}
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        className="bg-success hover:bg-success/90 text-success-foreground"
-                        onClick={() => onAprovar(company.id, approvalNotes)}
-                      >
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Aprovar Cadastro
-                      </Button>
-                    </div>
-                  </div>
+                  ) : (
+                    <>
+                      <DialogHeader>
+                        <DialogTitle>Aprovar Cadastro</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-2">Empresa:</p>
+                          <p className="font-medium">{company.name} - {company.cnpj}</p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">Comentários sobre a aprovação:</label>
+                          <Textarea
+                            placeholder="Adicione comentários sobre a aprovação do cadastro... (opcional)"
+                            value={approvalNotes}
+                            onChange={(e) => setApprovalNotes(e.target.value)}
+                            rows={4}
+                          />
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            className="bg-success hover:bg-success/90 text-success-foreground"
+                            onClick={handleApproveConfirm}
+                          >
+                            <CheckCircle className="h-4 w-4 mr-2" />
+                            Aprovar Cadastro
+                          </Button>
+                          <Button variant="outline" onClick={() => setApprovalOpen(false)}>
+                            Cancelar
+                          </Button>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </DialogContent>
               </Dialog>
             </>
