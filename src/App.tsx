@@ -63,6 +63,11 @@ const App = () => (
               <DocumentosPage />
             </AppLayout>
           } />
+          <Route path="/documentos/grupo/:companyId" element={
+            <AppLayout currentUser={mockUser}>
+              <DocumentosPage />
+            </AppLayout>
+          } />
           <Route path="/analise" element={
             <AppLayout currentUser={{...mockUser, role: "equipe_cadastro"}}>
               <AnalisePage />
