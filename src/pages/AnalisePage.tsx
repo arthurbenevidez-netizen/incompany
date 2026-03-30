@@ -562,9 +562,47 @@ function CompanyAnaliseCard({
                 <p className="text-sm text-muted-foreground">Atualizado em</p>
                 <p className="text-sm">{company.updatedAt.toLocaleDateString('pt-BR')}</p>
               </div>
-            </div>
-          </div>
-        </div>
+           </div>
+         </div>
+
+         {/* Empresas do grupo */}
+         {company.id === 'grp-2' && (
+           <div className="mb-4 border border-border rounded-lg overflow-hidden">
+             <div className="bg-muted/50 px-4 py-2 flex items-center gap-2">
+               <Users className="h-4 w-4 text-primary" />
+               <span className="text-sm font-medium">Empresas do Grupo ({grupoBetaEmpresas.length})</span>
+             </div>
+             <div className="divide-y divide-border">
+               {grupoBetaEmpresas.map((emp, idx) => {
+                 const progress = Math.round(((emp.docsTotal - emp.docsPending) / emp.docsTotal) * 100);
+                 const statusLabel = emp.status === 'awaiting_review' ? 'Aguardando Revisão' : emp.status === 'in_progress' ? 'Em Análise' : 'Pendente';
+                 const statusColor = emp.status === 'awaiting_review' ? 'text-warning' : emp.status === 'in_progress' ? 'text-primary' : 'text-pending';
+                 return (
+                   <div key={idx} className="px-4 py-3 flex items-center gap-4">
+                     <Building2 className="h-4 w-4 text-muted-foreground shrink-0" />
+                     <div className="flex-1 min-w-0">
+                       <p className="text-sm font-medium truncate">{emp.name}</p>
+                       <p className="text-xs text-muted-foreground font-mono">{emp.cnpj}</p>
+                     </div>
+                     <div className="flex items-center gap-3 shrink-0">
+                       <div className="w-24">
+                         <div className="flex justify-between text-xs mb-1">
+                           <span className="text-muted-foreground">Docs</span>
+                           <span className="font-medium">{progress}%</span>
+                         </div>
+                         <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                           <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${progress}%` }} />
+                         </div>
+                       </div>
+                       <span className={`text-xs font-medium ${statusColor} whitespace-nowrap`}>{statusLabel}</span>
+                       <span className="text-xs text-destructive font-medium">{emp.docsPending} pend.</span>
+                     </div>
+                   </div>
+                 );
+               })}
+             </div>
+           </div>
+         )}
 
         <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
           {activeFilter !== 'aprovados' && activeFilter !== 'reprovados' && (
