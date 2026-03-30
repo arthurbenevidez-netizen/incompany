@@ -437,21 +437,8 @@ export default function RecrutamentoPage() {
   const [selectedMemberIndex, setSelectedMemberIndex] = useState(0);
   const [groupEntitiesMap, setGroupEntitiesMap] = useState<Record<string, EntityBlock[]>>({});
 
-  // Auto-open company from navigation state (e.g., from Análise de Cadastro)
-  useEffect(() => {
-    const state = location.state as { autoOpenCompany?: string } | null;
-    if (state?.autoOpenCompany) {
-      const item = queue.find(r => r.companyName.toLowerCase().includes(state.autoOpenCompany!.toLowerCase()));
-      if (item) {
-        handleOpenCompany(item);
-      }
-      // Clear the state so it doesn't re-trigger
-      window.history.replaceState({}, document.title);
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-
-    const hasPreUploaded = item.status !== 'aguardando'; // items already started have pre-uploaded docs
+  const initializeEntities = (item: RecruitmentItem) => {
+    const hasPreUploaded = item.status !== 'aguardando';
 
     if (item.isGroup && item.groupMembers) {
       const map: Record<string, EntityBlock[]> = {};
@@ -460,7 +447,6 @@ export default function RecrutamentoPage() {
       });
       setGroupEntitiesMap(map);
       setSelectedMemberIndex(0);
-      // Set current entities to first member
       const firstMember = item.groupMembers[0];
       setEntities(map[firstMember.id]);
     } else {
@@ -472,11 +458,9 @@ export default function RecrutamentoPage() {
 
   const handleSelectGroupMember = (index: number) => {
     if (!selectedCompany?.groupMembers) return;
-    // Save current entities for previous member
     const prevMember = selectedCompany.groupMembers[selectedMemberIndex];
     setGroupEntitiesMap(prev => ({ ...prev, [prevMember.id]: entities }));
     
-    // Load entities for new member
     const newMember = selectedCompany.groupMembers[index];
     setSelectedMemberIndex(index);
     setEntities(groupEntitiesMap[newMember.id] || createEntitiesForCompany(newMember.name, false));
@@ -491,6 +475,18 @@ export default function RecrutamentoPage() {
       setQueue(q => q.map(r => r.id === item.id ? { ...r, status: 'em_andamento' as RecruitmentStatus, lastUpdated: new Date() } : r));
     }
   };
+
+  // Auto-open company from navigation state (e.g., from Análise de Cadastro)
+  useEffect(() => {
+    const state = location.state as { autoOpenCompany?: string } | null;
+    if (state?.autoOpenCompany) {
+      const item = queue.find(r => r.companyName.toLowerCase().includes(state.autoOpenCompany!.toLowerCase()));
+      if (item) {
+        handleOpenCompany(item);
+      }
+      window.history.replaceState({}, document.title);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleBackToQueue = () => {
     setSelectedCompany(null);
