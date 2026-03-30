@@ -459,12 +459,12 @@ function CompanyCard({ company }: { company: Company }) {
   return (
     <Card className={`shadow-card hover:shadow-elevated transition-shadow cursor-pointer ${renewal ? 'border-warning' : ''}`}>
       {renewal && (
-        <div className="bg-warning/10 border-b border-warning/30 px-4 py-2 rounded-t-xl flex items-center gap-2">
+        <div className="bg-warning/10 border-b border-warning/30 px-6 py-2 rounded-t-xl flex items-center gap-2">
           <AlertTriangle className="h-4 w-4 text-warning" />
           <span className="text-xs font-medium text-warning">Atualização necessária — aprovado há mais de 6 meses</span>
         </div>
       )}
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-3 px-6">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
             {getProcessTypeIconWithTooltip(company.processType)}
@@ -473,7 +473,7 @@ function CompanyCard({ company }: { company: Company }) {
           {getStatusBadge(company.status)}
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-6">
         <div className="space-y-3">
           <div>
             <p className="text-sm text-muted-foreground">CNPJ</p>
