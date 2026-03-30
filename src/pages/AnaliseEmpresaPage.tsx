@@ -277,8 +277,8 @@ export default function AnaliseEmpresaPage() {
                       <Textarea placeholder="Descreva o motivo..." value={reviewNotes} onChange={(e) => setReviewNotes(e.target.value)} rows={4} />
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="destructive" onClick={handleReprovar} disabled={!reviewNotes.trim()}>Reprovar Cadastro</Button>
                       <Button variant="outline" onClick={() => setRejectionOpen(false)}>Cancelar</Button>
+                      <Button variant="destructive" onClick={handleReprovar} disabled={!reviewNotes.trim()}>Reprovar Cadastro</Button>
                     </div>
                   </div>
                 </>
