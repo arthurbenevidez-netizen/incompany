@@ -240,15 +240,11 @@ export default function WorkflowListPage() {
                     onClick={() => navigate(`/workflow/${item.id}`)}
                   >
                     <TableCell>{getStatusBadge(item.status)}</TableCell>
-                    <TableCell>
-                      {getProcessTypeLabel(item.processType)}
-                    </TableCell>
-                    <TableCell>{item.etapa}</TableCell>
-                    <TableCell className="font-medium">{item.responsavel}</TableCell>
+                    <TableCell>{item.razaoSocial}</TableCell>
                     <TableCell className="font-mono text-sm">{item.cnpj}</TableCell>
-                    <TableCell>
-                      {item.razaoSocial}
-                    </TableCell>
+                    <TableCell className="font-medium">{item.responsavel}</TableCell>
+                    <TableCell>{getProcessTypeLabel(item.processType)}</TableCell>
+                    <TableCell>{item.etapa}</TableCell>
                     <TableCell className="text-right">{item.ultimaAtualizacao}</TableCell>
                   </TableRow>
                 ))
