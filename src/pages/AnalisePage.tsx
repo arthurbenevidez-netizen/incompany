@@ -304,6 +304,7 @@ export default function AnalisePage() {
     console.log("Aprovando empresa:", companyId, "Comentários:", notes);
   };
 
+  const todosCount = mockCompanies.length;
   const pendentesCount = mockCompanies.filter(c => (c.documentsPending ?? 0) > 0 && c.status !== 'approved' && c.status !== 'rejected').length;
   const andamentoCount = mockCompanies.filter(c => c.status === 'in_progress' || c.status === 'awaiting_review').length;
   const aprovadosCount = mockCompanies.filter(c => c.status === 'approved').length;
