@@ -110,6 +110,11 @@ const App = () => (
             </AppLayout>
           } />
           <Route path="/cliente/:token" element={<ClientePortalPage />} />
+          <Route path="/workflows" element={
+            <AppLayout currentUser={mockUser}>
+              <WorkflowListPage />
+            </AppLayout>
+          } />
           <Route path="/workflow/:companyId" element={
             <AppLayout currentUser={mockUser}>
               <WorkflowPage />
