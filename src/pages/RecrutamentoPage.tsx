@@ -863,7 +863,7 @@ export default function RecrutamentoPage() {
             </div>
             <div>
               <p className="text-2xl font-bold">{counts.em_andamento}</p>
-              <p className="text-sm text-muted-foreground">Em Andamento / Pausados</p>
+              <p className="text-sm text-muted-foreground">Em Andamento</p>
             </div>
           </CardContent>
         </Card>
