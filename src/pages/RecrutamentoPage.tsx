@@ -437,7 +437,20 @@ export default function RecrutamentoPage() {
   const [selectedMemberIndex, setSelectedMemberIndex] = useState(0);
   const [groupEntitiesMap, setGroupEntitiesMap] = useState<Record<string, EntityBlock[]>>({});
 
-  const initializeEntities = (item: RecruitmentItem) => {
+  // Auto-open company from navigation state (e.g., from Análise de Cadastro)
+  useEffect(() => {
+    const state = location.state as { autoOpenCompany?: string } | null;
+    if (state?.autoOpenCompany) {
+      const item = queue.find(r => r.companyName.toLowerCase().includes(state.autoOpenCompany!.toLowerCase()));
+      if (item) {
+        handleOpenCompany(item);
+      }
+      // Clear the state so it doesn't re-trigger
+      window.history.replaceState({}, document.title);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+
     const hasPreUploaded = item.status !== 'aguardando'; // items already started have pre-uploaded docs
 
     if (item.isGroup && item.groupMembers) {
