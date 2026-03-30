@@ -575,11 +575,9 @@ export default function RecrutamentoPage() {
     handleContinue();
   };
 
-  const handleSaveAndPause = () => {
-    if (selectedCompany) {
-      handlePauseItem(selectedCompany.id);
-      setSelectedCompany(null);
-    }
+  const handleSaveProgress = () => {
+    toast({ title: "Cadastro salvo", description: "O progresso foi salvo com sucesso." });
+    setSelectedCompany(null);
   };
 
   // === Render form steps (when inside a company) ===
