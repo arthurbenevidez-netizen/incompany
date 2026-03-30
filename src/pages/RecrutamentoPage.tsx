@@ -21,7 +21,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { ProcessType } from "@/types";
 
 // Types for the recruitment queue
-type RecruitmentStatus = 'aguardando' | 'em_andamento' | 'pausado' | 'finalizado';
+type RecruitmentStatus = 'aguardando' | 'em_andamento' | 'finalizado';
 
 interface RecruitmentItem {
   id: string;
