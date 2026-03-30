@@ -10,6 +10,7 @@ import { Company, EconomicGroup } from "@/types";
 import { Link } from "react-router-dom";
 import { getProcessTypeLabel, getProcessTypeBadge } from "@/data/documentCategories";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+// Collapsible kept for potential future use
 
 const SIX_MONTHS_MS = 6 * 30 * 24 * 60 * 60 * 1000;
 
