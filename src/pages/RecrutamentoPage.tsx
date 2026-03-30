@@ -13,7 +13,7 @@ import { ProcuradorForm } from "@/components/forms/ProcuradorForm";
 import { toast } from "@/hooks/use-toast";
 import { 
   Plus, Building2, User, Users, Briefcase, ArrowLeft, 
-  Clock, CheckCircle2, PlayCircle, Pause, FileText,
+  Clock, CheckCircle2, PlayCircle, FileText,
   ArrowRight, Timer, ArrowUpDown, ArrowUp, ArrowDown
 } from "lucide-react";
 import { getProcessTypeIconComponent } from "@/utils/processTypeUtils";
