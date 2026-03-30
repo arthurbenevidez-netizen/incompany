@@ -324,13 +324,13 @@ export default function WorkflowPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {data.groupCompanies.map((company, i) => (
                 <div
-                  key={company}
+                  key={company.name}
                   className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/20"
                 >
                   <div className={`w-3 h-3 rounded-full ${companyDotColors[i % companyDotColors.length]} shrink-0`} />
                   <div className="min-w-0">
-                    <p className="text-sm font-medium truncate">{company}</p>
-                    <p className="text-xs text-muted-foreground">Empresa {i + 1} de {data.groupCompanies!.length}</p>
+                    <p className="text-sm font-medium truncate">{company.name}</p>
+                    <p className="text-xs text-muted-foreground font-mono">{company.cnpj}</p>
                   </div>
                 </div>
               ))}
