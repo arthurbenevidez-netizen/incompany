@@ -14,7 +14,7 @@ import { WorkflowDocuments } from "@/components/workflow/WorkflowDocuments";
 const mockWorkflowData: Record<string, {
   companyName: string;
   groupName?: string;
-  groupCompanies?: string[];
+  groupCompanies?: { name: string; cnpj: string }[];
   steps: WorkflowStep[];
   etapa: string;
   responsavel: string;
@@ -89,7 +89,10 @@ const mockWorkflowData: Record<string, {
   "2": {
     companyName: "Grupo Alpha Holdings",
     groupName: "Grupo Alpha Holdings",
-    groupCompanies: ["Indústria ABC S.A.", "ABC Logística LTDA"],
+    groupCompanies: [
+      { name: "Indústria ABC S.A.", cnpj: "12.345.678/0001-90" },
+      { name: "ABC Logística LTDA", cnpj: "12.345.678/0002-71" },
+    ],
     steps: [
       { label: "Recrutamento", status: "completed" },
       { label: "Formalização", status: "completed" },
@@ -213,7 +216,11 @@ const mockWorkflowData: Record<string, {
   "grp-2": {
     companyName: "Grupo Beta Participações",
     groupName: "Grupo Beta Participações",
-    groupCompanies: ["Beta Comércio LTDA", "Beta Serviços S.A.", "Beta Tech LTDA"],
+    groupCompanies: [
+      { name: "Beta Comércio LTDA", cnpj: "55.666.777/0001-88" },
+      { name: "Beta Serviços S.A.", cnpj: "55.666.777/0002-69" },
+      { name: "Beta Tech LTDA", cnpj: "55.666.777/0003-40" },
+    ],
     steps: [
       { label: "Recrutamento", status: "completed" },
       { label: "Formalização", status: "completed" },
@@ -306,31 +313,6 @@ export default function WorkflowPage() {
         </nav>
       </div>
 
-      {/* Group companies block */}
-      {isGroup && data.groupCompanies && (
-        <Card>
-          <CardContent className="py-4">
-            <div className="flex items-center gap-2 mb-3">
-              <Building2 className="h-4 w-4 text-primary" />
-              <span className="text-sm font-semibold">Empresas do Grupo</span>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              {data.groupCompanies.map((company, i) => (
-                <div
-                  key={company}
-                  className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/20"
-                >
-                  <div className={`w-3 h-3 rounded-full ${companyDotColors[i % companyDotColors.length]} shrink-0`} />
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium truncate">{company}</p>
-                    <p className="text-xs text-muted-foreground">Empresa {i + 1} de {data.groupCompanies!.length}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
       {/* Stepper + Actions */}
       <div className="bg-card border border-border rounded-lg p-6 flex items-center gap-6">
@@ -355,6 +337,32 @@ export default function WorkflowPage() {
         atualizadoEm={data.atualizadoEm}
       />
 
+      {/* Group companies block */}
+      {isGroup && data.groupCompanies && (
+        <Card>
+          <CardContent className="py-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Building2 className="h-4 w-4 text-primary" />
+              <span className="text-sm font-semibold">Empresas do Grupo</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {data.groupCompanies.map((company, i) => (
+                <div
+                  key={company.name}
+                  className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/20"
+                >
+                  <div className={`w-3 h-3 rounded-full ${companyDotColors[i % companyDotColors.length]} shrink-0`} />
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium truncate">{company.name}</p>
+                    <p className="text-xs text-muted-foreground font-mono">{company.cnpj}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Risk Indicators */}
       <WorkflowRiskIndicators initialRatings={data.ratings} />
 
@@ -367,7 +375,7 @@ export default function WorkflowPage() {
         <WorkflowDocuments
           documents={data.documents}
           isGroup={isGroup}
-          groupCompanies={data.groupCompanies}
+          groupCompanies={data.groupCompanies?.map(c => c.name)}
         />
       </div>
     </div>

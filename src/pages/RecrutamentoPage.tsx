@@ -740,7 +740,6 @@ export default function RecrutamentoPage() {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-3xl font-bold">Dados da Empresa</h1>
-                {isGroup && <Badge variant="secondary" className="gap-1"><Users className="h-3 w-3" />Grupo</Badge>}
               </div>
               <p className="text-muted-foreground">{currentMemberName} — Preencha as informações da empresa</p>
             </div>
@@ -759,7 +758,7 @@ export default function RecrutamentoPage() {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-3xl font-bold">Dados do Sócio PF</h1>
-                {isGroup && <Badge variant="secondary" className="gap-1"><Users className="h-3 w-3" />Grupo</Badge>}
+              
               </div>
               <p className="text-muted-foreground">{currentMemberName}</p>
             </div>
@@ -778,7 +777,7 @@ export default function RecrutamentoPage() {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-3xl font-bold">Dados do Sócio PJ</h1>
-                {isGroup && <Badge variant="secondary" className="gap-1"><Users className="h-3 w-3" />Grupo</Badge>}
+              
               </div>
               <p className="text-muted-foreground">{currentMemberName}</p>
             </div>
@@ -797,7 +796,7 @@ export default function RecrutamentoPage() {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-3xl font-bold">Dados do Procurador</h1>
-                {isGroup && <Badge variant="secondary" className="gap-1"><Users className="h-3 w-3" />Grupo</Badge>}
+                
               </div>
               <p className="text-muted-foreground">{currentMemberName}</p>
             </div>
@@ -816,7 +815,6 @@ export default function RecrutamentoPage() {
           <div className="flex-1">
             <div className="flex items-center gap-2">
               <h1 className="text-3xl font-bold">{selectedCompany.companyName}</h1>
-              {isGroup && <Badge variant="secondary" className="gap-1"><Users className="h-3 w-3" />Grupo</Badge>}
             </div>
             <p className="text-muted-foreground">
               {getProcessTypeLabel(selectedCompany.processType)} — Organize e envie a documentação necessária
@@ -1139,21 +1137,6 @@ export default function RecrutamentoPage() {
                         <TableRow key={item.id}>
                           <TableCell>
                             <div className="flex items-center gap-2">
-                              {item.isGroup && (
-                                <Tooltip>
-                                  <TooltipTrigger>
-                                    <div className="p-1 rounded bg-primary/10">
-                                      <Users className="h-3.5 w-3.5 text-primary" />
-                                    </div>
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p className="font-medium mb-1">Grupo Econômico</p>
-                                    {item.groupMembers?.map(m => (
-                                      <p key={m.id} className="text-xs">{m.name}</p>
-                                    ))}
-                                  </TooltipContent>
-                                </Tooltip>
-                              )}
                               <div>
                                 <p className="font-medium">{item.companyName}</p>
                                 <p className="text-xs text-muted-foreground">
