@@ -241,20 +241,7 @@ export default function WorkflowListPage() {
                   >
                     <TableCell>{getStatusBadge(item.status)}</TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-2">
-                        {item.isGroup && (
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <Users className="h-4 w-4 text-primary" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p className="font-medium">Grupo Econômico</p>
-                              <p className="text-xs">{item.groupCompanies?.join(", ")}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        )}
-                        {getProcessTypeLabel(item.processType)}
-                      </div>
+                      {getProcessTypeLabel(item.processType)}
                     </TableCell>
                     <TableCell>{item.etapa}</TableCell>
                     <TableCell className="font-medium">{item.responsavel}</TableCell>
