@@ -238,7 +238,15 @@ const mockCompanies: Company[] = [
     savedStatus: "incompleto",
     documentsPending: 4,
     documentsTotal: 24,
+    groupId: "grp-beta",
   },
+];
+
+// Empresas membro do Grupo Beta Participações
+const grupoBetaEmpresas = [
+  { name: "Beta Logística S.A.", cnpj: "55.666.777/0002-69", docsApproved: 5, docsTotal: 8, docsPending: 2, status: "in_progress" as const },
+  { name: "Beta Transportes Ltda", cnpj: "55.666.778/0001-11", docsApproved: 6, docsTotal: 8, docsPending: 1, status: "awaiting_review" as const },
+  { name: "Beta Armazéns S.A.", cnpj: "55.666.779/0001-22", docsApproved: 3, docsTotal: 8, docsPending: 1, status: "pending" as const },
 ];
 
 type AnaliseFilter = "todos" | "pendentes" | "em_andamento" | "aprovados" | "reprovados";
