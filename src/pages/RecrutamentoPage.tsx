@@ -13,7 +13,7 @@ import { ProcuradorForm } from "@/components/forms/ProcuradorForm";
 import { toast } from "@/hooks/use-toast";
 import { 
   Plus, Building2, User, Users, Briefcase, ArrowLeft, 
-  Clock, CheckCircle2, PlayCircle, Pause, FileText,
+  Clock, CheckCircle2, PlayCircle, FileText,
   ArrowRight, Timer, ArrowUpDown, ArrowUp, ArrowDown
 } from "lucide-react";
 import { getProcessTypeIconComponent } from "@/utils/processTypeUtils";
@@ -21,7 +21,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { ProcessType } from "@/types";
 
 // Types for the recruitment queue
-type RecruitmentStatus = 'aguardando' | 'em_andamento' | 'pausado' | 'finalizado';
+type RecruitmentStatus = 'aguardando' | 'em_andamento' | 'finalizado';
 
 interface RecruitmentItem {
   id: string;
@@ -78,7 +78,7 @@ const mockRecruitmentQueue: RecruitmentItem[] = [
     processType: "atualizacao_cedente",
     managerName: "Carlos Silva",
     approvedAt: new Date(2024, 2, 18),
-    status: "pausado",
+    status: "em_andamento",
     progress: 40,
     lastUpdated: new Date(2024, 2, 23),
     assignedTo: "Pedro Lima",
@@ -298,8 +298,6 @@ const getStatusConfig = (status: RecruitmentStatus) => {
       return { label: 'Aguardando', icon: <Clock className="h-3.5 w-3.5" />, className: 'bg-amber-100 text-amber-800 border-amber-200' };
     case 'em_andamento':
       return { label: 'Em Andamento', icon: <PlayCircle className="h-3.5 w-3.5" />, className: 'bg-blue-100 text-blue-800 border-blue-200' };
-    case 'pausado':
-      return { label: 'Pausado', icon: <Pause className="h-3.5 w-3.5" />, className: 'bg-orange-100 text-orange-800 border-orange-200' };
     case 'finalizado':
       return { label: 'Finalizado', icon: <CheckCircle2 className="h-3.5 w-3.5" />, className: 'bg-green-100 text-green-800 border-green-200' };
   }
@@ -403,15 +401,6 @@ export default function RecrutamentoPage() {
     setFormSteps([{ type: 'documents' }]);
   };
 
-  const handlePauseItem = (id: string) => {
-    setQueue(q => q.map(r => r.id === id ? { ...r, status: 'pausado' as RecruitmentStatus, lastUpdated: new Date() } : r));
-    toast({ title: "Processo pausado", description: "O recrutamento foi pausado e pode ser retomado a qualquer momento." });
-  };
-
-  const handleResumeItem = (id: string) => {
-    setQueue(q => q.map(r => r.id === id ? { ...r, status: 'em_andamento' as RecruitmentStatus, lastUpdated: new Date() } : r));
-    toast({ title: "Processo retomado", description: "O recrutamento foi retomado." });
-  };
 
   const handleFinalizeItem = (id: string) => {
     setQueue(q => q.map(r => r.id === id ? { ...r, status: 'finalizado' as RecruitmentStatus, progress: 100, stepsCompleted: r.totalSteps, lastUpdated: new Date() } : r));
@@ -423,14 +412,14 @@ export default function RecrutamentoPage() {
   const filteredQueue = queue.filter(item => {
     if (activeTab === 'todos') return true;
     if (activeTab === 'aguardando') return item.status === 'aguardando';
-    if (activeTab === 'em_andamento') return item.status === 'em_andamento' || item.status === 'pausado';
+    if (activeTab === 'em_andamento') return item.status === 'em_andamento';
     if (activeTab === 'finalizado') return item.status === 'finalizado';
     return true;
   });
 
   const counts = {
     aguardando: queue.filter(i => i.status === 'aguardando').length,
-    em_andamento: queue.filter(i => i.status === 'em_andamento' || i.status === 'pausado').length,
+    em_andamento: queue.filter(i => i.status === 'em_andamento').length,
     finalizado: queue.filter(i => i.status === 'finalizado').length,
   };
 
@@ -586,11 +575,9 @@ export default function RecrutamentoPage() {
     handleContinue();
   };
 
-  const handleSaveAndPause = () => {
-    if (selectedCompany) {
-      handlePauseItem(selectedCompany.id);
-      setSelectedCompany(null);
-    }
+  const handleSaveProgress = () => {
+    toast({ title: "Cadastro salvo", description: "O progresso foi salvo com sucesso." });
+    setSelectedCompany(null);
   };
 
   // === Render form steps (when inside a company) ===
@@ -668,8 +655,8 @@ export default function RecrutamentoPage() {
               {getProcessTypeLabel(selectedCompany.processType)} — Organize e envie a documentação necessária
             </p>
           </div>
-          <Button variant="outline" onClick={handleSaveAndPause}>
-            <Pause className="h-4 w-4 mr-2" />
+          <Button variant="outline" onClick={handleSaveProgress}>
+            <FileText className="h-4 w-4 mr-2" />
             Salvar cadastro
           </Button>
         </div>
@@ -802,8 +789,8 @@ export default function RecrutamentoPage() {
         </div>
 
         <div className="flex justify-end gap-3">
-          <Button variant="outline" onClick={handleSaveAndPause}>
-            <Pause className="h-4 w-4 mr-2" />Salvar cadastro
+          <Button variant="outline" onClick={handleSaveProgress}>
+            <FileText className="h-4 w-4 mr-2" />Salvar cadastro
           </Button>
           <Button size="lg" className="px-8" onClick={handleContinue}>
             Continuar <ArrowRight className="h-4 w-4 ml-2" />
@@ -874,7 +861,7 @@ export default function RecrutamentoPage() {
             </div>
             <div>
               <p className="text-2xl font-bold">{counts.em_andamento}</p>
-              <p className="text-sm text-muted-foreground">Em Andamento / Pausados</p>
+              <p className="text-sm text-muted-foreground">Em Andamento</p>
             </div>
           </CardContent>
         </Card>
@@ -996,11 +983,6 @@ export default function RecrutamentoPage() {
                           </TableCell>
                           <TableCell className="text-right">
                             <div className="flex items-center justify-end gap-2">
-                              {item.status === 'pausado' && (
-                                <Button variant="outline" size="sm" onClick={() => handleResumeItem(item.id)}>
-                                  <PlayCircle className="h-4 w-4 mr-1" />Retomar
-                                </Button>
-                              )}
                               {item.status !== 'finalizado' && (
                                 <Button size="sm" onClick={() => handleOpenCompany(item)}>
                                   {item.status === 'aguardando' ? 'Iniciar' : 'Continuar'}
