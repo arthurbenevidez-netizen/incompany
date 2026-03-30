@@ -985,11 +985,6 @@ export default function RecrutamentoPage() {
                           </TableCell>
                           <TableCell className="text-right">
                             <div className="flex items-center justify-end gap-2">
-                              {item.status === 'pausado' && (
-                                <Button variant="outline" size="sm" onClick={() => handleResumeItem(item.id)}>
-                                  <PlayCircle className="h-4 w-4 mr-1" />Retomar
-                                </Button>
-                              )}
                               {item.status !== 'finalizado' && (
                                 <Button size="sm" onClick={() => handleOpenCompany(item)}>
                                   {item.status === 'aguardando' ? 'Iniciar' : 'Continuar'}
