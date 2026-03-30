@@ -310,15 +310,15 @@ export default function AnaliseEmpresaPage() {
                     </div>
                   )}
                   <div className="flex gap-3 mt-4">
+                    <Button variant="outline" onClick={() => { setApprovalOpen(false); navigate("/analise"); }}>
+                      Retomar a Análise
+                    </Button>
                     <Button
                       className="bg-success hover:bg-success/90 text-success-foreground"
                       onClick={() => { setApprovalOpen(false); navigate("/recrutamento"); }}
                     >
                       <FileText className="h-4 w-4 mr-2" />
                       Continuar Recrutamento
-                    </Button>
-                    <Button variant="outline" onClick={() => { setApprovalOpen(false); navigate("/analise"); }}>
-                      Retomar a Análise
                     </Button>
                   </div>
                 </div>
