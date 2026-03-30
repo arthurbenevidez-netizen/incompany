@@ -789,8 +789,8 @@ export default function RecrutamentoPage() {
         </div>
 
         <div className="flex justify-end gap-3">
-          <Button variant="outline" onClick={handleSaveAndPause}>
-            <Pause className="h-4 w-4 mr-2" />Salvar cadastro
+          <Button variant="outline" onClick={handleSaveProgress}>
+            <FileText className="h-4 w-4 mr-2" />Salvar cadastro
           </Button>
           <Button size="lg" className="px-8" onClick={handleContinue}>
             Continuar <ArrowRight className="h-4 w-4 ml-2" />
