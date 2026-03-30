@@ -877,6 +877,7 @@ export default function RecrutamentoPage() {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
+          <TabsTrigger value="todos">Todos ({queue.length})</TabsTrigger>
           <TabsTrigger value="aguardando">Aguardando ({counts.aguardando})</TabsTrigger>
           <TabsTrigger value="em_andamento">Em Andamento ({counts.em_andamento})</TabsTrigger>
           <TabsTrigger value="finalizado">Finalizados ({counts.finalizado})</TabsTrigger>

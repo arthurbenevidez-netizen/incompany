@@ -421,7 +421,11 @@ export default function AnalisePage() {
       </Card>
 
       <Tabs value={activeFilter} onValueChange={(v) => setActiveFilter(v as AnaliseFilter)}>
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="todos" className="gap-2">
+            <LayoutGrid className="h-4 w-4" />
+            Todos ({todosCount})
+          </TabsTrigger>
           <TabsTrigger value="pendentes" className="gap-2">
             <Clock className="h-4 w-4" />
             Pendentes ({pendentesCount})
