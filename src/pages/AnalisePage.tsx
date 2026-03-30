@@ -683,6 +683,9 @@ function CompanyAnaliseCard({
                         </div>
                       )}
                       <div className="flex gap-3 mt-4">
+                        <Button variant="outline" onClick={() => setApprovalOpen(false)}>
+                          Retomar a Análise
+                        </Button>
                         <Button
                           className="bg-success hover:bg-success/90 text-success-foreground"
                           onClick={() => {
@@ -692,9 +695,6 @@ function CompanyAnaliseCard({
                         >
                           <FileText className="h-4 w-4 mr-2" />
                           Continuar Recrutamento
-                        </Button>
-                        <Button variant="outline" onClick={() => setApprovalOpen(false)}>
-                          Retomar a Análise
                         </Button>
                       </div>
                     </div>
