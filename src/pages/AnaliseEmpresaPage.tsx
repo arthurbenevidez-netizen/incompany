@@ -335,10 +335,10 @@ export default function AnaliseEmpresaPage() {
                       <Textarea placeholder="Adicione comentários... (opcional)" value={approvalNotes} onChange={(e) => setApprovalNotes(e.target.value)} rows={4} />
                     </div>
                     <div className="flex gap-2">
+                      <Button variant="outline" onClick={() => setApprovalOpen(false)}>Cancelar</Button>
                       <Button className="bg-success hover:bg-success/90 text-success-foreground" onClick={handleAprovar}>
                         <CheckCircle className="h-4 w-4 mr-2" />Aprovar Cadastro
                       </Button>
-                      <Button variant="outline" onClick={() => setApprovalOpen(false)}>Cancelar</Button>
                     </div>
                   </div>
                 </>
