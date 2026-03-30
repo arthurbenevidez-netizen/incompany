@@ -545,8 +545,8 @@ function GroupAnaliseView({ group }: { group: AnaliseGroup }) {
                       <Textarea placeholder="Descreva o motivo..." value={reviewNotes} onChange={(e) => setReviewNotes(e.target.value)} rows={4} />
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="destructive" onClick={() => { console.log("Reprovar grupo", reviewNotes); setRejectionConfirmed(true); }} disabled={!reviewNotes.trim()}>Reprovar Grupo</Button>
                       <Button variant="outline" onClick={() => setRejectionOpen(false)}>Cancelar</Button>
+                      <Button variant="destructive" onClick={() => { console.log("Reprovar grupo", reviewNotes); setRejectionConfirmed(true); }} disabled={!reviewNotes.trim()}>Reprovar Grupo</Button>
                     </div>
                   </div>
                 </>
