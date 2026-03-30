@@ -211,9 +211,37 @@ const mockCompanies: Company[] = [
     documentsPending: 0,
     documentsTotal: 4,
   },
+  {
+    id: "grp-1",
+    name: "Grupo Alpha Holdings",
+    cnpj: "12.345.678/0001-90",
+    status: "awaiting_review",
+    processType: "cadastro_cedente",
+    managerName: "João Silva",
+    managerId: "1",
+    createdAt: new Date("2024-01-06"),
+    updatedAt: new Date("2024-01-25"),
+    savedStatus: "completo",
+    documentsPending: 0,
+    documentsTotal: 16,
+  },
+  {
+    id: "grp-2",
+    name: "Grupo Beta Participações",
+    cnpj: "55.666.777/0001-88",
+    status: "in_progress",
+    processType: "cadastro_cedente",
+    managerName: "Maria Santos",
+    managerId: "2",
+    createdAt: new Date("2024-01-10"),
+    updatedAt: new Date("2024-01-28"),
+    savedStatus: "incompleto",
+    documentsPending: 4,
+    documentsTotal: 24,
+  },
 ];
 
-type AnaliseFilter = "pendentes" | "em_andamento" | "aprovados" | "reprovados";
+type AnaliseFilter = "todos" | "pendentes" | "em_andamento" | "aprovados" | "reprovados";
 type ViewMode = "list" | "manager";
 
 export default function AnalisePage() {
@@ -264,6 +292,8 @@ export default function AnalisePage() {
     });
 
     switch (filter) {
+      case 'todos':
+        break;
       case 'pendentes':
         filtered = filtered.filter(c => (c.documentsPending ?? 0) > 0 && c.status !== 'approved' && c.status !== 'rejected');
         break;
@@ -302,6 +332,7 @@ export default function AnalisePage() {
     console.log("Aprovando empresa:", companyId, "Comentários:", notes);
   };
 
+  const todosCount = mockCompanies.length;
   const pendentesCount = mockCompanies.filter(c => (c.documentsPending ?? 0) > 0 && c.status !== 'approved' && c.status !== 'rejected').length;
   const andamentoCount = mockCompanies.filter(c => c.status === 'in_progress' || c.status === 'awaiting_review').length;
   const aprovadosCount = mockCompanies.filter(c => c.status === 'approved').length;
@@ -418,7 +449,11 @@ export default function AnalisePage() {
       </Card>
 
       <Tabs value={activeFilter} onValueChange={(v) => setActiveFilter(v as AnaliseFilter)}>
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="todos" className="gap-2">
+            <LayoutGrid className="h-4 w-4" />
+            Todos ({todosCount})
+          </TabsTrigger>
           <TabsTrigger value="pendentes" className="gap-2">
             <Clock className="h-4 w-4" />
             Pendentes ({pendentesCount})

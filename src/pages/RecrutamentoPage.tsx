@@ -220,6 +220,34 @@ const mockRecruitmentQueue: RecruitmentItem[] = [
     stepsCompleted: 0,
     totalSteps: 7,
   },
+  {
+    id: "rec-grp-1",
+    companyName: "Grupo Alpha Holdings",
+    cnpj: "12.345.678/0001-90",
+    processType: "cadastro_cedente",
+    managerName: "João Silva",
+    approvedAt: new Date(2024, 2, 22),
+    status: "em_andamento",
+    progress: 45,
+    lastUpdated: new Date(2024, 2, 27),
+    assignedTo: "Ana Souza",
+    stepsCompleted: 3,
+    totalSteps: 7,
+    startedAt: new Date(2024, 2, 23),
+  },
+  {
+    id: "rec-grp-2",
+    companyName: "Grupo Beta Participações",
+    cnpj: "55.666.777/0001-88",
+    processType: "cadastro_cedente",
+    managerName: "Maria Santos",
+    approvedAt: new Date(2024, 2, 25),
+    status: "aguardando",
+    progress: 0,
+    lastUpdated: new Date(2024, 2, 25),
+    stepsCompleted: 0,
+    totalSteps: 8,
+  },
 ];
 
 // === Document/Form types (kept from original) ===
@@ -393,6 +421,7 @@ export default function RecrutamentoPage() {
 
   // Filter queue by tab
   const filteredQueue = queue.filter(item => {
+    if (activeTab === 'todos') return true;
     if (activeTab === 'aguardando') return item.status === 'aguardando';
     if (activeTab === 'em_andamento') return item.status === 'em_andamento' || item.status === 'pausado';
     if (activeTab === 'finalizado') return item.status === 'finalizado';
@@ -876,6 +905,7 @@ export default function RecrutamentoPage() {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
+          <TabsTrigger value="todos">Todos ({queue.length})</TabsTrigger>
           <TabsTrigger value="aguardando">Aguardando ({counts.aguardando})</TabsTrigger>
           <TabsTrigger value="em_andamento">Em Andamento ({counts.em_andamento})</TabsTrigger>
           <TabsTrigger value="finalizado">Finalizados ({counts.finalizado})</TabsTrigger>

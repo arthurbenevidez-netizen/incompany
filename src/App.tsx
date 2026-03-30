@@ -18,6 +18,7 @@ import ProgramacaoAvisosPage from "./pages/ProgramacaoAvisosPage";
 import GestaoPerfilPage from "./pages/GestaoPerfilPage";
 import ClientePortalPage from "./pages/ClientePortalPage";
 import WorkflowPage from "./pages/WorkflowPage";
+import WorkflowListPage from "./pages/WorkflowListPage";
 import NotFound from "./pages/NotFound";
 import { User } from "@/types";
 
@@ -109,6 +110,11 @@ const App = () => (
             </AppLayout>
           } />
           <Route path="/cliente/:token" element={<ClientePortalPage />} />
+          <Route path="/workflows" element={
+            <AppLayout currentUser={mockUser}>
+              <WorkflowListPage />
+            </AppLayout>
+          } />
           <Route path="/workflow/:companyId" element={
             <AppLayout currentUser={mockUser}>
               <WorkflowPage />
