@@ -562,10 +562,11 @@ function CompanyAnaliseCard({
                 <p className="text-sm text-muted-foreground">Atualizado em</p>
                 <p className="text-sm">{company.updatedAt.toLocaleDateString('pt-BR')}</p>
               </div>
-           </div>
-         </div>
+            </div>
+          </div>
+        </div>
 
-         {/* Empresas do grupo */}
+        {/* Empresas do grupo */}
          {company.id === 'grp-2' && (
            <div className="mb-4 border border-border rounded-lg overflow-hidden">
              <div className="bg-muted/50 px-4 py-2 flex items-center gap-2">
