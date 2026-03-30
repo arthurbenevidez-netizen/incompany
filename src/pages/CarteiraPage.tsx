@@ -312,23 +312,13 @@ export default function CarteiraPage() {
       </Card>
 
       {viewMode === "grid" ? (
-        <div className="space-y-6">
-          {/* Groups */}
-          {filteredGroups.length > 0 && (
-            <div className="space-y-4">
-              {filteredGroups.map(group => (
-                <GroupCard key={group.id} group={group} />
-              ))}
-            </div>
-          )}
-          {/* Standalone companies */}
-          {filteredStandalone.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredStandalone.map((company) => (
-                <CompanyCard key={company.id} company={company} />
-              ))}
-            </div>
-          )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredGroups.map(group => (
+            <GroupCard key={group.id} group={group} />
+          ))}
+          {filteredStandalone.map((company) => (
+            <CompanyCard key={company.id} company={company} />
+          ))}
         </div>
       ) : (
         <div className="space-y-8">
