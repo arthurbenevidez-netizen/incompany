@@ -690,7 +690,7 @@ function CompanyAnaliseCard({
                           className="bg-success hover:bg-success/90 text-success-foreground"
                           onClick={() => {
                             setApprovalOpen(false);
-                            navigate("/recrutamento", { state: { autoOpenCompany: selectedCompany?.name } });
+                            navigate("/recrutamento", { state: { autoOpenCompany: selectedCompany?.name, companyCnpj: selectedCompany?.cnpj, processType: selectedCompany?.processType, managerName: selectedCompany?.managerName } });
                           }}
                         >
                           <FileText className="h-4 w-4 mr-2" />

@@ -478,12 +478,28 @@ export default function RecrutamentoPage() {
 
   // Auto-open company from navigation state (e.g., from Análise de Cadastro)
   useEffect(() => {
-    const state = location.state as { autoOpenCompany?: string } | null;
+    const state = location.state as { autoOpenCompany?: string; companyCnpj?: string; processType?: string; managerName?: string } | null;
     if (state?.autoOpenCompany) {
-      const item = queue.find(r => r.companyName.toLowerCase().includes(state.autoOpenCompany!.toLowerCase()));
-      if (item) {
-        handleOpenCompany(item);
+      let item = queue.find(r => r.companyName.toLowerCase().includes(state.autoOpenCompany!.toLowerCase()));
+      if (!item) {
+        // Company not yet in recruitment queue — add it dynamically
+        const newItem: RecruitmentItem = {
+          id: `rec-auto-${Date.now()}`,
+          companyName: state.autoOpenCompany,
+          cnpj: state.companyCnpj || "00.000.000/0001-00",
+          processType: (state.processType as ProcessType) || "cadastro_cedente",
+          managerName: state.managerName || "—",
+          approvedAt: new Date(),
+          status: "aguardando",
+          progress: 0,
+          lastUpdated: new Date(),
+          stepsCompleted: 0,
+          totalSteps: 6,
+        };
+        setQueue(q => [...q, newItem]);
+        item = newItem;
       }
+      handleOpenCompany(item);
       window.history.replaceState({}, document.title);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

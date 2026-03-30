@@ -315,7 +315,7 @@ export default function AnaliseEmpresaPage() {
                     </Button>
                     <Button
                       className="bg-success hover:bg-success/90 text-success-foreground"
-                      onClick={() => { setApprovalOpen(false); navigate("/recrutamento", { state: { autoOpenCompany: company.name } }); }}
+                      onClick={() => { setApprovalOpen(false); navigate("/recrutamento", { state: { autoOpenCompany: company.name, companyCnpj: company.cnpj, processType: company.processType, managerName: company.managerName } }); }}
                     >
                       <FileText className="h-4 w-4 mr-2" />
                       Continuar Recrutamento
@@ -583,7 +583,7 @@ function GroupAnaliseView({ group }: { group: AnaliseGroup }) {
                     </Button>
                     <Button
                       className="bg-success hover:bg-success/90 text-success-foreground"
-                      onClick={() => { setApprovalOpen(false); navigate("/recrutamento", { state: { autoOpenCompany: group.name } }); }}
+                      onClick={() => { setApprovalOpen(false); navigate("/recrutamento", { state: { autoOpenCompany: group.name, companyCnpj: group.cnpj, processType: group.processType, managerName: group.managerName } }); }}
                     >
                       <FileText className="h-4 w-4 mr-2" />
                       Continuar Recrutamento
