@@ -424,10 +424,15 @@ export default function AnaliseEmpresaPage() {
 // ===================== GROUP ANALYSIS VIEW =====================
 
 function GroupAnaliseView({ group }: { group: AnaliseGroup }) {
+  const navigate = useNavigate();
   const [selectedMemberIndex, setSelectedMemberIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("empresa");
   const [reviewNotes, setReviewNotes] = useState("");
   const [approvalNotes, setApprovalNotes] = useState("");
+  const [rejectionOpen, setRejectionOpen] = useState(false);
+  const [approvalOpen, setApprovalOpen] = useState(false);
+  const [rejectionConfirmed, setRejectionConfirmed] = useState(false);
+  const [approvalConfirmed, setApprovalConfirmed] = useState(false);
 
   const selectedMember = group.members[selectedMemberIndex];
   const documents = mockDocumentsByCompany[selectedMember.id] || [];
