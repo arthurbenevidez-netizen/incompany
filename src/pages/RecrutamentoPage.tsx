@@ -815,7 +815,6 @@ export default function RecrutamentoPage() {
           <div className="flex-1">
             <div className="flex items-center gap-2">
               <h1 className="text-3xl font-bold">{selectedCompany.companyName}</h1>
-              {isGroup && <Badge variant="secondary" className="gap-1"><Users className="h-3 w-3" />Grupo</Badge>}
             </div>
             <p className="text-muted-foreground">
               {getProcessTypeLabel(selectedCompany.processType)} — Organize e envie a documentação necessária
