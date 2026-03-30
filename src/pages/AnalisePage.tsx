@@ -526,11 +526,17 @@ function CompanyAnaliseCard({
       <CardContent className="pt-6">
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <div className="flex items-center gap-3 mb-3 flex-wrap">
-              {getProcessTypeIconWithTooltip(company.processType)}
-              <h3 className="font-semibold text-lg">{company.name}</h3>
-              {getStatusBadge(company.status)}
-            </div>
+             <div className="flex items-center gap-3 mb-3 flex-wrap">
+               {company.id.startsWith('grp-') && (
+                 <Badge variant="secondary" className="bg-accent text-accent-foreground gap-1">
+                   <Users className="h-3 w-3" />
+                   Grupo
+                 </Badge>
+               )}
+               {getProcessTypeIconWithTooltip(company.processType)}
+               <h3 className="font-semibold text-lg">{company.name}</h3>
+               {getStatusBadge(company.status)}
+             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
               <div>
