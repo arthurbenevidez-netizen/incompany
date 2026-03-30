@@ -374,7 +374,7 @@ export default function WorkflowPage() {
         <WorkflowDocuments
           documents={data.documents}
           isGroup={isGroup}
-          groupCompanies={data.groupCompanies}
+          groupCompanies={data.groupCompanies?.map(c => c.name)}
         />
       </div>
     </div>
