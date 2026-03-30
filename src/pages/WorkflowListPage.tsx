@@ -194,18 +194,8 @@ export default function WorkflowListPage() {
                   </button>
                 </TableHead>
                 <TableHead>
-                  <button className="flex items-center hover:text-foreground transition-colors" onClick={() => handleSort('processType')}>
-                    Processo <SortIcon field="processType" />
-                  </button>
-                </TableHead>
-                <TableHead>
-                  <button className="flex items-center hover:text-foreground transition-colors" onClick={() => handleSort('etapa')}>
-                    Etapa <SortIcon field="etapa" />
-                  </button>
-                </TableHead>
-                <TableHead>
-                  <button className="flex items-center hover:text-foreground transition-colors" onClick={() => handleSort('responsavel')}>
-                    Responsável <SortIcon field="responsavel" />
+                  <button className="flex items-center hover:text-foreground transition-colors" onClick={() => handleSort('razaoSocial')}>
+                    Razão Social <SortIcon field="razaoSocial" />
                   </button>
                 </TableHead>
                 <TableHead>
@@ -214,8 +204,18 @@ export default function WorkflowListPage() {
                   </button>
                 </TableHead>
                 <TableHead>
-                  <button className="flex items-center hover:text-foreground transition-colors" onClick={() => handleSort('razaoSocial')}>
-                    Razão Social <SortIcon field="razaoSocial" />
+                  <button className="flex items-center hover:text-foreground transition-colors" onClick={() => handleSort('responsavel')}>
+                    Responsável <SortIcon field="responsavel" />
+                  </button>
+                </TableHead>
+                <TableHead>
+                  <button className="flex items-center hover:text-foreground transition-colors" onClick={() => handleSort('processType')}>
+                    Processo <SortIcon field="processType" />
+                  </button>
+                </TableHead>
+                <TableHead>
+                  <button className="flex items-center hover:text-foreground transition-colors" onClick={() => handleSort('etapa')}>
+                    Etapa <SortIcon field="etapa" />
                   </button>
                 </TableHead>
                 <TableHead>
@@ -240,15 +240,11 @@ export default function WorkflowListPage() {
                     onClick={() => navigate(`/workflow/${item.id}`)}
                   >
                     <TableCell>{getStatusBadge(item.status)}</TableCell>
-                    <TableCell>
-                      {getProcessTypeLabel(item.processType)}
-                    </TableCell>
-                    <TableCell>{item.etapa}</TableCell>
-                    <TableCell className="font-medium">{item.responsavel}</TableCell>
+                    <TableCell>{item.razaoSocial}</TableCell>
                     <TableCell className="font-mono text-sm">{item.cnpj}</TableCell>
-                    <TableCell>
-                      {item.razaoSocial}
-                    </TableCell>
+                    <TableCell className="font-medium">{item.responsavel}</TableCell>
+                    <TableCell>{getProcessTypeLabel(item.processType)}</TableCell>
+                    <TableCell>{item.etapa}</TableCell>
                     <TableCell className="text-right">{item.ultimaAtualizacao}</TableCell>
                   </TableRow>
                 ))
