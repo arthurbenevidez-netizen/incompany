@@ -718,15 +718,15 @@ function CompanyAnaliseCard({
                           />
                         </div>
                         <div className="flex gap-2">
+                          <Button variant="outline" onClick={() => setApprovalOpen(false)}>
+                            Cancelar
+                          </Button>
                           <Button
                             className="bg-success hover:bg-success/90 text-success-foreground"
                             onClick={handleApproveConfirm}
                           >
                             <CheckCircle className="h-4 w-4 mr-2" />
                             Aprovar Cadastro
-                          </Button>
-                          <Button variant="outline" onClick={() => setApprovalOpen(false)}>
-                            Cancelar
                           </Button>
                         </div>
                       </div>
