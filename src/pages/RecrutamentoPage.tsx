@@ -1137,21 +1137,6 @@ export default function RecrutamentoPage() {
                         <TableRow key={item.id}>
                           <TableCell>
                             <div className="flex items-center gap-2">
-                              {item.isGroup && (
-                                <Tooltip>
-                                  <TooltipTrigger>
-                                    <div className="p-1 rounded bg-primary/10">
-                                      <Users className="h-3.5 w-3.5 text-primary" />
-                                    </div>
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p className="font-medium mb-1">Grupo Econômico</p>
-                                    {item.groupMembers?.map(m => (
-                                      <p key={m.id} className="text-xs">{m.name}</p>
-                                    ))}
-                                  </TooltipContent>
-                                </Tooltip>
-                              )}
                               <div>
                                 <p className="font-medium">{item.companyName}</p>
                                 <p className="text-xs text-muted-foreground">

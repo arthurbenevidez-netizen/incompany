@@ -216,7 +216,11 @@ const mockWorkflowData: Record<string, {
   "grp-2": {
     companyName: "Grupo Beta Participações",
     groupName: "Grupo Beta Participações",
-    groupCompanies: ["Beta Comércio LTDA", "Beta Serviços S.A.", "Beta Tech LTDA"],
+    groupCompanies: [
+      { name: "Beta Comércio LTDA", cnpj: "55.666.777/0001-88" },
+      { name: "Beta Serviços S.A.", cnpj: "55.666.777/0002-69" },
+      { name: "Beta Tech LTDA", cnpj: "55.666.777/0003-40" },
+    ],
     steps: [
       { label: "Recrutamento", status: "completed" },
       { label: "Formalização", status: "completed" },
