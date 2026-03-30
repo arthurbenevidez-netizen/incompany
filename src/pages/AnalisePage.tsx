@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Building2, Clock, CheckCircle, AlertTriangle, Eye, MessageSquare, FileText, Users, LayoutGrid, XCircle } from "lucide-react";
+import { Search, Building2, Clock, CheckCircle, AlertTriangle, Eye, MessageSquare, FileText, Users, LayoutGrid, XCircle, ChevronRight } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { getProcessTypeIconWithTooltip as getProcessTypeIconWithTooltipUtil } from "@/utils/processTypeUtils";
 import { Button } from "@/components/ui/button";
