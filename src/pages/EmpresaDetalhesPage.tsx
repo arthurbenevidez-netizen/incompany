@@ -378,37 +378,6 @@ function GroupDetalhes({ group }: { group: EconomicGroup }) {
             </CardContent>
           </Card>
 
-          {/* All Companies Summary */}
-          <Card className="shadow-card">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
-                Resumo das Empresas do Grupo
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {group.companies.map((c, idx) => (
-                  <div key={c.id} className={`flex items-center justify-between p-3 rounded-lg border ${idx === currentIndex ? 'border-primary bg-primary/5' : 'border-border'}`}>
-                    <div className="flex items-center gap-3 min-w-0">
-                      <Building2 className="h-4 w-4 text-muted-foreground shrink-0" />
-                      <div className="min-w-0">
-                        <p className="text-sm font-medium truncate">{c.name}</p>
-                        <p className="text-xs text-muted-foreground font-mono">{c.cnpj}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      {getStatusBadge(c.status)}
-                      <Button size="sm" variant="ghost" onClick={() => setCurrentIndex(idx)}>
-                        Selecionar
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
           {/* Histórico */}
           <Card className="shadow-card">
             <CardHeader>
