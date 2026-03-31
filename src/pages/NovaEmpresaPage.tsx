@@ -108,7 +108,7 @@ export default function NovaEmpresaPage() {
     : [];
 
   const isFormValid = cadastroMode === 'individual'
-    ? formData.razaoSocial && formData.cnpj && formData.processType
+    ? formData.razaoSocial && formData.cnpj && formData.processType && (!vincularGrupo || (individualGroupId && passaWorkflow))
     : formData.processType && (groupMode === 'existente' ? selectedGroupId : groupName) && groupCompanies.every(c => c.razaoSocial && c.cnpj);
 
   if (isSaved && savedCompanyId) {
