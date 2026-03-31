@@ -37,6 +37,11 @@ export default function NovaEmpresaPage() {
     mensagemConvite: "Olá! Sua empresa foi cadastrada no Sistema de Cadastro. Clique no link abaixo para começar o processo de cadastro:",
   });
 
+  // Individual company group linking
+  const [vincularGrupo, setVincularGrupo] = useState(false);
+  const [individualGroupId, setIndividualGroupId] = useState("");
+  const [passaWorkflow, setPassaWorkflow] = useState<'sim' | 'nao' | ''>('');
+
   // Group-specific state
   const [groupMode, setGroupMode] = useState<'novo' | 'existente'>('novo');
   const [groupName, setGroupName] = useState("");
