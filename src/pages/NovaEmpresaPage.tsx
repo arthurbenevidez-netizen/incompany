@@ -302,6 +302,66 @@ export default function NovaEmpresaPage() {
                       </SelectContent>
                     </Select>
                   </div>
+
+                  <Separator />
+
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="vincularGrupo"
+                      checked={vincularGrupo}
+                      onCheckedChange={(checked) => {
+                        setVincularGrupo(checked as boolean);
+                        if (!checked) {
+                          setIndividualGroupId("");
+                          setPassaWorkflow('');
+                        }
+                      }}
+                    />
+                    <Label htmlFor="vincularGrupo" className="text-sm cursor-pointer">
+                      Vincular a um grupo econômico existente
+                    </Label>
+                  </div>
+
+                  {vincularGrupo && (
+                    <div className="space-y-4 pl-6 border-l-2 border-primary/20">
+                      <div className="space-y-2">
+                        <Label>Grupo Econômico <span className="text-destructive">*</span></Label>
+                        <Select value={individualGroupId} onValueChange={setIndividualGroupId}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione um grupo" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {existingGroups.map(g => (
+                              <SelectItem key={g.id} value={g.id}>{g.name}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {individualGroupId && (
+                        <div className="space-y-3">
+                          <Label>A empresa passará pelo Workflow? <span className="text-destructive">*</span></Label>
+                          <RadioGroup value={passaWorkflow} onValueChange={(v) => setPassaWorkflow(v as 'sim' | 'nao')} className="flex gap-4">
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="sim" id="workflow-sim" />
+                              <Label htmlFor="workflow-sim" className="cursor-pointer">Sim</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="nao" id="workflow-nao" />
+                              <Label htmlFor="workflow-nao" className="cursor-pointer">Não</Label>
+                            </div>
+                          </RadioGroup>
+                          <p className="text-xs text-muted-foreground">
+                            {passaWorkflow === 'sim'
+                              ? 'A empresa será incluída no fluxo de aprovação do grupo.'
+                              : passaWorkflow === 'nao'
+                              ? 'A empresa será vinculada ao grupo, mas não passará pelo workflow de aprovação.'
+                              : 'Defina se a empresa precisa passar pelo fluxo de aprovação do grupo.'}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ) : (
