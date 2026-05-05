@@ -435,7 +435,19 @@ export default function AnaliseEmpresaPage() {
 
 function GroupAnaliseView({ group }: { group: AnaliseGroup }) {
   const navigate = useNavigate();
-  const [selectedMemberIndex, setSelectedMemberIndex] = useState(0);
+  // A holding (empresa do grupo) é incluída como primeira entidade selecionável,
+  // marcada como opcional. As empresas vinculadas seguem obrigatórias.
+  const holdingMember: GroupMember & { isHolding?: boolean } = {
+    id: `${group.id}-holding`,
+    name: group.name,
+    cnpj: group.cnpj,
+    status: 'approved',
+    documentsPending: 0,
+    documentsTotal: 0,
+    isHolding: true,
+  };
+  const allMembers: (GroupMember & { isHolding?: boolean })[] = [holdingMember, ...group.members];
+  const [selectedMemberIndex, setSelectedMemberIndex] = useState(1);
   const [activeTab, setActiveTab] = useState("empresa");
   const [reviewNotes, setReviewNotes] = useState("");
   const [approvalNotes, setApprovalNotes] = useState("");
@@ -444,7 +456,7 @@ function GroupAnaliseView({ group }: { group: AnaliseGroup }) {
   const [rejectionConfirmed, setRejectionConfirmed] = useState(false);
   const [approvalConfirmed, setApprovalConfirmed] = useState(false);
 
-  const selectedMember = group.members[selectedMemberIndex];
+  const selectedMember = allMembers[selectedMemberIndex];
   const documents = mockDocumentsByCompany[selectedMember.id] || [];
 
   const getStatusBadge = (status: string) => {
@@ -627,7 +639,7 @@ function GroupAnaliseView({ group }: { group: AnaliseGroup }) {
         </div>
       </div>
 
-      <GroupOptionalNotice context="ambos" />
+      <GroupOptionalNotice context="ambos" holdingName={group.name} />
 
       {/* Group Info Card */}
       <Card className="shadow-card">
@@ -688,7 +700,7 @@ function GroupAnaliseView({ group }: { group: AnaliseGroup }) {
             </Button>
 
             <div className="flex-1 flex gap-2 overflow-x-auto">
-              {group.members.map((member, index) => {
+              {allMembers.map((member, index) => {
                 const progress = calculateMemberProgress(member.id);
                 const isSelected = index === selectedMemberIndex;
                 return (
@@ -702,9 +714,18 @@ function GroupAnaliseView({ group }: { group: AnaliseGroup }) {
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <p className="text-sm font-semibold truncate">{member.name}</p>
-                      {member.status === 'approved' && <Check className="h-4 w-4 text-success shrink-0" />}
-                      {member.status === 'awaiting_review' && <AlertTriangle className="h-3.5 w-3.5 text-warning shrink-0" />}
+                      <div className="flex items-center gap-1.5 truncate">
+                        {member.isHolding && <Users className="h-3.5 w-3.5 text-muted-foreground shrink-0" />}
+                        <p className="text-sm font-semibold truncate">{member.name}</p>
+                      </div>
+                      {member.isHolding ? (
+                        <Badge variant="outline" className="bg-muted text-muted-foreground text-[10px] px-1.5 py-0 shrink-0">Opcional</Badge>
+                      ) : (
+                        <>
+                          {member.status === 'approved' && <Check className="h-4 w-4 text-success shrink-0" />}
+                          {member.status === 'awaiting_review' && <AlertTriangle className="h-3.5 w-3.5 text-warning shrink-0" />}
+                        </>
+                      )}
                     </div>
                     <p className="text-xs text-muted-foreground font-mono mb-2">{member.cnpj}</p>
                     <div className="flex items-center gap-2">
@@ -720,7 +741,7 @@ function GroupAnaliseView({ group }: { group: AnaliseGroup }) {
               variant="outline"
               size="icon"
               className="h-8 w-8 shrink-0"
-              disabled={selectedMemberIndex === group.members.length - 1}
+              disabled={selectedMemberIndex === allMembers.length - 1}
               onClick={() => setSelectedMemberIndex(i => i + 1)}
             >
               <ChevronRight className="h-4 w-4" />
