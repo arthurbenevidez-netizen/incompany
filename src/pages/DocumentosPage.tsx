@@ -106,8 +106,20 @@ interface GroupCompany {
 }
 
 function GroupDocumentosView({ group }: { group: { id: string; name: string; companies: GroupCompany[] } }) {
-  const [selectedCompanyIndex, setSelectedCompanyIndex] = useState(0);
-  const selectedCompany = group.companies[selectedCompanyIndex];
+  // A holding (empresa do grupo) é incluída como primeira entidade selecionável,
+  // marcada como opcional. As demais empresas do grupo seguem obrigatórias.
+  const holdingEntity: GroupCompany & { isHolding?: boolean } = {
+    id: `${group.id}-holding`,
+    name: group.name,
+    cnpj: "—",
+    processType: group.companies[0]?.processType || "cadastro_cedente",
+    documentsPending: 0,
+    documentsTotal: 0,
+    isHolding: true,
+  };
+  const allEntities: (GroupCompany & { isHolding?: boolean })[] = [holdingEntity, ...group.companies];
+  const [selectedCompanyIndex, setSelectedCompanyIndex] = useState(1);
+  const selectedCompany = allEntities[selectedCompanyIndex];
 
   return (
     <div className="space-y-6">
@@ -120,20 +132,20 @@ function GroupDocumentosView({ group }: { group: { id: string; name: string; com
           <div className="flex items-center gap-2 mb-1">
             <Users className="h-5 w-5 text-primary" />
             <h1 className="text-2xl font-bold">Documentos - {group.name}</h1>
-            <Badge variant="secondary">{group.companies.length} empresas</Badge>
+            <Badge variant="secondary">{allEntities.length} empresas</Badge>
           </div>
           <p className="text-muted-foreground">Gerencie documentos de todas as empresas do grupo</p>
         </div>
       </div>
 
-      <GroupOptionalNotice context="documentos" />
+      <GroupOptionalNotice context="documentos" holdingName={group.name} />
 
       {/* Company Selector - Horizontal Pills */}
       <Card className="shadow-card">
         <CardContent className="pt-6 pb-4">
           <p className="text-sm font-medium text-muted-foreground mb-3">Selecione a empresa</p>
           <div className="flex gap-3 overflow-x-auto pb-2">
-            {group.companies.map((company, idx) => {
+            {allEntities.map((company, idx) => {
               const approved = (company.documentsTotal || 0) - (company.documentsPending || 0);
               const pct = company.documentsTotal ? Math.round((approved / company.documentsTotal) * 100) : 0;
               const isSelected = idx === selectedCompanyIndex;
@@ -149,8 +161,17 @@ function GroupDocumentosView({ group }: { group: { id: string; name: string; com
                   }`}
                 >
                   <div className="flex items-center gap-2 mb-2">
-                    <Building2 className={`h-4 w-4 ${isSelected ? 'text-primary' : 'text-muted-foreground'}`} />
+                    {company.isHolding ? (
+                      <Users className={`h-4 w-4 ${isSelected ? 'text-primary' : 'text-muted-foreground'}`} />
+                    ) : (
+                      <Building2 className={`h-4 w-4 ${isSelected ? 'text-primary' : 'text-muted-foreground'}`} />
+                    )}
                     <span className="text-sm font-semibold truncate">{company.name}</span>
+                    {company.isHolding && (
+                      <Badge variant="outline" className="bg-muted text-muted-foreground text-[10px] px-1.5 py-0 ml-auto">
+                        Opcional
+                      </Badge>
+                    )}
                   </div>
                   <p className="text-xs text-muted-foreground font-mono mb-2">{company.cnpj}</p>
                   <div className="flex items-center gap-2">
@@ -159,7 +180,7 @@ function GroupDocumentosView({ group }: { group: { id: string; name: string; com
                       {pct}%
                     </span>
                   </div>
-                  {pct === 100 && (
+                  {pct === 100 && !company.isHolding && (
                     <Badge className="bg-success/10 text-success text-xs mt-2">Completo</Badge>
                   )}
                 </button>
@@ -175,8 +196,9 @@ function GroupDocumentosView({ group }: { group: { id: string; name: string; com
         companyName={selectedCompany.name}
         processType={selectedCompany.processType}
         isGroupContext
+        isHolding={selectedCompany.isHolding}
         groupProgress={{
-          companies: group.companies.map(c => ({
+          companies: allEntities.map(c => ({
             name: c.name,
             approved: (c.documentsTotal || 0) - (c.documentsPending || 0),
             total: c.documentsTotal || 0,
@@ -193,12 +215,13 @@ interface SingleCompanyDocumentosProps {
   companyName: string;
   processType: string;
   isGroupContext?: boolean;
+  isHolding?: boolean;
   groupProgress?: {
     companies: { name: string; approved: number; total: number }[];
   };
 }
 
-function SingleCompanyDocumentos({ companyId, companyName, processType, isGroupContext, groupProgress }: SingleCompanyDocumentosProps) {
+function SingleCompanyDocumentos({ companyId, companyName, processType, isGroupContext, isHolding, groupProgress }: SingleCompanyDocumentosProps) {
   const [activeTab, setActiveTab] = useState("empresa");
 
   const handleDocumentUpload = (categoryName: string, files: File[]) => {

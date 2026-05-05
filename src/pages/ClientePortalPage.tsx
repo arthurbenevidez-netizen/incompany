@@ -395,7 +395,7 @@ export default function ClientePortalPage() {
 
         {/* Group member selector */}
         {portalMode === 'grupo' && (
-          <GroupOptionalNotice context="documentos" />
+          <GroupOptionalNotice context="documentos" holdingName={mockGroupInvite.groupName} />
         )}
         {portalMode === 'grupo' && (
           <Card>
@@ -405,6 +405,20 @@ export default function ClientePortalPage() {
                 <span className="text-sm font-medium">Selecione a empresa para enviar documentos</span>
               </div>
               <div className="flex flex-wrap gap-2">
+                {/* Holding (empresa do grupo) — opcional, informativa */}
+                <div
+                  className="flex items-center gap-2 px-4 py-3 rounded-lg border border-dashed border-border bg-muted/30 text-sm text-muted-foreground"
+                  title="A holding do grupo é opcional"
+                >
+                  <Users className="h-3.5 w-3.5" />
+                  <div className="text-left">
+                    <p className="font-medium">{mockGroupInvite.groupName}</p>
+                    <p className="text-xs opacity-70">Holding</p>
+                  </div>
+                  <Badge variant="outline" className="ml-2 bg-background text-muted-foreground text-[10px] px-1.5 py-0">
+                    Opcional
+                  </Badge>
+                </div>
                 {mockGroupInvite.members.map((member, index) => {
                   const memberProgress = getProgressForMember(member.id);
                   const memberDocsCount = uploadedDocs.filter(d => d.memberId === member.id).length;

@@ -717,12 +717,23 @@ export default function RecrutamentoPage() {
       const members = selectedCompany.groupMembers!;
       return (
         <div className="mb-6">
-          <GroupOptionalNotice context="ambos" className="mb-3" />
+          <GroupOptionalNotice context="ambos" className="mb-3" holdingName={selectedCompany.companyName} />
           <div className="flex items-center gap-2 mb-3">
             <Users className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm font-medium text-muted-foreground">Empresas do grupo</span>
           </div>
           <div className="flex flex-wrap gap-2">
+            {/* Holding (empresa do grupo) — opcional, apenas informativa */}
+            <div
+              className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-dashed border-border bg-muted/30 text-sm text-muted-foreground"
+              title="A holding do grupo é opcional"
+            >
+              <Users className="h-3.5 w-3.5" />
+              <span className="font-medium">{selectedCompany.companyName}</span>
+              <Badge variant="outline" className="ml-1 bg-background text-muted-foreground text-[10px] px-1.5 py-0">
+                Opcional
+              </Badge>
+            </div>
             {members.map((member, index) => {
               const memberEntities = index === selectedMemberIndex ? entities : groupEntitiesMap[member.id];
               let memberProgress = member.progress;

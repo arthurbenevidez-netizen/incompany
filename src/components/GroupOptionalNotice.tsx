@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 interface GroupOptionalNoticeProps {
   context?: "documentos" | "variaveis" | "ambos";
   className?: string;
+  holdingName?: string;
 }
 
 /**
@@ -11,7 +12,7 @@ interface GroupOptionalNoticeProps {
  * indicando que envios/preenchimentos no nível do grupo são opcionais
  * e não bloqueiam aprovação.
  */
-export function GroupOptionalNotice({ context = "ambos", className = "" }: GroupOptionalNoticeProps) {
+export function GroupOptionalNotice({ context = "ambos", className = "", holdingName }: GroupOptionalNoticeProps) {
   const subject =
     context === "documentos"
       ? "envio de documentos"
@@ -29,11 +30,14 @@ export function GroupOptionalNotice({ context = "ambos", className = "" }: Group
           <Badge variant="outline" className="bg-muted text-muted-foreground text-xs">
             Opcional
           </Badge>
-          <span className="text-sm font-medium">Cadastro do Grupo Econômico</span>
+          <span className="text-sm font-medium">
+            Cadastro da holding{holdingName ? ` (${holdingName})` : ""}
+          </span>
         </div>
         <p className="text-xs text-muted-foreground">
-          O {subject} no nível do grupo é opcional e, em geral, não é uma ação executada pelo
-          usuário. Não bloqueia a aprovação — as validações ocorrem por empresa membro.
+          O {subject} para a empresa do grupo (holding) é opcional e, em geral, não é
+          executado pelo usuário — não bloqueia a aprovação. As empresas vinculadas ao
+          grupo seguem com cadastro obrigatório por padrão.
         </p>
       </div>
     </div>
