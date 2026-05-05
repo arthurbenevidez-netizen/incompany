@@ -717,6 +717,7 @@ export default function RecrutamentoPage() {
       const members = selectedCompany.groupMembers!;
       return (
         <div className="mb-6">
+          <GroupOptionalNotice context="ambos" className="mb-3" />
           <div className="flex items-center gap-2 mb-3">
             <Users className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm font-medium text-muted-foreground">Empresas do grupo</span>
