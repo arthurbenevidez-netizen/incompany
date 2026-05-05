@@ -11,6 +11,7 @@ import { EmpresaForm } from "@/components/forms/EmpresaForm";
 import { SocioPFForm } from "@/components/forms/SocioPFForm";
 import { SocioPJForm } from "@/components/forms/SocioPJForm";
 import { ProcuradorForm } from "@/components/forms/ProcuradorForm";
+import { GroupOptionalNotice } from "@/components/GroupOptionalNotice";
 import { toast } from "@/hooks/use-toast";
 import { 
   Plus, Building2, User, Users, Briefcase, ArrowLeft, 
