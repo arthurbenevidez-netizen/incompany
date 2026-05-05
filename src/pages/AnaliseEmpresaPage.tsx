@@ -13,6 +13,7 @@ import { Company, DocumentCategory, DocumentWithFiles } from "@/types";
 import { documentCategories, getProcessTypeLabel } from "@/data/documentCategories";
 import DocumentViewModal from "@/components/DocumentViewModal";
 import { DocumentRequestModal } from "@/components/DocumentRequestModal";
+import { GroupOptionalNotice } from "@/components/GroupOptionalNotice";
 
 interface GroupMember {
   id: string;
