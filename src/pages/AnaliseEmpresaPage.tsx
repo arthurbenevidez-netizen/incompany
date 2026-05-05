@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Company, DocumentCategory, DocumentWithFiles } from "@/types";
 import { documentCategories, getProcessTypeLabel } from "@/data/documentCategories";
 import DocumentViewModal from "@/components/DocumentViewModal";
+import { DocumentRequestModal } from "@/components/DocumentRequestModal";
 
 interface GroupMember {
   id: string;
@@ -237,6 +238,14 @@ export default function AnaliseEmpresaPage() {
           </div>
         </div>
         <div className="flex gap-2">
+          {/* Solicitar Documentação */}
+          <DocumentRequestModal
+            company={company}
+            onRequest={(companyId, selectedDocuments, notes) => {
+              console.log("Solicitar documentação", { companyId, selectedDocuments, notes });
+            }}
+          />
+
           {/* Reprovação */}
           <Dialog open={rejectionOpen} onOpenChange={(o) => { setRejectionOpen(o); if (!o) setRejectionConfirmed(false); }}>
             <DialogTrigger asChild>
