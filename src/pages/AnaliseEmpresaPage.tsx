@@ -13,6 +13,7 @@ import { Company, DocumentCategory, DocumentWithFiles } from "@/types";
 import { documentCategories, getProcessTypeLabel } from "@/data/documentCategories";
 import DocumentViewModal from "@/components/DocumentViewModal";
 import { DocumentRequestModal } from "@/components/DocumentRequestModal";
+import { GroupOptionalNotice } from "@/components/GroupOptionalNotice";
 
 interface GroupMember {
   id: string;
@@ -625,6 +626,8 @@ function GroupAnaliseView({ group }: { group: AnaliseGroup }) {
           </Dialog>
         </div>
       </div>
+
+      <GroupOptionalNotice context="ambos" />
 
       {/* Group Info Card */}
       <Card className="shadow-card">

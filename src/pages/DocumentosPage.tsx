@@ -11,6 +11,7 @@ import { documentCategories, getProcessTypeLabel } from "@/data/documentCategori
 import { useParams, Link } from "react-router-dom";
 import DocumentUploadModal from "@/components/DocumentUploadModal";
 import DocumentViewModal from "@/components/DocumentViewModal";
+import { GroupOptionalNotice } from "@/components/GroupOptionalNotice";
 
 // Mock data for standalone companies
 const mockCompanies: Record<string, { name: string; processType: string }> = {
@@ -124,6 +125,8 @@ function GroupDocumentosView({ group }: { group: { id: string; name: string; com
           <p className="text-muted-foreground">Gerencie documentos de todas as empresas do grupo</p>
         </div>
       </div>
+
+      <GroupOptionalNotice context="documentos" />
 
       {/* Company Selector - Horizontal Pills */}
       <Card className="shadow-card">

@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import { Company, EconomicGroup } from "@/types";
+import { GroupOptionalNotice } from "@/components/GroupOptionalNotice";
 
 // Mock standalone company
 const mockCompany: Company = {
@@ -308,6 +309,7 @@ function GroupDetalhes({ group }: { group: EconomicGroup }) {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
+          <GroupOptionalNotice context="ambos" />
           {/* Company Selector Card */}
           <Card className="shadow-card">
             <CardHeader>
