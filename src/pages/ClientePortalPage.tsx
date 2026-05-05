@@ -12,6 +12,7 @@ import { DocumentCategory, DocumentFile } from "@/types";
 import { documentCategories, getObligationLabel, getSectionLabel } from "@/data/documentCategories";
 import DocumentUploadModal from "@/components/DocumentUploadModal";
 import ClienteOnboardingModal from "@/components/ClienteOnboardingModal";
+import { GroupOptionalNotice } from "@/components/GroupOptionalNotice";
 
 // Mock data for single company
 const mockSingleInvite = {
@@ -393,6 +394,9 @@ export default function ClientePortalPage() {
         </Card>
 
         {/* Group member selector */}
+        {portalMode === 'grupo' && (
+          <GroupOptionalNotice context="documentos" />
+        )}
         {portalMode === 'grupo' && (
           <Card>
             <CardContent className="py-4">
