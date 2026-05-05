@@ -627,6 +627,8 @@ function GroupAnaliseView({ group }: { group: AnaliseGroup }) {
         </div>
       </div>
 
+      <GroupOptionalNotice context="ambos" />
+
       {/* Group Info Card */}
       <Card className="shadow-card">
         <CardHeader>
