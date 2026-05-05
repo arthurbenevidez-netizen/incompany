@@ -215,12 +215,13 @@ interface SingleCompanyDocumentosProps {
   companyName: string;
   processType: string;
   isGroupContext?: boolean;
+  isHolding?: boolean;
   groupProgress?: {
     companies: { name: string; approved: number; total: number }[];
   };
 }
 
-function SingleCompanyDocumentos({ companyId, companyName, processType, isGroupContext, groupProgress }: SingleCompanyDocumentosProps) {
+function SingleCompanyDocumentos({ companyId, companyName, processType, isGroupContext, isHolding, groupProgress }: SingleCompanyDocumentosProps) {
   const [activeTab, setActiveTab] = useState("empresa");
 
   const handleDocumentUpload = (categoryName: string, files: File[]) => {
